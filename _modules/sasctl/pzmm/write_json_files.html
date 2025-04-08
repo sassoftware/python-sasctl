@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.11.1 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.11.2 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=00ba7901"></script>
+    <script src="../../../_static/documentation_options.js?v=adea09cd"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.1" />
-    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
+  <meta name="docsearch:version" content="1.11.2" />
+    <meta name="docbuild:last-update" content="Apr 08, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.1 documentation</p>
+    <p class="title logo__title">sasctl 1.11.2 documentation</p>
   
 </a></div>
     
@@ -494,7 +494,7 @@
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_variable_properties</span><span class="p">(</span>
-        <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span><span class="p">]</span>
+        <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a list of dictionaries of variable properties given an input dataframe.</span>
@@ -1563,7 +1563,6 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_model_statistics</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
-        <span class="n">prob_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">validate_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">train_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">test_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1582,8 +1581,7 @@
 <span class="sd">        Datasets must contain the actual and predicted values and may optionally contain</span>
 <span class="sd">        the predicted probabilities. If no probabilities are provided, a dummy</span>
 <span class="sd">        probability dataset is generated based on the predicted values and normalized by</span>
-<span class="sd">        the target value. If a probability threshold value is not provided, the</span>
-<span class="sd">        threshold value is set at 0.5.</span>
+<span class="sd">        the target value.</span>
 
 <span class="sd">        Datasets can be provided in the following forms, with the assumption that data</span>
 <span class="sd">        is ordered as `actual`, `predict`, and `probability` respectively:</span>
@@ -1600,9 +1598,6 @@
 <span class="sd">        ----------</span>
 <span class="sd">        target_value : str, int, or float</span>
 <span class="sd">            Target event value for model prediction events.</span>
-<span class="sd">        prob_value : int or float, optional</span>
-<span class="sd">            The threshold value for model predictions to indicate an event occurred. The</span>
-<span class="sd">            default value is 0.5.</span>
 <span class="sd">        validate_data : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the validation data. The default value is None.</span>
 <span class="sd">        train_data : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
@@ -1655,19 +1650,22 @@
                 <span class="k">continue</span>
 
             <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">stat_dataset_to_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target_value</span><span class="p">,</span> <span class="n">target_type</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span>
 
             <span class="n">conn</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
                 <span class="n">data</span><span class="p">,</span>
-                <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
             <span class="p">)</span>
+
             <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
                 <span class="n">conn</span><span class="o">.</span><span class="n">percentile</span><span class="o">.</span><span class="n">assess</span><span class="p">(</span>
                     <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-                    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
-                    <span class="n">pVar</span><span class="o">=</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">,</span>
-                    <span class="n">event</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">target_value</span><span class="p">),</span>
-                    <span class="n">pEvent</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">prob_value</span><span class="p">)</span> <span class="k">if</span> <span class="n">prob_value</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
-                    <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
+                    <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">,</span>
+                    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
+                    <span class="n">event</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                    <span class="n">pvar</span><span class="o">=</span><span class="s2">&quot;predict_proba2&quot;</span><span class="p">,</span>
+                    <span class="n">pevent</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                    <span class="n">includeLift</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">fitStatOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
                     <span class="n">rocOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ROC&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
                     <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
@@ -1675,10 +1673,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">conn</span><span class="o">.</span><span class="n">percentile</span><span class="o">.</span><span class="n">assess</span><span class="p">(</span>
                     <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-                    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
-                    <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
-                    <span class="n">fitStatOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-                    <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
+                    <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
+                    <span class="n">fitStatOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                    <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
                 <span class="p">)</span>
 
             <span class="n">fitstat_dict</span> <span class="o">=</span> <span class="p">(</span>
