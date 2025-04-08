@@ -1281,21 +1281,20 @@ class JSONFiles:
             data = cls.stat_dataset_to_dataframe(data, target_value, target_type)
             data["predict_proba2"] = 1 - data["predict_proba"]
 
-            out = conn.upload(
+            conn.upload(
                 data,
                 casout={"caslib": "Public", "name": "assess_dataset", "replace": True},
             )
 
             if target_type == "classification":
-                output = conn.percentile.assess(
+                conn.percentile.assess(
                     table={"name": "assess_dataset", "caslib": "Public"},
-                    inputs="actual",
-                    response="predict_proba",
+                    inputs="predict_proba",
+                    response="actual",
                     event="1",
                     pvar="predict_proba2",
                     pevent="0",
                     includeLift=True,
-                    cutstep=0.2,
                     fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
                     rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
                     casout={"name": "Lift", "replace": True, "caslib": "Public"},
@@ -1303,8 +1302,8 @@ class JSONFiles:
             else:
                 conn.percentile.assess(
                     table={"name": "assess_dataset", "caslib": "Public"},
-                    response="predict",
-                    inputs="actual",
+                    response="actual",
+                    inputs="predict",
                     fitStatOut={"caslib": "Public", "name": "FitStat", "replace": True},
                     casout={"caslib": "Public", "name": "Lift", "replace": True},
                 )
