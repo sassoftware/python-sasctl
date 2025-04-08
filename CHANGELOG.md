@@ -1,3 +1,8 @@
+v1.11.2 (2025-04-08)
+--------------------
+**Bugfixes**
+- Updated `calculate_model_statistics` function in `write_json_files.py` to improve ROC tables as well as model card files.
+
 v1.11.1 (2025-01-22)
 --------------------
 **Improvements**
