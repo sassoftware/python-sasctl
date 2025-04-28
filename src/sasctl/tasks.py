@@ -1000,13 +1000,14 @@ def score_model_with_cas(
     score_results = se.get_score_execution_results(score_execution, use_cas_gateway)
     return score_results
 
+
 def upload_local_model(
-        path: Union[str, Path],
-        model_name: str,
-        project_name: str,
-        repo_name: Union[str, dict] = None,
-        version: str = "latest",
-    ):
+    path: Union[str, Path],
+    model_name: str,
+    project_name: str,
+    repo_name: Union[str, dict] = None,
+    version: str = "latest",
+):
     """A barebones function to upload a model and any associated files to the model repository.
     Parameters
     ----------
@@ -1043,11 +1044,11 @@ def upload_local_model(
         mr.create_project(project_name, repository)
     zip_name = str(Path(path) / (model_name + ".zip"))
     file_names = sorted(Path(path).glob("*[!zip]"))
-    with zipfile.ZipFile(
-            str(zip_name), mode="w"
-        ) as zFile:
-            for file in file_names:
-                zFile.write(str(file), arcname=file.name)
+    with zipfile.ZipFile(str(zip_name), mode="w") as zFile:
+        for file in file_names:
+            zFile.write(str(file), arcname=file.name)
     with open(zip_name, "rb") as zip_file:
-        model = mr.import_model_from_zip(model_name, project_name, zip_file, version=version)
+        model = mr.import_model_from_zip(
+            model_name, project_name, zip_file, version=version
+        )
     return model
