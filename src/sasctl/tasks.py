@@ -1034,11 +1034,10 @@ def upload_local_model(
         raise e
 
     # Unable to find or create the repo.
-    if repository is None and repo_name is None:
+    if not repository and not repo_name:
         raise ValueError("Unable to find a default repository")
-
-    if repository is None:
-        raise ValueError("Unable to find repository '{}'".format(repository))
+    elif not repository:
+        raise ValueError(f"Unable to find repository '{repo_name}'")
     p = mr.get_project(project_name)
     if p is None:
         mr.create_project(project_name, repository)
