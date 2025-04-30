@@ -1,3 +1,8 @@
+v1.11.3 (2025-04-29)
+--------------------
+**Improvements**
+- Added `upload_local_model` to `tasks.py`, which can be used to upload local directories to SAS Model Manager without any extra file generation.
+
 v1.11.2 (2025-04-08)
 --------------------
 **Bugfixes**
