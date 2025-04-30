@@ -265,10 +265,9 @@ def _register_sas_model(
             out_var = []
             in_var = []
             import copy
-            import zipfile as zp
 
             zip_file_copy = copy.deepcopy(zip_file)
-            tmp_zip = zp.ZipFile(zip_file_copy)
+            tmp_zip = zipfile.ZipFile(zip_file_copy)
             if "outputVar.json" in tmp_zip.namelist():
                 out_var = json.loads(
                     tmp_zip.read("outputVar.json").decode("utf=8")
@@ -328,8 +327,8 @@ def _register_sas_model(
 
         if current_session().version_info() < 4:
             # Upload the model as a ZIP file if using Viya 3.
-            zipfile = utils.create_package(model, input=input)
-            model = mr.import_model_from_zip(name, project, zipfile, version=version)
+            zip_file = utils.create_package(model, input=input)
+            model = mr.import_model_from_zip(name, project, zip_file, version=version)
         else:
             # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
             astore = cas.astore.download(rstore=model)
@@ -1008,7 +1007,7 @@ def upload_local_model(
     repo_name: Union[str, dict] = None,
     version: str = "latest",
 ):
-    """A barebones function to upload a model and any associated files to the model repository.
+    """A function to upload a model and any associated files to the model repository.
     Parameters
     ----------
     path : Union[str, Path]
@@ -1017,6 +1016,10 @@ def upload_local_model(
         The name of the model.
     project_name : str
         The name of the project to which the model will be uploaded.
+    repo_name : Union[str, dict], optional
+        repository in which to create the project
+    version: str, optional
+        The version of the model being uploaded
     """
     # Use default repository if not specified
     try:
@@ -1036,16 +1039,21 @@ def upload_local_model(
     # Unable to find or create the repo.
     if not repository and not repo_name:
         raise ValueError("Unable to find a default repository")
-    elif not repository:
+    if not repository:
         raise ValueError(f"Unable to find repository '{repo_name}'")
+
+    # Get project from repo if it exists; if it doesn't, create a new one
     p = mr.get_project(project_name)
     if p is None:
         mr.create_project(project_name, repository)
+
+    # zip up all files in directory (except any previous zip files)
     zip_name = str(Path(path) / (model_name + ".zip"))
     file_names = sorted(Path(path).glob("*[!zip]"))
     with zipfile.ZipFile(str(zip_name), mode="w") as zFile:
         for file in file_names:
             zFile.write(str(file), arcname=file.name)
+    # upload zipped model
     with open(zip_name, "rb") as zip_file:
         model = mr.import_model_from_zip(
             model_name, project_name, zip_file, version=version
