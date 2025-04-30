@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.tasks &#8212; sasctl 1.11.2 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.11.3 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=adea09cd"></script>
+    <script src="../../_static/documentation_options.js?v=c925d989"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/tasks';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.2" />
-    <meta name="docbuild:last-update" content="Apr 08, 2025"/>
+  <meta name="docsearch:version" content="1.11.3" />
+    <meta name="docbuild:last-update" content="Apr 30, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.2 documentation</p>
+    <p class="title logo__title">sasctl 1.11.3 documentation</p>
   
 </a></div>
     
@@ -331,6 +331,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
@@ -580,10 +581,9 @@
             <span class="n">out_var</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">in_var</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">zp</span>
 
             <span class="n">zip_file_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">zip_file</span><span class="p">)</span>
-            <span class="n">tmp_zip</span> <span class="o">=</span> <span class="n">zp</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_file_copy</span><span class="p">)</span>
+            <span class="n">tmp_zip</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_file_copy</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;outputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
                 <span class="n">out_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
                     <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
@@ -643,8 +643,8 @@
 
         <span class="k">if</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">version_info</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
             <span class="c1"># Upload the model as a ZIP file if using Viya 3.</span>
-            <span class="n">zipfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zipfile</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+            <span class="n">zip_file</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zip_file</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.</span>
             <span class="n">astore</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">rstore</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
@@ -1328,6 +1328,70 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">score_execution_poll</span><span class="p">)</span>
     <span class="n">score_results</span> <span class="o">=</span> <span class="n">se</span><span class="o">.</span><span class="n">get_score_execution_results</span><span class="p">(</span><span class="n">score_execution</span><span class="p">,</span> <span class="n">use_cas_gateway</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">score_results</span></div>
+
+
+
+<div class="viewcode-block" id="upload_local_model">
+<a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.upload_local_model">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">upload_local_model</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">project_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">repo_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to upload a model and any associated files to the model repository.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Union[str, Path]</span>
+<span class="sd">        The path to the model and any associated files.</span>
+<span class="sd">    model_name : str</span>
+<span class="sd">        The name of the model.</span>
+<span class="sd">    project_name : str</span>
+<span class="sd">        The name of the project to which the model will be uploaded.</span>
+<span class="sd">    repo_name : Union[str, dict], optional</span>
+<span class="sd">        repository in which to create the project</span>
+<span class="sd">    version: str, optional</span>
+<span class="sd">        The version of the model being uploaded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Use default repository if not specified</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">repo_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">repository</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">default_repository</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">repository</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_repository</span><span class="p">(</span><span class="n">repo_name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AuthorizationError</span><span class="p">(</span>
+                <span class="s2">&quot;Unable to register model.  User account does not have read permissions &quot;</span>
+                <span class="s2">&quot;for the /modelRepository/repositories/ URL. Please contact your SAS &quot;</span>
+                <span class="s2">&quot;Viya administrator.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="c1"># Unable to find or create the repo.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">repository</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">repo_name</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to find a default repository&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">repository</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to find repository &#39;</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get project from repo if it exists; if it doesn&#39;t, create a new one</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">repository</span><span class="p">)</span>
+
+    <span class="c1"># zip up all files in directory (except any previous zip files)</span>
+    <span class="n">zip_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_name</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span><span class="p">))</span>
+    <span class="n">file_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*[!zip]&quot;</span><span class="p">))</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">zip_name</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zFile</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
+            <span class="n">zFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="n">arcname</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="c1"># upload zipped model</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">zip_name</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span>
+            <span class="n">model_name</span><span class="p">,</span> <span class="n">project_name</span><span class="p">,</span> <span class="n">zip_file</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
 
 </pre></div>
 
