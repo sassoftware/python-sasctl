@@ -1019,7 +1019,7 @@ def upload_local_model(
     repo_name : Union[str, dict], optional
         repository in which to create the project
     version: str, optional
-        The version of the model being uploaded
+        The version of the model being uploaded. Defaults to 'latest'. For new model version, use 'new'.
     """
     # Use default repository if not specified
     try:
@@ -1058,7 +1058,8 @@ def upload_local_model(
             data = {
                 "name": model_name,
                 "projectId": p.id,
-                "type": "ASTORE", 
+                "type": "ASTORE",
+                "versionOption": version
             }
             files = {"files": (sasast_file.name, sasast_model)}
             model = mr.post("/models", files=files, data=data)
