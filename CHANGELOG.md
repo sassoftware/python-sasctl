@@ -1,3 +1,8 @@
+v1.11.4 (2025-05-02)
+--------------------
+**Improvements**
+- Improved `upload_local_model` to allow for SAS Model Manager to properly intake local ASTORE models.
+
 v1.11.3 (2025-04-29)
 --------------------
 **Improvements**
