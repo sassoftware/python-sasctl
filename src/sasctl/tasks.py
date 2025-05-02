@@ -1059,7 +1059,7 @@ def upload_local_model(
                 "name": model_name,
                 "projectId": p.id,
                 "type": "ASTORE",
-                "versionOption": version
+                "versionOption": version,
             }
             files = {"files": (sasast_file.name, sasast_model)}
             model = mr.post("/models", files=files, data=data)
