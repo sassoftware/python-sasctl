@@ -1019,7 +1019,7 @@ def upload_local_model(
     repo_name : Union[str, dict], optional
         repository in which to create the project
     version: str, optional
-        The version of the model being uploaded
+        The version of the model being uploaded. Defaults to 'latest'. For new model version, use 'new'.
     """
     # Use default repository if not specified
     try:
@@ -1045,17 +1045,34 @@ def upload_local_model(
     # Get project from repo if it exists; if it doesn't, create a new one
     p = mr.get_project(project_name)
     if p is None:
-        mr.create_project(project_name, repository)
+        p = mr.create_project(project_name, repository)
 
     # zip up all files in directory (except any previous zip files)
     zip_name = str(Path(path) / (model_name + ".zip"))
-    file_names = sorted(Path(path).glob("*[!zip]"))
-    with zipfile.ZipFile(str(zip_name), mode="w") as zFile:
+    file_names = sorted(Path(path).glob("*[!(zip|sasast)]"))
+    sasast_file = next(Path(path).glob("*.sasast"), None)
+    if sasast_file:
+        # If a sasast file is present, upload it as well
+        with open(sasast_file, "rb") as sasast:
+            sasast_model = sasast.read()
+            data = {
+                "name": model_name,
+                "projectId": p.id,
+                "type": "ASTORE",
+                "versionOption": version,
+            }
+            files = {"files": (sasast_file.name, sasast_model)}
+            model = mr.post("/models", files=files, data=data)
         for file in file_names:
-            zFile.write(str(file), arcname=file.name)
-    # upload zipped model
-    with open(zip_name, "rb") as zip_file:
-        model = mr.import_model_from_zip(
-            model_name, project_name, zip_file, version=version
-        )
+            with open(file, "r") as f:
+                mr.add_model_content(model, f, file.name)
+    else:
+        with zipfile.ZipFile(str(zip_name), mode="w") as zFile:
+            for file in file_names:
+                zFile.write(str(file), arcname=file.name)
+        # upload zipped model
+        with open(zip_name, "rb") as zip_file:
+            model = mr.import_model_from_zip(
+                model_name, project_name, zip_file, version=version
+            )
     return model
