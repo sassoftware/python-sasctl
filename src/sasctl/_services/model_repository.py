@@ -10,6 +10,7 @@ import datetime
 from warnings import warn
 import requests
 from requests.exceptions import HTTPError
+import traceback
 
 from ..core import current_session, delete, get, sasctl_command
 from .service import Service
@@ -624,24 +625,31 @@ class ModelRepository(Service):
                 "Cannot find link for version history for model '%s'" % model
             )
 
-        modelHistory = cls.request_link(
+        
+         modelHistory = cls.request_link(
             link,
             "modelHistory",
-            headers={"Accept": "application/vnd.sas.models.model.version"},
+            headers={"Accept": "application/vnd.sas.collection+json"},
         )
-        if modelHistory is None:
-            return {}
 
         return modelHistory
 
     @classmethod
-    def get_model_version(cls, model, version_id):
+    def get_model_version(cls, model, version_id): #check if this now handles a return 1 case
 
         model_history = cls.list_model_versions(model)
-        model_history_items = model_history.get("items")
 
-        for i, item in enumerate(model_history_items):
-            if item.get("id") == version_id:
+        for item in model_history:
+            if isinstance(item, str):
+                if item == 'id' and dict(model_history)[item] == version_id:
+                    return cls.request_link(
+                    model_history,
+                    "self",
+                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                )
+                continue
+            
+            if item["id"] == version_id:
                 return cls.request_link(
                     item,
                     "self",
