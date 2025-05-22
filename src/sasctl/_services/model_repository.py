@@ -8,8 +8,10 @@
 
 import datetime
 from warnings import warn
+import requests
+from requests.exceptions import HTTPError
 
-from ..core import HTTPError, current_session, delete, get, sasctl_command
+from ..core import current_session, delete, get, sasctl_command
 from .service import Service
 
 FUNCTIONS = {
@@ -612,14 +614,134 @@ class ModelRepository(Service):
 
         Returns
         -------
-        list
+        RestObj
 
         """
-        model = cls.get_model(model)
-        if cls.get_model_link(model, "modelVersions") is None:
-            raise ValueError("Unable to retrieve versions for model '%s'" % model)
 
-        return cls.request_link(model, "modelVersions")
+        link = cls.get_model_link(model, "modelHistory")
+        if link is None:
+            raise ValueError(
+                "Cannot find link for version history for model '%s'" % model
+            )
+
+        modelHistory = cls.request_link(
+            link,
+            "modelHistory",
+            headers={"Accept": "application/vnd.sas.models.model.version"},
+        )
+        if modelHistory is None:
+            return {}
+
+        return modelHistory
+
+    @classmethod
+    def get_model_version(cls, model, version_id):
+
+        model_history = cls.list_model_versions(model)
+        model_history_items = model_history.get("items")
+
+        for i, item in enumerate(model_history_items):
+            if item.get("id") == version_id:
+                return cls.request_link(
+                    item,
+                    "self",
+                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                )
+
+        raise ValueError("The version id specified could not be found.")
+
+    @classmethod
+    def get_model_with_versions(cls, model):
+        if cls.is_uuid(model):
+            model_id = model
+        elif isinstance(model, dict) and "id" in model:
+            model_id = model["id"]
+        else:
+            model = cls.get_model(model)
+            if not model:
+                raise HTTPError(
+                    "This model may not exist in a project or the model may not exist at all."
+                )
+            model_id = model["id"]
+
+        versions_uri = f"/modelRepository/models/{model_id}/versions"
+        version_history = cls.get(
+            versions_uri,
+            headers={"Accept": "application/vnd.sas.models.model.version"},
+        )
+        if version_history is None:
+            return {}
+        return version_history
+
+    @classmethod
+    def get_model_or_version(cls, model, version_id):
+
+        if cls.is_uuid(model):
+            model_id = model
+        elif isinstance(model, dict) and "id" in model:
+            model_id = model["id"]
+        else:
+            model = cls.get_model(model)
+            if not model:
+                raise HTTPError(
+                    "This model may not exist in a project or the model may not exist at all."
+                )
+            model_id = model["id"]
+
+        if model_id == version_id:
+            return cls.get_model(model)
+
+        version_history = cls.get_model_with_versions(model)
+        model_versions = version_history.get("modelVersions")
+        for i, item in enumerate(model_versions):
+            if item.get("id") == version_id:
+                return cls.request_link(
+                    item,
+                    "self",
+                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                )
+
+        raise ValueError("The version id specified could not be found.")
+
+    @classmethod
+    def get_model_version_contents(cls, model, version_id):
+        model_version = cls.get_model_version(model, version_id)
+        version_contents = cls.request_link(
+            model_version,
+            "contents",
+            headers={"Accept": "application/vnd.sas.models.model.content"},
+        )
+
+        if version_contents is None:
+            return {}
+        return version_contents
+
+    @classmethod
+    def get_model_version_content_metadata(cls, model, version_id, content_id):
+        model_version_contents = cls.get_model_version_contents(model, version_id)
+
+        model_version_contents_items = model_version_contents.get("items")
+        for i, item in enumerate(model_version_contents_items):
+            if item.get("id") == content_id:
+                return cls.request_link(
+                    item,
+                    "self",
+                    headers={"Accept": "application/vnd.sas.models.model.content"},
+                )
+
+        raise ValueError("The content id specified could not be found.")
+
+    @classmethod
+    def get_model_version_content(cls, model, version_id, content_id):
+
+        metadata = cls.get_model_version_content_metadata(model, version_id, content_id)
+        version_content_file = cls.request_link(
+            metadata, "content", headers={"Accept": "text/plain"}
+        )
+
+        if version_content_file is None:
+            raise HTTPError("Something went wrong while accessing the metadata file.")
+        return version_content_file
 
     @classmethod
     def copy_analytic_store(cls, model):
