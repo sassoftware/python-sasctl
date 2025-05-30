@@ -387,7 +387,7 @@ def test_get_model_with_versions():
                     mr.get_model_with_versions(model=RestObj)
 
                 is_uuid.return_value = False
-                get_model.return_value = RestObj
+                get_model.return_value = RestObj({"id": "12345"})
                 request.side_effect = urllib.error.HTTPError(
                     url="http://demo.sas.com",
                     code=404,
