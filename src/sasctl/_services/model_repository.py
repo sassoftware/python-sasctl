@@ -10,10 +10,14 @@ import datetime
 from warnings import warn
 import requests
 from requests.exceptions import HTTPError
-import traceback
+import urllib
 
-from ..core import current_session, delete, get, sasctl_command
+# import traceback
+# import sys
+
+from ..core import current_session, delete, get, sasctl_command, RestObj
 from .service import Service
+
 
 FUNCTIONS = {
     "Analytical",
@@ -615,7 +619,7 @@ class ModelRepository(Service):
 
         Returns
         -------
-        RestObj
+        list
 
         """
 
@@ -625,41 +629,60 @@ class ModelRepository(Service):
                 "Cannot find link for version history for model '%s'" % model
             )
 
-        
-         modelHistory = cls.request_link(
+        modelHistory = cls.request_link(
             link,
             "modelHistory",
             headers={"Accept": "application/vnd.sas.collection+json"},
         )
 
+        if isinstance(modelHistory, RestObj):
+            return [modelHistory]
         return modelHistory
 
     @classmethod
-    def get_model_version(cls, model, version_id): #check if this now handles a return 1 case
+    def get_model_version(cls, model, version_id):
+        """Get a specific version of a model.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+        version_id: str
+            The id of a model version.
+
+        Returns
+        -------
+        RestObj
+
+        """
 
         model_history = cls.list_model_versions(model)
 
         for item in model_history:
-            if isinstance(item, str):
-                if item == 'id' and dict(model_history)[item] == version_id:
-                    return cls.request_link(
-                    model_history,
-                    "self",
-                    headers={"Accept": "application/vnd.sas.models.model.version"},
-                )
-                continue
-            
             if item["id"] == version_id:
                 return cls.request_link(
                     item,
                     "self",
-                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                    headers={"Accept": "application/vnd.sas.models.model.version+json"},
                 )
 
         raise ValueError("The version id specified could not be found.")
 
     @classmethod
     def get_model_with_versions(cls, model):
+        """Get the current model with its version history.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+
+        Returns
+        -------
+        list
+
+        """
+
         if cls.is_uuid(model):
             model_id = model
         elif isinstance(model, dict) and "id" in model:
@@ -672,75 +695,130 @@ class ModelRepository(Service):
                 )
             model_id = model["id"]
 
-        versions_uri = f"/modelRepository/models/{model_id}/versions"
-        version_history = cls.get(
-            versions_uri,
-            headers={"Accept": "application/vnd.sas.models.model.version"},
-        )
-        if version_history is None:
-            return {}
+        versions_uri = f"/models/{model_id}/versions"
+        try:
+            version_history = cls.request(
+                "GET",
+                versions_uri,
+                headers={"Accept": "application/vnd.sas.collection+json"},
+            )
+        except urllib.error.HTTPError as e:
+            raise HTTPError(
+                f"Request failed: Model id may be referencing a non-existing model."
+            ) from None
+
+        if isinstance(version_history, RestObj):
+            return [version_history]
+
         return version_history
 
     @classmethod
     def get_model_or_version(cls, model, version_id):
+        """Get a specific version of a model but if model id and version id are the same, the current model is returned.
 
-        if cls.is_uuid(model):
-            model_id = model
-        elif isinstance(model, dict) and "id" in model:
-            model_id = model["id"]
-        else:
-            model = cls.get_model(model)
-            if not model:
-                raise HTTPError(
-                    "This model may not exist in a project or the model may not exist at all."
-                )
-            model_id = model["id"]
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+        version_id: str
+            The id of a model version.
 
-        if model_id == version_id:
-            return cls.get_model(model)
+        Returns
+        -------
+        RestObj
+
+        """
 
         version_history = cls.get_model_with_versions(model)
-        model_versions = version_history.get("modelVersions")
-        for i, item in enumerate(model_versions):
-            if item.get("id") == version_id:
+
+        for item in version_history:
+            if item["id"] == version_id:
                 return cls.request_link(
                     item,
                     "self",
-                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                    headers={
+                        "Accept": "application/vnd.sas.models.model.version+json, application/vnd.sas.models.model+json"
+                    },
                 )
 
         raise ValueError("The version id specified could not be found.")
 
     @classmethod
     def get_model_version_contents(cls, model, version_id):
+        """Get the contents of a model version.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+        version_id: str
+            The id of a model version.
+
+        Returns
+        -------
+        list
+
+        """
         model_version = cls.get_model_version(model, version_id)
         version_contents = cls.request_link(
             model_version,
             "contents",
-            headers={"Accept": "application/vnd.sas.models.model.content"},
+            headers={"Accept": "application/vnd.sas.collection+json"},
         )
 
-        if version_contents is None:
-            return {}
+        if isinstance(version_contents, RestObj):
+            return [version_contents]
+
         return version_contents
 
     @classmethod
     def get_model_version_content_metadata(cls, model, version_id, content_id):
+        """Get the content metadata header information for a model version.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+        version_id: str
+            The id of a model version.
+        content_id: str
+            The id of the content file.
+
+        Returns
+        -------
+        RestObj
+
+        """
         model_version_contents = cls.get_model_version_contents(model, version_id)
 
-        model_version_contents_items = model_version_contents.get("items")
-        for i, item in enumerate(model_version_contents_items):
-            if item.get("id") == content_id:
+        for item in model_version_contents:
+            if item["id"] == content_id:
                 return cls.request_link(
                     item,
                     "self",
-                    headers={"Accept": "application/vnd.sas.models.model.content"},
+                    headers={"Accept": "application/vnd.sas.models.model.content+json"},
                 )
 
         raise ValueError("The content id specified could not be found.")
 
     @classmethod
     def get_model_version_content(cls, model, version_id, content_id):
+        """Get the specific content inside the content file for a model version.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+        version_id: str
+            The id of a model version.
+        content_id: str
+            The id of the specific content file.
+
+        Returns
+        -------
+        list
+
+        """
 
         metadata = cls.get_model_version_content_metadata(model, version_id, content_id)
         version_content_file = cls.request_link(
@@ -749,6 +827,9 @@ class ModelRepository(Service):
 
         if version_content_file is None:
             raise HTTPError("Something went wrong while accessing the metadata file.")
+
+        if isinstance(version_content_file, RestObj):
+            return [version_content_file]
         return version_content_file
 
     @classmethod

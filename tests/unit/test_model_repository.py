@@ -15,6 +15,7 @@ from sasctl.services import model_repository as mr
 
 from sasctl.core import RestObj, VersionInfo, request
 from requests import HTTPError
+import urllib.error
 
 
 def test_create_model():
@@ -235,6 +236,53 @@ def test_add_model_content():
             }
 
 
+def test_create_model_version():
+    model_mock = {"id": 12345}
+    new_model_mock = {"id": 34567}
+    with mock.patch(
+        "sasctl._services.model_repository.ModelRepository.get_model",
+        side_effect=[
+            model_mock,
+            model_mock,
+            new_model_mock,
+            model_mock,
+            new_model_mock,
+        ],
+    ) as get_model:
+        with mock.patch(
+            "sasctl._services.model_repository.ModelRepository.get_model_link"
+        ) as get_model_link:
+            with mock.patch(
+                "sasctl._services.model_repository.ModelRepository.request_link"
+            ) as request_link:
+                get_model_link_mock = {
+                    "method": "GET",
+                    "rel": "modelHistory",
+                    "href": "/modelRepository/models/12345/history",
+                    "uri": "/modelRepository/models/12345/history",
+                    "type": "application/vnd.sas.collection",
+                    "responseItemType": "application/vnd.sas.models.model.version",
+                }
+
+                get_model_link.return_value = None
+                with pytest.raises(ValueError):
+                    mr.create_model_version(model=model_mock, minor=False)
+
+                get_model_link.return_value = get_model_link_mock
+                response = mr.create_model_version(model=model_mock, minor=False)
+
+                request_link.assert_called_with(
+                    model_mock, "addModelVersion", json={"option": "major"}
+                )
+                assert response == new_model_mock
+
+                response = mr.create_model_version(model=model_mock, minor=True)
+                request_link.assert_called_with(
+                    model_mock, "addModelVersion", json={"option": "minor"}
+                )
+                assert response == new_model_mock
+
+
 def test_list_model_versions():
     with mock.patch(
         "sasctl._services.model_repository.ModelRepository.get_model_link"
@@ -249,7 +297,6 @@ def test_list_model_versions():
                     model="12345",
                 )
 
-            # Successfully returns an empty list of model versions
             get_model_link_mock = {
                 "method": "GET",
                 "rel": "modelHistory",
@@ -258,14 +305,22 @@ def test_list_model_versions():
                 "type": "application/vnd.sas.collection",
                 "responseItemType": "application/vnd.sas.models.model.version",
             }
-            get_model_link.return_value = get_model_link_mock
-            request_link.return_value = None
-            response = mr.list_model_versions(model="12345")
-            assert response == {}
 
-            request_link.return_value = RestObj
+            get_model_link.return_value = get_model_link_mock
+
             response = mr.list_model_versions(model="12345")
-            assert response == RestObj
+            assert response
+
+            request_link.return_value = RestObj({"id": "12345"})
+            response = mr.list_model_versions(model="12345")
+            assert isinstance(response, list)
+
+            request_link.return_value = [
+                RestObj({"id": "12345"}),
+                RestObj({"id": "3456"}),
+            ]
+            response = mr.list_model_versions(model="12345")
+            assert isinstance(response, list)
 
 
 def test_get_model_version():
@@ -276,26 +331,21 @@ def test_get_model_version():
             "sasctl._services.model_repository.ModelRepository.request_link"
         ) as request_link:
 
-            list_model_versions_mock = {
-                "count": 2,
-                "items": [
-                    {
-                        "id": "123",
-                        "links": [
-                            {
-                                "method": "GET",
-                                "rel": "self",
-                                "href": "/modelRepository/models/abc/history/123",
-                                "uri": "/modelRepository/models/abc/history/123",
-                                "type": "demo",
-                            }
-                        ],
-                    },
-                    {"id": "345", "links": []},
-                ],
-            }
-
-            # originally wrapped as a list, so this test works assuming dict/restobj returning is allowed
+            list_model_versions_mock = [
+                {
+                    "id": "123",
+                    "links": [
+                        {
+                            "method": "GET",
+                            "rel": "self",
+                            "href": "/modelRepository/models/abc/history/123",
+                            "uri": "/modelRepository/models/abc/history/123",
+                            "type": "demo",
+                        }
+                    ],
+                },
+                {"id": "345", "links": []},
+            ]
 
             list_model_versions.return_value = list_model_versions_mock
 
@@ -304,9 +354,9 @@ def test_get_model_version():
 
             response = mr.get_model_version(model="000", version_id="123")
             request_link.assert_called_once_with(
-                list_model_versions_mock.get("items")[0],
+                list_model_versions_mock[0],
                 "self",
-                headers={"Accept": "application/vnd.sas.models.model.version"},
+                headers={"Accept": "application/vnd.sas.models.model.version+json"},
             )
 
 
@@ -318,8 +368,8 @@ def test_get_model_with_versions():
             "sasctl._services.model_repository.ModelRepository.get_model"
         ) as get_model:
             with mock.patch(
-                "sasctl._services.model_repository.ModelRepository.get"
-            ) as get:
+                "sasctl._services.model_repository.ModelRepository.request"
+            ) as request:
 
                 is_uuid.return_value = True
                 response = mr.get_model_with_versions(model="12345")
@@ -337,106 +387,81 @@ def test_get_model_with_versions():
 
                 is_uuid.return_value = False
                 get_model.return_value = RestObj
-                get.return_value = RestObj
-                response = mr.get_model_with_versions(model=RestObj)
-                assert response != {}
+                request.side_effect = urllib.error.HTTPError(
+                    url="http://demo.sas.com",
+                    code=404,
+                    msg="Not Found",
+                    hdrs=None,
+                    fp=None,
+                )
+                with pytest.raises(HTTPError):
+                    mr.get_model_with_versions(model=RestObj)
 
-                get.return_value = None
+                request.side_effect = None
+                request.return_value = RestObj({"id": "12345"})
                 response = mr.get_model_with_versions(model=RestObj)
-                assert response == {}
+                assert isinstance(response, list)
 
-                assert get.call_count == 4
-                get.assert_any_call(
-                    "/modelRepository/models/sasctl.core.RestObj['id']/versions",
-                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                request.return_value = [
+                    RestObj({"id": "12345"}),
+                    RestObj({"id": "3456"}),
+                ]
+                response = mr.get_model_with_versions(model=RestObj)
+                assert isinstance(response, list)
+
+                request.assert_any_call(
+                    "GET",
+                    "/models/sasctl.core.RestObj['id']/versions",
+                    headers={"Accept": "application/vnd.sas.collection+json"},
                 )
 
-                get.assert_any_call(
-                    "/modelRepository/models/12345/versions",
-                    headers={"Accept": "application/vnd.sas.models.model.version"},
+                request.assert_any_call(
+                    "GET",
+                    "/models/12345/versions",
+                    headers={"Accept": "application/vnd.sas.collection+json"},
                 )
-
-                # add test case for returning empty dictionary
 
 
 def test_get_model_or_version():
     with mock.patch(
-        "sasctl._services.model_repository.ModelRepository.is_uuid"
-    ) as is_uuid:
+        "sasctl._services.model_repository.ModelRepository.get_model_with_versions"
+    ) as get_model_with_versions:
         with mock.patch(
-            "sasctl._services.model_repository.ModelRepository.get_model"
-        ) as get_model:
-            with mock.patch(
-                "sasctl._services.model_repository.ModelRepository.get_model_with_versions"
-            ) as get_model_with_versions:
-                with mock.patch(
-                    "sasctl._services.model_repository.ModelRepository.request_link"
-                ) as request_link:
+            "sasctl._services.model_repository.ModelRepository.request_link"
+        ) as request_link:
 
-                    is_uuid.return_value = True
-                    get_model.return_value = RestObj
-                    response = mr.get_model_or_version(
-                        model="12345", version_id="12345"
-                    )
-                    assert response
+            get_model_with_versions_mock = [
+                {
+                    "id": "123",
+                    "links": [
+                        {
+                            "method": "GET",
+                            "rel": "self",
+                            "href": "/modelRepository/models/abc/history/123",
+                            "uri": "/modelRepository/models/abc/history/123",
+                            "type": "demo",
+                        }
+                    ],
+                },
+                {"id": "345", "links": []},
+            ]
 
-                    is_uuid.return_value = False
-                    get_model.return_value = RestObj
-                    response = mr.get_model_or_version(
-                        model={"id": "12345"}, version_id="12345"
-                    )
-                    assert response
+            get_model_with_versions.return_value = []
+            with pytest.raises(ValueError):
+                mr.get_model_or_version(model="000", version_id="000")
 
-                    is_uuid.return_value = False
-                    get_model.return_value = None
-                    with pytest.raises(HTTPError):
-                        mr.get_model_or_version(model=RestObj, version_id="12345")
+            get_model_with_versions.return_value = get_model_with_versions_mock
+            with pytest.raises(ValueError):
+                mr.get_model_or_version(model="000", version_id="000")
 
-                    is_uuid.return_value = False
-                    get_model_mock = {"id": "12345"}
-                    get_model.side_effect = [
-                        get_model_mock,
-                        RestObj,
-                    ]
-                    response = mr.get_model_or_version(
-                        model=RestObj, version_id="12345"
-                    )
-                    assert response
-
-                    assert get_model.call_count == 5
-
-                    get_model_with_versions_mock = {
-                        "count": 2,
-                        "items": [{}],
-                        "modelVersions": [
-                            {
-                                "id": "123",
-                                "links": [
-                                    {
-                                        "method": "GET",
-                                        "rel": "self",
-                                        "href": "/modelRepository/models/abc/history/123",
-                                        "uri": "/modelRepository/models/abc/history/123",
-                                        "type": "demo",
-                                    }
-                                ],
-                            },
-                            {"id": "345", "links": []},
-                        ],
-                    }
-
-                    is_uuid.return_value = True
-                    get_model_with_versions.return_value = get_model_with_versions_mock
-                    with pytest.raises(ValueError):
-                        mr.get_model_or_version(model="012", version_id="000")
-
-                    response = mr.get_model_or_version(model="012", version_id="123")
-                    assert response
-                    request_link.assert_called_once_with(
-                        get_model_with_versions_mock.get("modelVersions")[0],
-                        "self",
-                        headers={"Accept": "application/vnd.sas.models.model.version"},
-                    )
+            response = mr.get_model_or_version(model="000", version_id="123")
+            request_link.assert_called_once_with(
+                get_model_with_versions_mock[0],
+                "self",
+                headers={
+                    "Accept": "application/vnd.sas.models.model.version+json, application/vnd.sas.models.model+json"
+                },
+            )
 
 
 def test_get_model_version_contents():
@@ -447,14 +472,23 @@ def test_get_model_version_contents():
             "sasctl._services.model_repository.ModelRepository.request_link"
         ) as request_link:
 
-            get_model_version.return_value = RestObj
-            request_link.return_value = None
-            response = mr.get_model_version_contents(model="12345", version_id="345")
-            assert response == {}
+            get_model_version.return_value = {"id": "000"}
+            request_link.return_value = RestObj({"id": "12345"})
+            response = mr.get_model_version_contents(model="12345", version_id="3456")
+            assert isinstance(response, list)
 
-            request_link.return_value = RestObj
-            response = mr.get_model_version_contents(model="12345", version_id="345")
-            assert response == RestObj
+            request_link.return_value = [
+                RestObj({"id": "12345"}),
+                RestObj({"id": "3456"}),
+            ]
+            response = mr.get_model_version_contents(model="12345", version_id="3456")
+            assert isinstance(response, list)
+
+            request_link.assert_any_call(
+                {"id": "000"},
+                "contents",
+                headers={"Accept": "application/vnd.sas.collection+json"},
+            )
 
 
 def test_get_model_version_content_metadata():
@@ -465,28 +499,31 @@ def test_get_model_version_content_metadata():
             "sasctl._services.model_repository.ModelRepository.request_link"
         ) as request_link:
 
-            model_version_contents_mock = {
-                "count": 2,
-                "items": [
-                    {
-                        "id": "345",
-                        "links": [
-                            {
-                                "method": "GET",
-                                "rel": "self",
-                                "href": "/modelRepository/models/abc/history/123/contents/345",
-                                "uri": "/modelRepository/models/abc/history/123/contents/345",
-                                "type": "demo",
-                            }
-                        ],
-                    },
-                    {"id": "567", "links": []},
-                ],
-            }
+            get_model_with_metadata_mock = [
+                {
+                    "id": "123",
+                    "links": [
+                        {
+                            "method": "GET",
+                            "rel": "self",
+                            "href": "/modelRepository/models/abc/history/123",
+                            "uri": "/modelRepository/models/abc/history/123",
+                            "type": "demo",
+                        }
+                    ],
+                },
+                {"id": "345", "links": []},
+            ]
 
-            get_model_version_contents.return_value = model_version_contents_mock
+            get_model_version_contents.return_value = []
             with pytest.raises(ValueError):
-                response = mr.get_model_version_content_metadata(
+                mr.get_model_version_content_metadata(
+                    model="000", version_id="123", content_id="000"
+                )
+
+            get_model_version_contents.return_value = get_model_with_metadata_mock
+            with pytest.raises(ValueError):
+                mr.get_model_version_content_metadata(
                     model="abc", version_id="123", content_id="000"
                 )
 
@@ -495,9 +532,9 @@ def test_get_model_version_content_metadata():
             )
             assert response
             request_link.assert_called_once_with(
-                model_version_contents_mock.get("items")[0],
+                get_model_with_metadata_mock[1],
                 "self",
-                headers={"Accept": "application/vnd.sas.models.model.content"},
+                headers={"Accept": "application/vnd.sas.models.model.content+json"},
             )
 
 
@@ -509,17 +546,30 @@ def test_get_model_version_content():
             "sasctl._services.model_repository.ModelRepository.request_link"
         ) as request_link:
 
-            get_model_version_content_metadata.return_value = RestObj
+            get_model_version_content_metadata.return_value = {"id": 000}
             request_link.return_value = None
             with pytest.raises(HTTPError):
                 mr.get_model_version_content(
                     model="abc", version_id="123", content_id="345"
                 )
 
-            request_link.return_value = RestObj
+            request_link.return_value = RestObj({"id": "12345"})
             response = mr.get_model_version_content(
                 model="abc", version_id="123", content_id="345"
             )
-            assert response
+            assert isinstance(response, list)
 
-            assert request_link.call_count == 2
+            request_link.return_value = [
+                RestObj({"id": "12345"}),
+                RestObj({"id": "3456"}),
+            ]
+            response = mr.get_model_version_content(
+                model="abc", version_id="123", content_id="345"
+            )
+            assert isinstance(response, list)
+
+            request_link.assert_any_call(
+                {"id": 000},
+                "content",
+                headers={"Accept": "text/plain"},
+            )
