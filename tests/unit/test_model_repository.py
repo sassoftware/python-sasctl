@@ -290,9 +290,7 @@ def test_list_model_versions():
         with mock.patch(
             "sasctl._services.model_repository.ModelRepository.request_link"
         ) as request_link:
-            with mock.patch(
-                "sasctl.core.Session.version_info"
-            ) as version:
+            with mock.patch("sasctl.core.Session.version_info") as version:
                 version.return_value = VersionInfo(4)
                 get_model_link.return_value = None
                 with pytest.raises(ValueError):
