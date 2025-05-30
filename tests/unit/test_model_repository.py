@@ -290,37 +290,40 @@ def test_list_model_versions():
         with mock.patch(
             "sasctl._services.model_repository.ModelRepository.request_link"
         ) as request_link:
+            with mock.patch(
+                "sasctl.core.Session.version_info"
+            ) as version:
+                version.return_value = VersionInfo(4)
+                get_model_link.return_value = None
+                with pytest.raises(ValueError):
+                    mr.list_model_versions(
+                        model="12345",
+                    )
 
-            get_model_link.return_value = None
-            with pytest.raises(ValueError):
-                mr.list_model_versions(
-                    model="12345",
-                )
+                get_model_link_mock = {
+                    "method": "GET",
+                    "rel": "modelHistory",
+                    "href": "/modelRepository/models/12345/history",
+                    "uri": "/modelRepository/models/12345/history",
+                    "type": "application/vnd.sas.collection",
+                    "responseItemType": "application/vnd.sas.models.model.version",
+                }
 
-            get_model_link_mock = {
-                "method": "GET",
-                "rel": "modelHistory",
-                "href": "/modelRepository/models/12345/history",
-                "uri": "/modelRepository/models/12345/history",
-                "type": "application/vnd.sas.collection",
-                "responseItemType": "application/vnd.sas.models.model.version",
-            }
+                get_model_link.return_value = get_model_link_mock
 
-            get_model_link.return_value = get_model_link_mock
+                response = mr.list_model_versions(model="12345")
+                assert response
 
-            response = mr.list_model_versions(model="12345")
-            assert response
+                request_link.return_value = RestObj({"id": "12345"})
+                response = mr.list_model_versions(model="12345")
+                assert isinstance(response, list)
 
-            request_link.return_value = RestObj({"id": "12345"})
-            response = mr.list_model_versions(model="12345")
-            assert isinstance(response, list)
-
-            request_link.return_value = [
-                RestObj({"id": "12345"}),
-                RestObj({"id": "3456"}),
-            ]
-            response = mr.list_model_versions(model="12345")
-            assert isinstance(response, list)
+                request_link.return_value = [
+                    RestObj({"id": "12345"}),
+                    RestObj({"id": "3456"}),
+                ]
+                response = mr.list_model_versions(model="12345")
+                assert isinstance(response, list)
 
 
 def test_get_model_version():
