@@ -387,7 +387,7 @@ def test_get_model_with_versions():
                     mr.get_model_with_versions(model=RestObj)
 
                 is_uuid.return_value = False
-                get_model.return_value = RestObj({"id": "12345"})
+                get_model.return_value = RestObj({"id": "123456"})
                 request.side_effect = urllib.error.HTTPError(
                     url="http://demo.sas.com",
                     code=404,
@@ -412,7 +412,7 @@ def test_get_model_with_versions():
 
                 request.assert_any_call(
                     "GET",
-                    "/models/sasctl.core.RestObj['id']/versions",
+                    "/models/123456/versions",
                     headers={"Accept": "application/vnd.sas.collection+json"},
                 )
 
