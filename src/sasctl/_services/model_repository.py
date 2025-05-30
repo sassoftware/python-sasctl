@@ -623,21 +623,28 @@ class ModelRepository(Service):
 
         """
 
-        link = cls.get_model_link(model, "modelHistory")
-        if link is None:
-            raise ValueError(
-                "Cannot find link for version history for model '%s'" % model
+        if current_session().version_info() < 4:
+            model = cls.get_model(model)
+            if cls.get_model_link(model, "modelVersions") is None:
+                raise ValueError("Unable to retrieve versions for model '%s'" % model)
+
+            return cls.request_link(model, "modelVersions")
+        else:
+            link = cls.get_model_link(model, "modelHistory")
+            if link is None:
+                raise ValueError(
+                    "Cannot find link for version history for model '%s'" % model
+                )
+
+            modelHistory = cls.request_link(
+                link,
+                "modelHistory",
+                headers={"Accept": "application/vnd.sas.collection+json"},
             )
 
-        modelHistory = cls.request_link(
-            link,
-            "modelHistory",
-            headers={"Accept": "application/vnd.sas.collection+json"},
-        )
-
-        if isinstance(modelHistory, RestObj):
-            return [modelHistory]
-        return modelHistory
+            if isinstance(modelHistory, RestObj):
+                return [modelHistory]
+            return modelHistory
 
     @classmethod
     def get_model_version(cls, model, version_id):
