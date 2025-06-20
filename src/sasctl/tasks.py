@@ -981,6 +981,7 @@ def score_model_with_cas(
     library_name: str = "Public",
     model_version: str = "latest",
     use_cas_gateway: bool = False,
+    timeout: int = 300,
 ):
     score_definition = sd.create_score_definition(
         score_def_name,
@@ -994,7 +995,7 @@ def score_model_with_cas(
         use_cas_gateway=use_cas_gateway,
     )
     score_execution = se.create_score_execution(score_definition.id)
-    score_execution_poll = se.poll_score_execution_state(score_execution)
+    score_execution_poll = se.poll_score_execution_state(score_execution, timeout)
     print(score_execution_poll)
     score_results = se.get_score_execution_results(score_execution, use_cas_gateway)
     return score_results
