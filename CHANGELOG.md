@@ -1,3 +1,9 @@
+v1.11.5 (2025-06-27)
+--------------------
+**Improvements**
+- Added model versioning methods to `model_repository.py` to handle model version endpoints.
+- Allow for user to set custom timeout length for score testing in `score_model_with_cas`.
+
 v1.11.4 (2025-05-02)
 --------------------
 **Improvements**
