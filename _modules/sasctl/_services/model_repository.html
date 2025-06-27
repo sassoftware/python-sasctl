@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.model_repository &#8212; sasctl 1.11.4 documentation</title>
+    <title>sasctl._services.model_repository &#8212; sasctl 1.11.5 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=2c3bee14"></script>
+    <script src="../../../_static/documentation_options.js?v=48f43e50"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/model_repository';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.4" />
-    <meta name="docbuild:last-update" content="May 02, 2025"/>
+  <meta name="docsearch:version" content="1.11.5" />
+    <meta name="docbuild:last-update" content="Jun 27, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.4 documentation</p>
+    <p class="title logo__title">sasctl 1.11.5 documentation</p>
   
 </a></div>
     
@@ -324,9 +324,16 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">sasctl_command</span>
+<span class="c1"># import traceback</span>
+<span class="c1"># import sys</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">sasctl_command</span><span class="p">,</span> <span class="n">RestObj</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
+
 
 <span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;Analytical&quot;</span><span class="p">,</span>
@@ -968,11 +975,240 @@
 <span class="sd">        list</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelVersions&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve versions for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelVersions&quot;</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">version_info</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelVersions&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve versions for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelVersions&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelHistory&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Cannot find link for version history for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span>
+                <span class="p">)</span>
+
+            <span class="n">modelHistory</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span>
+                <span class="n">link</span><span class="p">,</span>
+                <span class="s2">&quot;modelHistory&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.collection+json&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">modelHistory</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">modelHistory</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">modelHistory</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_version">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_version">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a specific version of a model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+<span class="sd">        version_id: str</span>
+<span class="sd">            The id of a model version.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">model_history</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_model_versions</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">model_history</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">version_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span>
+                    <span class="n">item</span><span class="p">,</span>
+                    <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.model.version+json&quot;</span><span class="p">},</span>
+                <span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The version id specified could not be found.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_with_versions">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_with_versions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_with_versions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current model with its version history.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+            <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">HTTPError</span><span class="p">(</span>
+                    <span class="s2">&quot;This model may not exist in a project or the model may not exist at all.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="n">versions_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/models/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s2">/versions&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">version_history</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="n">versions_uri</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.collection+json&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Request failed: Model id may be referencing a non-existing model.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">version_history</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">version_history</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">version_history</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_or_version">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_or_version">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_or_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a specific version of a model but if model id and version id are the same, the current model is returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+<span class="sd">        version_id: str</span>
+<span class="sd">            The id of a model version.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">version_history</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_with_versions</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">version_history</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">version_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span>
+                    <span class="n">item</span><span class="p">,</span>
+                    <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.model.version+json, application/vnd.sas.models.model+json&quot;</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The version id specified could not be found.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_version_contents">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_version_contents">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_version_contents</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the contents of a model version.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+<span class="sd">        version_id: str</span>
+<span class="sd">            The id of a model version.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_version</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_version</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">)</span>
+        <span class="n">version_contents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span>
+            <span class="n">model_version</span><span class="p">,</span>
+            <span class="s2">&quot;contents&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.collection+json&quot;</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">version_contents</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">version_contents</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">version_contents</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_version_content_metadata">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_version_content_metadata">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_version_content_metadata</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">,</span> <span class="n">content_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the content metadata header information for a model version.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+<span class="sd">        version_id: str</span>
+<span class="sd">            The id of a model version.</span>
+<span class="sd">        content_id: str</span>
+<span class="sd">            The id of the content file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_version_contents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_version_contents</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">model_version_contents</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">content_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span>
+                    <span class="n">item</span><span class="p">,</span>
+                    <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.model.content+json&quot;</span><span class="p">},</span>
+                <span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The content id specified could not be found.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_version_content">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_version_content">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_version_content</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">,</span> <span class="n">content_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the specific content inside the content file for a model version.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+<span class="sd">        version_id: str</span>
+<span class="sd">            The id of a model version.</span>
+<span class="sd">        content_id: str</span>
+<span class="sd">            The id of the specific content file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_version_content_metadata</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">version_id</span><span class="p">,</span> <span class="n">content_id</span><span class="p">)</span>
+        <span class="n">version_content_file</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">version_content_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPError</span><span class="p">(</span><span class="s2">&quot;Something went wrong while accessing the metadata file.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">version_content_file</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">version_content_file</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">version_content_file</span></div>
 
 
 <div class="viewcode-block" id="ModelRepository.copy_analytic_store">

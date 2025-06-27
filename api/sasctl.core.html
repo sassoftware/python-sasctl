@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.core &#8212; sasctl 1.11.4 documentation</title>
+    <title>sasctl.core &#8212; sasctl 1.11.5 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=2c3bee14"></script>
+    <script src="../_static/documentation_options.js?v=48f43e50"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.core';</script>
@@ -49,8 +49,8 @@
     <link rel="prev" title="current_session" href="sasctl.current_session.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.4" />
-    <meta name="docbuild:last-update" content="May 02, 2025"/>
+  <meta name="docsearch:version" content="1.11.5" />
+    <meta name="docbuild:last-update" content="Jun 27, 2025"/>
   </head>
   
   
@@ -112,7 +112,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.4 documentation</p>
+    <p class="title logo__title">sasctl 1.11.5 documentation</p>
   
 </a></div>
     
@@ -345,7 +345,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">OAuth2Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#OAuth2Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.OAuth2Token" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.auth.AuthBase" title="(in Requests v2.32.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuthBase</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.auth.AuthBase" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuthBase</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token.is_expired">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_expired</span></span><a class="headerlink" href="#sasctl.core.OAuth2Token.is_expired" title="Link to this definition">#</a></dt>
@@ -453,7 +453,7 @@ length is not known until all items have been pulled from the server.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">SSLContextAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a></p>
 <p>HTTPAdapter that uses the default SSL context on the machine.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter.init_poolmanager">
@@ -461,7 +461,7 @@ length is not known until all items have been pulled from the server.</p>
 <dd><p>Initializes a urllib3 PoolManager.</p>
 <p>This method should not be called from user code, and is only
 exposed for use when subclassing the
-<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a>.</p>
+<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -479,7 +479,7 @@ exposed for use when subclassing the
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.Session">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authinfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_ssl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consul_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Session" title="(in Requests v2.32.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Session" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a></p>
 <p>Establish a connection to a SAS Viya server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -617,7 +617,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -634,7 +634,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -651,7 +651,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -676,7 +676,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -695,7 +695,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -739,7 +739,7 @@ for multipart encoding upload.</p></li>
 <li><p><strong>auth</strong> – (optional) Auth tuple or callable to enable
 Basic/Digest/Custom HTTP Auth.</p></li>
 <li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – (optional) How long to wait for the server to send
-data before giving up, as a float, or a <a class="reference external" href="https://requests.readthedocs.io/en/latest/user/advanced/#timeouts" title="(in Requests v2.32.3)"><span class="xref std std-ref">(connect timeout,
+data before giving up, as a float, or a <a class="reference external" href="https://requests.readthedocs.io/en/latest/user/advanced/#timeouts" title="(in Requests v2.32.4)"><span class="xref std std-ref">(connect timeout,
 read timeout)</span></a> tuple.</p></li>
 <li><p><strong>allow_redirects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – (optional) Set to True by default.</p></li>
 <li><p><strong>proxies</strong> – (optional) Dictionary mapping protocol or protocol and
@@ -761,7 +761,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -772,7 +772,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 <dd><p>Send a given PreparedRequest.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1014,10 +1014,10 @@ will automatically be specified.</p></li>
 <li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – <p>The format of the return response.  Defaults to <cite>auto</cite>.</p>
 <ul>
 <li><p><cite>rest</cite>: <a class="reference internal" href="#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> constructed from JSON.</p></li>
-<li><p><cite>response</cite>: the raw <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Response</span></code></a> object.</p></li>
-<li><p><cite>content</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.content" title="(in Requests v2.32.3)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.content</span></code></a></p></li>
-<li><p><cite>json</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.json" title="(in Requests v2.32.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">requests.Response.json()</span></code></a></p></li>
-<li><p><cite>text</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.text" title="(in Requests v2.32.3)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.text</span></code></a></p></li>
+<li><p><cite>response</cite>: the raw <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Response</span></code></a> object.</p></li>
+<li><p><cite>content</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.content" title="(in Requests v2.32.4)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.content</span></code></a></p></li>
+<li><p><cite>json</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.json" title="(in Requests v2.32.4)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">requests.Response.json()</span></code></a></p></li>
+<li><p><cite>text</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.text" title="(in Requests v2.32.4)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.text</span></code></a></p></li>
 <li><p><cite>auto</cite>: <a class="reference internal" href="#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> constructed from JSON if possible, otherwise same as <cite>text</cite>.</p></li>
 </ul>
 </p></li>
