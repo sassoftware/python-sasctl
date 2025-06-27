@@ -83,9 +83,7 @@ class ScoreDefinitions(Service):
         else:
             object_descriptor_type = "sas.models.model.ds2"
 
-        if cls._model_repository.is_uuid(model):
-            model_id = model
-        elif isinstance(model, dict) and "id" in model:
+        if isinstance(model, dict) and "id" in model:
             model_id = model["id"]
         else:
             model = cls._model_repository.get_model(model)
