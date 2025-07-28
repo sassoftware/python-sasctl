@@ -69,7 +69,7 @@ class ScoreDefinitions(Service):
         library_name: str, optional
             The library within the CAS server the table exists in. Defaults to "Public".
         model_version: str, optional
-            The user-chosen version of the model with the specified model_id. Defaults to "latest".
+            The user-chosen version of the model with the specified model version name. Defaults to latest version.
 
         Returns
         -------
@@ -116,7 +116,7 @@ class ScoreDefinitions(Service):
         table = cls._cas_management.get_table(table_name, library_name, server_name)
         if not table and not table_file:
             raise HTTPError(
-                f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist."
+                "This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist."
             )
         elif not table and table_file:
             cls._cas_management.upload_file(
@@ -125,16 +125,32 @@ class ScoreDefinitions(Service):
             table = cls._cas_management.get_table(table_name, library_name, server_name)
             if not table:
                 raise HTTPError(
-                    f"The file failed to upload properly or another error occurred."
+                    "The file failed to upload properly or another error occurred."
                 )
             # Checks if the inputted table exists, and if not, uploads a file to create a new table
+
+        if model_version != "latest":
+
+            if isinstance(model_version, dict) and "modelVersionName" in model_version:
+                model_version = model_version["modelVersionName"]
+            elif isinstance(model_version, str) and cls.is_uuid(model_version):
+                model_version = cls._model_repository.get_model_or_version(
+                    model_id, model_version
+                )["modelVersionName"]
+            else:
+                model_version = model_version
+
+            object_uri = f"/modelManagement/models/{model_id}/versions/@{model_version}"
+
+        else:
+            object_uri = f"/modelManagement/models/{model_id}"
 
         save_score_def = {
             "name": model_name,  # used to be score_def_name
             "description": description,
             "objectDescriptor": {
-                "uri": f"/modelManagement/models/{model_id}",
-                "name": f"{model_name}({model_version})",
+                "uri": object_uri,
+                "name": f"{model_name} ({model_version})",
                 "type": f"{object_descriptor_type}",
             },
             "inputData": {
@@ -149,7 +165,7 @@ class ScoreDefinitions(Service):
                 "projectUri": f"/modelRepository/projects/{model_project_id}",
                 "projectVersionUri": f"/modelRepository/projects/{model_project_id}/projectVersions/{model_project_version_id}",
                 "publishDestination": "",
-                "versionedModel": f"{model_name}({model_version})",
+                "versionedModel": f"{model_name} ({model_version})",
             },
             "mappings": inputMapping,
         }
