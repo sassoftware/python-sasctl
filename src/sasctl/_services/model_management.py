@@ -278,7 +278,6 @@ class ModelManagement(Service):
 
             modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
             for model, modelVersionName in zip(models, modelVersions):
-                print(model.name)
                 if (
                     isinstance(modelVersionName, dict)
                     and "modelVersionName" in modelVersionName
