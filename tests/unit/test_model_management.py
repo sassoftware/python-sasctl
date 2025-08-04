@@ -23,6 +23,8 @@ def test_create_performance_definition():
         RestObj({"name": "Test Model 2", "id": "67890", "projectId": PROJECT["id"]}),
     ]
     USER = "username"
+    VERSION_MOCK = {"modelVersionName": "1.0"}
+    VERSION_MOCK_NONAME = {}
 
     with mock.patch("sasctl.core.Session._get_authorization_token"):
         current_session("example.com", USER, "password")
@@ -111,6 +113,32 @@ def test_create_performance_definition():
                             table_prefix="TestData",
                         )
 
+                    with pytest.raises(ValueError):
+                        # Model verions exceeds models
+                        get_model.side_effect = copy.deepcopy(MODELS)
+                        _ = mm.create_performance_definition(
+                            models=["model1", "model2"],
+                            modelVersions=["1.0", "2.0", "3.0"],
+                            library_name="TestLibrary",
+                            table_prefix="TestData",
+                            max_bins=3,
+                            monitor_challenger=True,
+                            monitor_champion=True,
+                        )
+
+                    with pytest.raises(ValueError):
+                        # Model version dictionary missing modelVersionName
+                        get_model.side_effect = copy.deepcopy(MODELS)
+                        _ = mm.create_performance_definition(
+                            models=["model1", "model2"],
+                            modelVersions=VERSION_MOCK_NONAME,
+                            library_name="TestLibrary",
+                            table_prefix="TestData",
+                            max_bins=3,
+                            monitor_challenger=True,
+                            monitor_champion=True,
+                        )
+
                     get_project.return_value = copy.deepcopy(PROJECT)
                     get_project.return_value["targetVariable"] = "target"
                     get_project.return_value["targetLevel"] = "interval"
@@ -125,21 +153,68 @@ def test_create_performance_definition():
                         monitor_challenger=True,
                         monitor_champion=True,
                     )
+                    url, data = post_models.call_args
+                    assert post_models.call_count == 1
+                    assert PROJECT["id"] == data["json"]["projectId"]
+                    assert MODELS[0]["id"] in data["json"]["modelIds"]
+                    assert MODELS[1]["id"] in data["json"]["modelIds"]
+                    assert "TestLibrary" == data["json"]["dataLibrary"]
+                    assert "TestData" == data["json"]["dataPrefix"]
+                    assert "cas-shared-default" == data["json"]["casServerId"]
+                    assert data["json"]["name"]
+                    assert data["json"]["description"]
+                    assert data["json"]["maxBins"] == 3
+                    assert data["json"]["championMonitored"] is True
+                    assert data["json"]["challengerMonitored"] is True
 
-                assert post_models.call_count == 1
-                url, data = post_models.call_args
+                    get_model.side_effect = copy.deepcopy(MODELS)
+                    _ = mm.create_performance_definition(
+                        # One model version as a string name
+                        models=["model1", "model2"],
+                        modelVersions="1.0",
+                        library_name="TestLibrary",
+                        table_prefix="TestData",
+                        max_bins=3,
+                        monitor_challenger=True,
+                        monitor_champion=True,
+                    )
 
-                assert PROJECT["id"] == data["json"]["projectId"]
-                assert MODELS[0]["id"] in data["json"]["modelIds"]
-                assert MODELS[1]["id"] in data["json"]["modelIds"]
-                assert "TestLibrary" == data["json"]["dataLibrary"]
-                assert "TestData" == data["json"]["dataPrefix"]
-                assert "cas-shared-default" == data["json"]["casServerId"]
-                assert data["json"]["name"]
-                assert data["json"]["description"]
-                assert data["json"]["maxBins"] == 3
-                assert data["json"]["championMonitored"] is True
-                assert data["json"]["challengerMonitored"] is True
+                    assert post_models.call_count == 2
+                    url, data = post_models.call_args
+                    assert f"{MODELS[0]['id']}:1.0" in data["json"]["modelIds"]
+                    assert MODELS[1]["id"] in data["json"]["modelIds"]
+
+                    get_model.side_effect = copy.deepcopy(MODELS)
+                    # List of string type model versions
+                    _ = mm.create_performance_definition(
+                        models=["model1", "model2"],
+                        modelVersions=["1.0", "2.0"],
+                        library_name="TestLibrary",
+                        table_prefix="TestData",
+                        max_bins=3,
+                        monitor_challenger=True,
+                        monitor_champion=True,
+                    )
+                    assert post_models.call_count == 3
+                    url, data = post_models.call_args
+                    assert f"{MODELS[0]['id']}:1.0" in data["json"]["modelIds"]
+                    assert f"{MODELS[1]['id']}:2.0" in data["json"]["modelIds"]
+
+                    get_model.side_effect = copy.deepcopy(MODELS)
+                    # List of dictionary type and string type model versions
+                    _ = mm.create_performance_definition(
+                        models=["model1", "model2"],
+                        modelVersions=[VERSION_MOCK, "2.0"],
+                        library_name="TestLibrary",
+                        table_prefix="TestData",
+                        max_bins=3,
+                        monitor_challenger=True,
+                        monitor_champion=True,
+                    )
+                    assert post_models.call_count == 4
+                    url, data = post_models.call_args
+                    assert f"{MODELS[0]['id']}:1.0" in data["json"]["modelIds"]
+                    assert f"{MODELS[1]['id']}:2.0" in data["json"]["modelIds"]
 
                 with mock.patch(
                     "sasctl._services.model_management.ModelManagement" ".post"
@@ -160,20 +235,39 @@ def test_create_performance_definition():
                         monitor_champion=True,
                     )
 
-                assert post_project.call_count == 1
-                url, data = post_project.call_args
+                    # one extra test for project with version id
 
-                assert PROJECT["id"] == data["json"]["projectId"]
-                assert MODELS[0]["id"] in data["json"]["modelIds"]
-                assert MODELS[1]["id"] in data["json"]["modelIds"]
-                assert "TestLibrary" == data["json"]["dataLibrary"]
-                assert "TestData" == data["json"]["dataPrefix"]
-                assert "cas-shared-default" == data["json"]["casServerId"]
-                assert data["json"]["name"]
-                assert data["json"]["description"]
-                assert data["json"]["maxBins"] == 3
-                assert data["json"]["championMonitored"] is True
-                assert data["json"]["challengerMonitored"] is True
+                    assert post_project.call_count == 1
+                    url, data = post_project.call_args
+
+                    assert PROJECT["id"] == data["json"]["projectId"]
+                    assert MODELS[0]["id"] in data["json"]["modelIds"]
+                    assert MODELS[1]["id"] in data["json"]["modelIds"]
+                    assert "TestLibrary" == data["json"]["dataLibrary"]
+                    assert "TestData" == data["json"]["dataPrefix"]
+                    assert "cas-shared-default" == data["json"]["casServerId"]
+                    assert data["json"]["name"]
+                    assert data["json"]["description"]
+                    assert data["json"]["maxBins"] == 3
+                    assert data["json"]["championMonitored"] is True
+                    assert data["json"]["challengerMonitored"] is True
+
+                    get_model.side_effect = copy.deepcopy(MODELS)
+                    # Project with model version
+                    _ = mm.create_performance_definition(
+                        project="project",
+                        modelVersions="2.0",
+                        library_name="TestLibrary",
+                        table_prefix="TestData",
+                        max_bins=3,
+                        monitor_challenger=True,
+                        monitor_champion=True,
+                    )
+
+                    assert post_project.call_count == 2
+                    url, data = post_project.call_args
+                    assert f"{MODELS[0]['id']}:2.0" in data["json"]["modelIds"]
+                    assert MODELS[1]["id"] in data["json"]["modelIds"]
 
     def test_table_prefix_format():
         with pytest.raises(ValueError):

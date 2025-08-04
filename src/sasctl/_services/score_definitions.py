@@ -133,7 +133,15 @@ class ScoreDefinitions(Service):
 
             if isinstance(model_version, dict) and "modelVersionName" in model_version:
                 model_version = model_version["modelVersionName"]
+            elif (
+                isinstance(model_version, dict)
+                and "modelVersionName" not in model_version
+            ):
+                raise ValueError(
+                    "Model version cannot be found. Please check the inputted model version."
+                )
             elif isinstance(model_version, str) and cls.is_uuid(model_version):
+                print("hello")
                 model_version = cls._model_repository.get_model_or_version(
                     model_id, model_version
                 )["modelVersionName"]

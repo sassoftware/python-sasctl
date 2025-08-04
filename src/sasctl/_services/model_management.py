@@ -79,6 +79,11 @@ class ModelManagement(Service):
         if model_version != "latest":
             if isinstance(model_version, dict) and "modelVersionName" in model_version:
                 model_version_name = model_version["modelVersionName"]
+            elif (
+                isinstance(model_version, dict)
+                and "modelVersionName" not in model_version
+            ):
+                raise ValueError("Model version is not recognized.")
             elif isinstance(model_version, str) and cls.is_uuid(model_version):
                 model_version_name = mr.get_model_or_version(model, model_version)[
                     "modelVersionName"
@@ -263,7 +268,7 @@ class ModelManagement(Service):
                 "Project %s must have the 'predictionVariable' "
                 "property set." % project.name
             )
-
+        print("sup")
         if not modelVersions:
             updated_models = [model.id for model in models]
         else:
@@ -278,22 +283,29 @@ class ModelManagement(Service):
 
             modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
             for model, modelVersionName in zip(models, modelVersions):
+
                 if (
                     isinstance(modelVersionName, dict)
                     and "modelVersionName" in modelVersionName
                 ):
+
                     modelVersionName = modelVersionName["modelVersionName"]
                 elif (
                     isinstance(modelVersionName, dict)
                     and "modelVersionName" not in modelVersionName
                 ):
+
                     raise ValueError("Model version is not recognized.")
-                updated_models.append(model.id + ":" + modelVersionName)
+
+                if modelVersionName != "":
+                    updated_models.append(model.id + ":" + modelVersionName)
+                else:
+                    updated_models.append(model.id)
 
         request = {
             "projectId": project.id,
             "name": name or project.name + " Performance",
-            "modelIds": [model for model in updated_models],
+            "modelIds": updated_models,
             "championMonitored": monitor_champion,
             "challengerMonitored": monitor_challenger,
             "maxBins": max_bins,
@@ -330,7 +342,6 @@ class ModelManagement(Service):
                 for v in project.get("variables", [])
                 if v.get("role") == "output"
             ]
-
         return cls.post(
             "/performanceTasks",
             json=request,
