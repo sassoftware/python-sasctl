@@ -44,8 +44,8 @@ class ModelManagement(Service):
             The name or id of the model, or a dictionary representation of the model.
         destination : str
             Name of destination to publish the model to.
-        model_version_id : str or dict, optional
-            Provide the id, name, or dictionary representation of the version to publish. Defaults to 'latest'.
+        model_version : str or dict, optional
+            Provide the version id, name, or dict to publish. Defaults to 'latest'.
         name : str, optional
             Provide a custom name for the published model. Defaults to None.
         force : bool, optional
@@ -164,7 +164,7 @@ class ModelManagement(Service):
             multiple models, input a list of model names, or a list of dictionaries. If no models are specified, all
             models in the project specified will be used. Defaults to None.
         modelVersions: str, list, optional
-            The name of the model version(s). Defaults to None, where all models are latest.
+            The name of the model version(s). Defaults to None, i.e. all models are latest.
         library_name : str
             The library containing the input data, default is 'Public'.
         name : str, optional
@@ -322,7 +322,7 @@ class ModelManagement(Service):
     @classmethod
     def check_model_versions(cls, models, modelVersions):
         """
-        Checking if the model version(s) are valid. Appending them to the model_id accordingly.
+        Checking if the model version(s) are valid and append to model id accordingly.
 
         Parameters
         ----------
@@ -337,38 +337,38 @@ class ModelManagement(Service):
         """
         if not modelVersions:
             return [model.id for model in models]
-        else:
-            updated_models = []
-            if not isinstance(modelVersions, list):
-                modelVersions = [modelVersions]
 
-            if len(models) < len(modelVersions):
-                raise ValueError(
-                    "There are too many versions for the amount of models specified."
-                )
+        updated_models = []
+        if not isinstance(modelVersions, list):
+            modelVersions = [modelVersions]
 
-            modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
-            for model, modelVersionName in zip(models, modelVersions):
+        if len(models) < len(modelVersions):
+            raise ValueError(
+                "There are too many versions for the amount of models specified."
+            )
 
-                if (
-                    isinstance(modelVersionName, dict)
-                    and "modelVersionName" in modelVersionName
-                ):
+        modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
+        for model, modelVersionName in zip(models, modelVersions):
 
-                    modelVersionName = modelVersionName["modelVersionName"]
-                elif (
-                    isinstance(modelVersionName, dict)
-                    and "modelVersionName" not in modelVersionName
-                ):
+            if (
+                isinstance(modelVersionName, dict)
+                and "modelVersionName" in modelVersionName
+            ):
 
-                    raise ValueError("Model version is not recognized.")
+                modelVersionName = modelVersionName["modelVersionName"]
+            elif (
+                isinstance(modelVersionName, dict)
+                and "modelVersionName" not in modelVersionName
+            ):
 
-                if modelVersionName != "":
-                    updated_models.append(model.id + ":" + modelVersionName)
-                else:
-                    updated_models.append(model.id)
+                raise ValueError("Model version is not recognized.")
 
-            return updated_models
+            if modelVersionName != "":
+                updated_models.append(model.id + ":" + modelVersionName)
+            else:
+                updated_models.append(model.id)
+
+        return updated_models
 
     @classmethod
     def execute_performance_definition(cls, definition):
