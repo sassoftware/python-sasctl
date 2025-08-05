@@ -164,7 +164,7 @@ class ModelManagement(Service):
             multiple models, input a list of model names, or a list of dictionaries. If no models are specified, all
             models in the project specified will be used. Defaults to None.
         modelVersions: str, list, optional
-            The name of the model version(s). Defaults to None, i.e. all models are latest.
+            The name of the model version(s). Defaults to None, so all models are latest.
         library_name : str
             The library containing the input data, default is 'Public'.
         name : str, optional
