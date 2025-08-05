@@ -198,6 +198,30 @@ def test_create_score_definition():
                                 == "test_model (1.0)"
                             )
 
+                            # Model version as a dict with modelVersionName key
+                            get_model.return_value = get_model_mock
+                            get_table.return_value = get_table_mock
+                            is_uuid.return_value = False
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                                model_version={"modelVersionName": "1.0"},
+                            )
+                            assert response
+                            assert post.call_count == 5
+
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+                            assert (
+                                json_data["objectDescriptor"]["name"]
+                                == "test_model (1.0)"
+                            )
+                            assert (
+                                json_data["properties"]["versionedModel"]
+                                == "test_model (1.0)"
+                            )
+
                             # Model version as a dictionary with model version name key
                             get_version_mock = {
                                 "id": "3456",
@@ -214,7 +238,7 @@ def test_create_score_definition():
                                 model_version="3456",
                             )
                             assert response
-                            assert post.call_count == 5
+                            assert post.call_count == 6
 
                             data = post.call_args
                             json_data = json.loads(data.kwargs["data"])

@@ -188,7 +188,6 @@ class ScoreDefinitions(Service):
             ):
                 raise ValueError("Model version cannot be found.")
             elif isinstance(model_version, str) and cls.is_uuid(model_version):
-                print("hello")
                 model_version = cls._model_repository.get_model_or_version(
                     model_id, model_version
                 )["modelVersionName"]
