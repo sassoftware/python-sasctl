@@ -116,7 +116,7 @@ class ScoreDefinitions(Service):
         table = cls._cas_management.get_table(table_name, library_name, server_name)
         if not table and not table_file:
             raise HTTPError(
-                "This table may not exist in CAS. Please include the `table_file` argument."
+                "This table may not exist in CAS. Include the `table_file` argument."
             )
         elif not table and table_file:
             cls._cas_management.upload_file(

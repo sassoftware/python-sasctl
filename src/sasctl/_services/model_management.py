@@ -164,8 +164,7 @@ class ModelManagement(Service):
             multiple models, input a list of model names, or a list of dictionaries. If no models are specified, all
             models in the project specified will be used. Defaults to None.
         modelVersions: str, list, optional
-            The name of the model version(s) for models used in the performance definition. If no model versions
-            are specified, all models will use the latest version. Defaults to None.
+            The name of the model version(s). Defaults to None, where all models are latest.
         library_name : str
             The library containing the input data, default is 'Public'.
         name : str, optional
@@ -268,39 +267,9 @@ class ModelManagement(Service):
                 "Project %s must have the 'predictionVariable' "
                 "property set." % project.name
             )
-        print("sup")
-        if not modelVersions:
-            updated_models = [model.id for model in models]
-        else:
-            updated_models = []
-            if not isinstance(modelVersions, list):
-                modelVersions = [modelVersions]
 
-            if len(models) < len(modelVersions):
-                raise ValueError(
-                    "There are too many versions for the amount of models specified."
-                )
-
-            modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
-            for model, modelVersionName in zip(models, modelVersions):
-
-                if (
-                    isinstance(modelVersionName, dict)
-                    and "modelVersionName" in modelVersionName
-                ):
-
-                    modelVersionName = modelVersionName["modelVersionName"]
-                elif (
-                    isinstance(modelVersionName, dict)
-                    and "modelVersionName" not in modelVersionName
-                ):
-
-                    raise ValueError("Model version is not recognized.")
-
-                if modelVersionName != "":
-                    updated_models.append(model.id + ":" + modelVersionName)
-                else:
-                    updated_models.append(model.id)
+        # Creating the new array of modelIds with version names appended
+        updated_models = cls.check_model_versions(models, modelVersions)
 
         request = {
             "projectId": project.id,
@@ -349,6 +318,57 @@ class ModelManagement(Service):
                 "Content-Type": "application/vnd.sas.models.performance.task+json"
             },
         )
+
+    @classmethod
+    def check_model_versions(cls, models, modelVersions):
+        """
+        Checking if the model version(s) are valid. Appending them to the model_id accordingly.
+
+        Parameters
+        ----------
+        models: list of str
+            List of models.
+        modelVersions : list of str
+            List of model versions associated with models.
+
+        Returns
+        -------
+        String list
+        """
+        if not modelVersions:
+            return [model.id for model in models]
+        else:
+            updated_models = []
+            if not isinstance(modelVersions, list):
+                modelVersions = [modelVersions]
+
+            if len(models) < len(modelVersions):
+                raise ValueError(
+                    "There are too many versions for the amount of models specified."
+                )
+
+            modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
+            for model, modelVersionName in zip(models, modelVersions):
+
+                if (
+                    isinstance(modelVersionName, dict)
+                    and "modelVersionName" in modelVersionName
+                ):
+
+                    modelVersionName = modelVersionName["modelVersionName"]
+                elif (
+                    isinstance(modelVersionName, dict)
+                    and "modelVersionName" not in modelVersionName
+                ):
+
+                    raise ValueError("Model version is not recognized.")
+
+                if modelVersionName != "":
+                    updated_models.append(model.id + ":" + modelVersionName)
+                else:
+                    updated_models.append(model.id)
+
+            return updated_models
 
     @classmethod
     def execute_performance_definition(cls, definition):
