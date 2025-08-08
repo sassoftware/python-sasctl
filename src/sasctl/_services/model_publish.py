@@ -10,6 +10,7 @@ import re
 
 from .model_repository import ModelRepository
 from .service import Service
+from ..utils.decorators import deprecated
 
 
 class ModelPublish(Service):
@@ -90,7 +91,7 @@ class ModelPublish(Service):
 
         return cls.delete("/destinations/{name}".format(name=item))
 
-    @classmethod
+    @deprecated("Use publish_model in model_management.py instead.", "1.11.5")
     def publish_model(cls, model, destination, name=None, code=None, notes=None):
         """Publish a model to an existing publishing destination.
 

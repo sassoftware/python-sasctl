@@ -28,7 +28,13 @@ class ModelManagement(Service):
     # TODO:  set ds2MultiType
     @classmethod
     def publish_model(
-        cls, model, destination, name=None, force=False, reload_model_table=False
+        cls,
+        model,
+        destination,
+        model_version="latest",
+        name=None,
+        force=False,
+        reload_model_table=False,
     ):
         """
 
@@ -38,6 +44,8 @@ class ModelManagement(Service):
             The name or id of the model, or a dictionary representation of the model.
         destination : str
             Name of destination to publish the model to.
+        model_version : str or dict, optional
+            Provide the version id, name, or dict to publish. Defaults to 'latest'.
         name : str, optional
             Provide a custom name for the published model. Defaults to None.
         force : bool, optional
@@ -68,6 +76,23 @@ class ModelManagement(Service):
 
         # TODO: Verify allowed formats by destination type.
         # As of 19w04 MAS throws HTTP 500 if name is in invalid format.
+        if model_version != "latest":
+            if isinstance(model_version, dict) and "modelVersionName" in model_version:
+                model_version_name = model_version["modelVersionName"]
+            elif (
+                isinstance(model_version, dict)
+                and "modelVersionName" not in model_version
+            ):
+                raise ValueError("Model version is not recognized.")
+            elif isinstance(model_version, str) and cls.is_uuid(model_version):
+                model_version_name = mr.get_model_or_version(model, model_version)[
+                    "modelVersionName"
+                ]
+            else:
+                model_version_name = model_version
+        else:
+            model_version_name = ""
+
         model_name = name or "{}_{}".format(
             model_obj["name"].replace(" ", ""), model_obj["id"]
         ).replace("-", "")
@@ -79,6 +104,7 @@ class ModelManagement(Service):
                 {
                     "modelName": mp._publish_name(model_name),
                     "sourceUri": model_uri.get("uri"),
+                    "modelVersionID": model_version_name,
                     "publishLevel": "model",
                 }
             ],
@@ -104,6 +130,7 @@ class ModelManagement(Service):
         table_prefix,
         project=None,
         models=None,
+        modelVersions=None,
         library_name="Public",
         name=None,
         description=None,
@@ -136,6 +163,8 @@ class ModelManagement(Service):
             The name or id of the model(s), or a dictionary representation of the model(s). For
             multiple models, input a list of model names, or a list of dictionaries. If no models are specified, all
             models in the project specified will be used. Defaults to None.
+        modelVersions: str, list, optional
+            The name of the model version(s). Defaults to None, so all models are latest.
         library_name : str
             The library containing the input data, default is 'Public'.
         name : str, optional
@@ -239,10 +268,13 @@ class ModelManagement(Service):
                 "property set." % project.name
             )
 
+        # Creating the new array of modelIds with version names appended
+        updated_models = cls.check_model_versions(models, modelVersions)
+
         request = {
             "projectId": project.id,
             "name": name or project.name + " Performance",
-            "modelIds": [model.id for model in models],
+            "modelIds": updated_models,
             "championMonitored": monitor_champion,
             "challengerMonitored": monitor_challenger,
             "maxBins": max_bins,
@@ -279,7 +311,6 @@ class ModelManagement(Service):
                 for v in project.get("variables", [])
                 if v.get("role") == "output"
             ]
-
         return cls.post(
             "/performanceTasks",
             json=request,
@@ -287,6 +318,57 @@ class ModelManagement(Service):
                 "Content-Type": "application/vnd.sas.models.performance.task+json"
             },
         )
+
+    @classmethod
+    def check_model_versions(cls, models, modelVersions):
+        """
+        Checking if the model version(s) are valid and append to model id accordingly.
+
+        Parameters
+        ----------
+        models: list of str
+            List of models.
+        modelVersions : list of str
+            List of model versions associated with models.
+
+        Returns
+        -------
+        String list
+        """
+        if not modelVersions:
+            return [model.id for model in models]
+
+        updated_models = []
+        if not isinstance(modelVersions, list):
+            modelVersions = [modelVersions]
+
+        if len(models) < len(modelVersions):
+            raise ValueError(
+                "There are too many versions for the amount of models specified."
+            )
+
+        modelVersions = modelVersions + [""] * (len(models) - len(modelVersions))
+        for model, modelVersionName in zip(models, modelVersions):
+
+            if (
+                isinstance(modelVersionName, dict)
+                and "modelVersionName" in modelVersionName
+            ):
+
+                modelVersionName = modelVersionName["modelVersionName"]
+            elif (
+                isinstance(modelVersionName, dict)
+                and "modelVersionName" not in modelVersionName
+            ):
+
+                raise ValueError("Model version is not recognized.")
+
+            if modelVersionName != "":
+                updated_models.append(model.id + ":" + modelVersionName)
+            else:
+                updated_models.append(model.id)
+
+        return updated_models
 
     @classmethod
     def execute_performance_definition(cls, definition):

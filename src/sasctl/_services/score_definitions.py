@@ -46,7 +46,7 @@ class ScoreDefinitions(Service):
         description: str = "",
         server_name: str = "cas-shared-default",
         library_name: str = "Public",
-        model_version: str = "latest",
+        model_version: Union[str, dict] = "latest",
     ):
         """Creates the score definition service.
 
@@ -69,7 +69,7 @@ class ScoreDefinitions(Service):
         library_name: str, optional
             The library within the CAS server the table exists in. Defaults to "Public".
         model_version: str, optional
-            The user-chosen version of the model with the specified model_id. Defaults to "latest".
+            The user-chosen version of the model. Deafaults to "latest".
 
         Returns
         -------
@@ -116,7 +116,7 @@ class ScoreDefinitions(Service):
         table = cls._cas_management.get_table(table_name, library_name, server_name)
         if not table and not table_file:
             raise HTTPError(
-                f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist."
+                "This table may not exist in CAS. Include the `table_file` argument."
             )
         elif not table and table_file:
             cls._cas_management.upload_file(
@@ -125,16 +125,19 @@ class ScoreDefinitions(Service):
             table = cls._cas_management.get_table(table_name, library_name, server_name)
             if not table:
                 raise HTTPError(
-                    f"The file failed to upload properly or another error occurred."
+                    "The file failed to upload properly or another error occurred."
                 )
             # Checks if the inputted table exists, and if not, uploads a file to create a new table
+
+        object_uri, model_version = cls.check_model_version(model_id, model_version)
+        # Checks if the model version is valid and how to find the name
 
         save_score_def = {
             "name": model_name,  # used to be score_def_name
             "description": description,
             "objectDescriptor": {
-                "uri": f"/modelManagement/models/{model_id}",
-                "name": f"{model_name}({model_version})",
+                "uri": object_uri,
+                "name": f"{model_name} ({model_version})",
                 "type": f"{object_descriptor_type}",
             },
             "inputData": {
@@ -149,7 +152,7 @@ class ScoreDefinitions(Service):
                 "projectUri": f"/modelRepository/projects/{model_project_id}",
                 "projectVersionUri": f"/modelRepository/projects/{model_project_id}/projectVersions/{model_project_version_id}",
                 "publishDestination": "",
-                "versionedModel": f"{model_name}({model_version})",
+                "versionedModel": f"{model_name} ({model_version})",
             },
             "mappings": inputMapping,
         }
@@ -161,3 +164,37 @@ class ScoreDefinitions(Service):
             "/definitions", data=json.dumps(save_score_def), headers=headers_score_def
         )
         # The response information of the score definition can be seen as a JSON as well as a RestOBJ
+
+    @classmethod
+    def check_model_version(cls, model_id: str, model_version: Union[str, dict]):
+        """Checks if the model version is valid.
+
+        Parameters
+        ----------
+        model_version : str or dict
+            The model version to check.
+
+        Returns
+        -------
+        String tuple
+        """
+        if model_version != "latest":
+
+            if isinstance(model_version, dict) and "modelVersionName" in model_version:
+                model_version = model_version["modelVersionName"]
+            elif (
+                isinstance(model_version, dict)
+                and "modelVersionName" not in model_version
+            ):
+                raise ValueError("Model version cannot be found.")
+            elif isinstance(model_version, str) and cls.is_uuid(model_version):
+                model_version = cls._model_repository.get_model_or_version(
+                    model_id, model_version
+                )["modelVersionName"]
+
+            object_uri = f"/modelManagement/models/{model_id}/versions/@{model_version}"
+
+        else:
+            object_uri = f"/modelManagement/models/{model_id}"
+
+        return object_uri, model_version

@@ -63,89 +63,190 @@ def test_create_score_definition():
                 "sasctl._services.cas_management.CASManagement.upload_file"
             ) as upload_file:
                 with mock.patch(
-                    "sasctl._services.score_definitions.ScoreDefinitions.post"
-                ) as post:
-                    # Invalid model id test case
-                    get_model.return_value = None
-                    with pytest.raises(HTTPError):
-                        sd.create_score_definition(
-                            score_def_name="test_create_sd",
-                            model="12345",
-                            table_name="test_table",
-                        )
-                    # Valid model id but invalid table name with no table_file argument test case
-                    get_model_mock = {
-                        "id": "12345",
-                        "projectId": "54321",
-                        "projectVersionId": "67890",
-                        "name": "test_model",
-                    }
-                    get_model.return_value = get_model_mock
-                    get_table.return_value = None
-                    with pytest.raises(HTTPError):
-                        sd.create_score_definition(
-                            score_def_name="test_create_sd",
-                            model="12345",
-                            table_name="test_table",
-                        )
+                    "sasctl._services.model_repository.ModelRepository.get_model_or_version"
+                ) as get_model_or_version:
+                    with mock.patch(
+                        "sasctl._services.score_definitions.ScoreDefinitions.is_uuid"
+                    ) as is_uuid:
+                        with mock.patch(
+                            "sasctl._services.score_definitions.ScoreDefinitions.post"
+                        ) as post:
 
-                    # Invalid table name with a table_file argument that doesn't work test case
-                    get_table.return_value = None
-                    upload_file.return_value = None
-                    get_table.return_value = None
-                    with pytest.raises(HTTPError):
-                        sd.create_score_definition(
-                            score_def_name="test_create_sd",
-                            model="12345",
-                            table_name="test_table",
-                            table_file="test_path",
-                        )
+                            # Invalid model id test case
+                            get_model.return_value = None
+                            with pytest.raises(HTTPError):
+                                sd.create_score_definition(
+                                    score_def_name="test_create_sd",
+                                    model="12345",
+                                    table_name="test_table",
+                                )
+                            # Valid model id but invalid table name with no table_file argument test case
+                            get_model_mock = {
+                                "id": "12345",
+                                "projectId": "54321",
+                                "projectVersionId": "67890",
+                                "name": "test_model",
+                            }
+                            get_model.return_value = get_model_mock
+                            get_table.return_value = None
+                            with pytest.raises(HTTPError):
+                                sd.create_score_definition(
+                                    score_def_name="test_create_sd",
+                                    model="12345",
+                                    table_name="test_table",
+                                )
 
-                    # Valid table_file argument that successfully creates a table test case
-                    get_table.return_value = None
-                    upload_file.return_value = RestObj
-                    get_table_mock = {"tableName": "test_table"}
-                    get_table.return_value = get_table_mock
-                    response = sd.create_score_definition(
-                        score_def_name="test_create_sd",
-                        model="12345",
-                        table_name="test_table",
-                        table_file="test_path",
-                    )
-                    assert response
+                            # Invalid table name with a table_file argument that doesn't work test case
+                            get_table.return_value = None
+                            upload_file.return_value = None
+                            get_table.return_value = None
+                            with pytest.raises(HTTPError):
+                                sd.create_score_definition(
+                                    score_def_name="test_create_sd",
+                                    model="12345",
+                                    table_name="test_table",
+                                    table_file="test_path",
+                                )
 
-                    # Valid table_name argument test case
-                    get_table.return_value = get_table_mock
-                    response = sd.create_score_definition(
-                        score_def_name="test_create_sd",
-                        model="12345",
-                        table_name="test_table",
-                        table_file="test_path",
-                    )
-                    assert response
+                            # Valid table_file argument that successfully creates a table test case
+                            get_table.return_value = None
+                            upload_file.return_value = RestObj
+                            get_table_mock = {"tableName": "test_table"}
+                            get_table.return_value = get_table_mock
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                                table_file="test_path",
+                            )
+                            assert response
 
-                    # Checking response with inputVariables in model elements
-                    get_model_mock = {
-                        "id": "12345",
-                        "projectId": "54321",
-                        "projectVersionId": "67890",
-                        "name": "test_model",
-                        "inputVariables": [
-                            {"name": "first"},
-                            {"name": "second"},
-                            {"name": "third"},
-                        ],
-                    }
-                    get_model.return_value = get_model_mock
-                    get_table.return_value = get_table_mock
-                    response = sd.create_score_definition(
-                        score_def_name="test_create_sd",
-                        model="12345",
-                        table_name="test_table",
-                    )
-                    assert response
-                    assert post.call_count == 3
+                            # Valid table_name argument test case
+                            get_table.return_value = get_table_mock
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                                table_file="test_path",
+                            )
+                            assert response
 
-                    data = post.call_args
-                    json_data = json.loads(data.kwargs["data"])
-                    assert json_data["mappings"] != []
+                            # Checking response with inputVariables in model elements
+                            get_model_mock = {
+                                "id": "12345",
+                                "projectId": "54321",
+                                "projectVersionId": "67890",
+                                "name": "test_model",
+                                "inputVariables": [
+                                    {"name": "first"},
+                                    {"name": "second"},
+                                    {"name": "third"},
+                                ],
+                            }
+                            get_model.return_value = get_model_mock
+                            get_table.return_value = get_table_mock
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                            )
+                            assert response
+                            assert post.call_count == 3
+
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+                            assert json_data["mappings"] != []
+                            assert (
+                                json_data["objectDescriptor"]["name"]
+                                == "test_model (latest)"
+                            )
+                            assert (
+                                json_data["properties"]["versionedModel"]
+                                == "test_model (latest)"
+                            )
+
+                            # Model version dictionary with no model version name
+                            with pytest.raises(ValueError):
+                                response = sd.create_score_definition(
+                                    score_def_name="test_create_sd",
+                                    model="12345",
+                                    table_name="test_table",
+                                    model_version={},
+                                )
+
+                            # Model version as a model version name string, not UUID
+                            get_model.return_value = get_model_mock
+                            get_table.return_value = get_table_mock
+                            is_uuid.return_value = False
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                                model_version="1.0",
+                            )
+                            assert response
+                            assert post.call_count == 4
+
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+                            assert (
+                                json_data["objectDescriptor"]["name"]
+                                == "test_model (1.0)"
+                            )
+                            assert (
+                                json_data["properties"]["versionedModel"]
+                                == "test_model (1.0)"
+                            )
+
+                            # Model version as a dict with modelVersionName key
+                            get_model.return_value = get_model_mock
+                            get_table.return_value = get_table_mock
+                            is_uuid.return_value = False
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                                model_version={"modelVersionName": "1.0"},
+                            )
+                            assert response
+                            assert post.call_count == 5
+
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+                            assert (
+                                json_data["objectDescriptor"]["name"]
+                                == "test_model (1.0)"
+                            )
+                            assert (
+                                json_data["properties"]["versionedModel"]
+                                == "test_model (1.0)"
+                            )
+
+                            # Model version as a dictionary with model version name key
+                            get_version_mock = {
+                                "id": "3456",
+                                "modelVersionName": "1.0",
+                            }
+                            get_model.return_value = get_model_mock
+                            get_table.return_value = get_table_mock
+                            is_uuid.return_value = True
+                            get_model_or_version.return_value = get_version_mock
+                            response = sd.create_score_definition(
+                                score_def_name="test_create_sd",
+                                model="12345",
+                                table_name="test_table",
+                                model_version="3456",
+                            )
+                            assert response
+                            assert post.call_count == 6
+
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+                            assert (
+                                json_data["objectDescriptor"]["name"]
+                                == "test_model (1.0)"
+                            )
+                            assert (
+                                json_data["properties"]["versionedModel"]
+                                == "test_model (1.0)"
+                            )
