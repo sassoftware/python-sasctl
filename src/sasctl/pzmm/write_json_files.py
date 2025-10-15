@@ -1608,12 +1608,15 @@ class JSONFiles:
             conversion = 1
 
         return conversion
+    
+
 
     @classmethod
     def create_requirements_json(
         cls,
         model_path: Union[str, Path, None] = Path.cwd(),
         output_path: Union[str, Path, None] = None,
+        create_requirements_txt: bool = False
     ) -> Union[dict, None]:
         """
         Searches the model directory for Python scripts and pickle files and
@@ -1666,6 +1669,53 @@ class JSONFiles:
         missing_package_versions = [
             item[0] for item in package_and_version if not item[1]
         ]
+        
+        IMPORT_TO_INSTALL_MAPPING = {
+            # Data Science & ML Core
+            'sklearn': 'scikit-learn',
+            'skimage': 'scikit-image', 
+            'cv2': 'opencv-python',
+            'PIL': 'Pillow',
+            
+            # Data Formats & Parsing
+            'yaml': 'PyYAML',
+            'bs4': 'beautifulsoup4',
+            'docx': 'python-docx',
+            'pptx': 'python-pptx',
+            
+            # Date & Time Utilities  
+            'dateutil': 'python-dateutil',
+            
+            # Database Connectors
+            'MySQLdb': 'MySQL-python',
+            'psycopg2': 'psycopg2-binary',
+            
+            # System & Platform
+            'win32api': 'pywin32',
+            'win32com': 'pywin32',
+            
+            # Scientific Libraries
+            'Bio': 'biopython',
+        }
+
+        package_list = [IMPORT_TO_INSTALL_MAPPING.get(name, name) for name in package_list]
+    
+
+        if create_requirements_txt:
+            requirements_txt = ""
+            if missing_package_versions:
+                requirements_txt += "# Warning- The existence and/or versions for the following packages could not be determined:\n"
+                requirements_txt += "# " + ", ".join(missing_package_versions) + "\n"
+
+            for package, version in package_and_version:
+                if version:
+                    requirements_txt += f"{package}=={version}\n"
+                    
+            if output_path:
+                with open(  # skipcq: PTC-W6004
+                    Path(output_path) / "requirements.txt", "w"
+                ) as file:
+                    file.write(requirements_txt)
 
         # Create a list of dicts related to each package or warning
         json_dicts = []
@@ -1800,16 +1850,16 @@ class JSONFiles:
             file_text = file.read()
             # Parse the file to get the abstract syntax tree representation
             tree = ast.parse(file_text)
-            modules = []
+            modules = set()
 
             # Walk through each node in the ast to find import calls
             for node in ast.walk(tree):
                 # Determine parent module for `from * import *` calls
                 if isinstance(node, ast.ImportFrom):
-                    modules.append(node.module)
+                    modules.add(node.module.split('.')[0])
                 elif isinstance(node, ast.Import):
                     for name in node.names:
-                        modules.append(name.name)
+                        modules.add(name.name.split('.')[0])
 
         modules = list(set(modules))
         try:

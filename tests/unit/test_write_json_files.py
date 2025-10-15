@@ -699,7 +699,7 @@ def test_create_requirements_json(change_dir):
         dtc = dtc.fit(x_train, y_train)
         with open(tmp_dir / "DecisionTreeClassifier.pickle", "wb") as pkl_file:
             pickle.dump(dtc, pkl_file)
-        jf.create_requirements_json(tmp_dir, Path(tmp_dir))
+        jf.create_requirements_json(tmp_dir, Path(tmp_dir), True)
         assert (Path(tmp_dir) / "requirements.json").exists()
 
         json_dict = jf.create_requirements_json(tmp_dir)
