@@ -1637,7 +1637,11 @@ class JSONFiles:
         environment.
 
         When provided with an output_path argument, this function outputs a JSON file
-        named "requirements.json". Otherwise, a list of dicts is returned.
+        named "requirements.json". If create_requirements_txt is True, it will also
+        create a requirements.txt file. Otherwise, a list of dicts is returned.
+
+        Note: The requirements.txt file is only created when both output_path and
+        create_requirements_txt are specified.
 
         Parameters
         ----------
@@ -1645,6 +1649,10 @@ class JSONFiles:
             The path to a Python project, by default the current working directory.
         output_path : str or pathlib.Path, optional
             The path for the output requirements.json file. The default value is None.
+        create_requirements_txt : bool, optional
+            Whether to also create a requirements.txt file in addition to the
+            requirements.json file. This is useful for SAS Event Stream Processing
+            environments. The default value is False.
 
         Returns
         -------
