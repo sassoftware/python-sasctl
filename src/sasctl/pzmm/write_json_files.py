@@ -1640,7 +1640,7 @@ class JSONFiles:
         named "requirements.json". If create_requirements_txt is True, it will also
         create a requirements.txt file. Otherwise, a list of dicts is returned.
 
-        Note: The requirements.txt file is only created when both output_path and
+        Note: requirements.txt file is only created when both output_path and
         create_requirements_txt are specified.
 
         Parameters
