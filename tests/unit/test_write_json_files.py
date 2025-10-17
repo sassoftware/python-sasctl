@@ -701,6 +701,7 @@ def test_create_requirements_json(change_dir):
             pickle.dump(dtc, pkl_file)
         jf.create_requirements_json(tmp_dir, Path(tmp_dir), True)
         assert (Path(tmp_dir) / "requirements.json").exists()
+        assert (Path(tmp_dir) / "requirements.txt").exists()
 
         json_dict = jf.create_requirements_json(tmp_dir)
         expected = [
@@ -709,12 +710,19 @@ def test_create_requirements_json(change_dir):
                 "command": f"pip install numpy=={np.__version__}",
             },
             {
-                "step": "install sklearn",
-                "command": f"pip install sklearn=={sk.__version__}",
+                "step": "install scikit-learn",
+                "command": f"pip install scikit-learn=={sk.__version__}",
             },
         ]
         unittest.TestCase.maxDiff = None
         unittest.TestCase().assertCountEqual(json_dict, expected)
+
+        # Verify requirements.txt content
+        with open(Path(tmp_dir) / "requirements.txt", "r") as file:
+            requirements_content = [line.strip() for line in file.readlines()]
+
+        assert f"numpy=={np.__version__}" in requirements_content
+        assert f"scikit-learn=={sk.__version__}" in requirements_content
 
 
 class TestAssessBiasHelpers(unittest.TestCase):
