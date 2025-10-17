@@ -1677,7 +1677,6 @@ class JSONFiles:
             item[0] for item in package_and_version if not item[1]
         ]
 
-                
         IMPORT_TO_INSTALL_MAPPING = {
             # Data Science & ML Core
             "sklearn": "scikit-learn",
@@ -1703,7 +1702,8 @@ class JSONFiles:
 
         # Map import names to their corresponding package installation names
         package_and_version = [
-            (IMPORT_TO_INSTALL_MAPPING.get(name, name), version) for name, version in package_and_version
+            (IMPORT_TO_INSTALL_MAPPING.get(name, name), version)
+            for name, version in package_and_version
         ]
 
         if create_requirements_txt:
