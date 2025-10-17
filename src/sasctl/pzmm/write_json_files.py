@@ -1671,37 +1671,12 @@ class JSONFiles:
         package_list = list(set(list(_flatten(package_list))))
         package_list = cls.remove_standard_library_packages(package_list)
         package_and_version = cls.get_local_package_version(package_list)
+
         # Identify packages with missing versions
         missing_package_versions = [
             item[0] for item in package_and_version if not item[1]
         ]
 
-        IMPORT_TO_INSTALL_MAPPING = {
-            # Data Science & ML Core
-            "sklearn": "scikit-learn",
-            "skimage": "scikit-image",
-            "cv2": "opencv-python",
-            "PIL": "Pillow",
-            # Data Formats & Parsing
-            "yaml": "PyYAML",
-            "bs4": "beautifulsoup4",
-            "docx": "python-docx",
-            "pptx": "python-pptx",
-            # Date & Time Utilities
-            "dateutil": "python-dateutil",
-            # Database Connectors
-            "MySQLdb": "MySQL-python",
-            "psycopg2": "psycopg2-binary",
-            # System & Platform
-            "win32api": "pywin32",
-            "win32com": "pywin32",
-            # Scientific Libraries
-            "Bio": "biopython",
-        }
-
-        package_list = [
-            IMPORT_TO_INSTALL_MAPPING.get(name, name) for name in package_list
-        ]
 
         if create_requirements_txt:
             requirements_txt = ""
@@ -1777,11 +1752,37 @@ class JSONFiles:
             package_versions.append([package_name, None])
             return package_versions
 
+        
+        IMPORT_TO_INSTALL_MAPPING = {
+            # Data Science & ML Core
+            "sklearn": "scikit-learn",
+            "skimage": "scikit-image",
+            "cv2": "opencv-python",
+            "PIL": "Pillow",
+            # Data Formats & Parsing
+            "yaml": "PyYAML",
+            "bs4": "beautifulsoup4",
+            "docx": "python-docx",
+            "pptx": "python-pptx",
+            # Date & Time Utilities
+            "dateutil": "python-dateutil",
+            # Database Connectors
+            "MySQLdb": "MySQL-python",
+            "psycopg2": "psycopg2-binary",
+            # System & Platform
+            "win32api": "pywin32",
+            "win32com": "pywin32",
+            # Scientific Libraries
+            "Bio": "biopython",
+        }
+
         package_and_version = []
 
         for package in package_list:
             try:
                 name = importlib.import_module(package)
+                package = IMPORT_TO_INSTALL_MAPPING.get(package, package)
+
                 try:
                     package_and_version.append([package, name.__version__])
                 except AttributeError:
