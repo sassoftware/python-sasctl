@@ -1,3 +1,8 @@
+v1.11.6 (2025-11-18)
+--------------------
+**Improvements**
+- Added `create_requirements_txt` parameter to `create_requirements_json()` function in `write_json_files.py` to optionally generate a requirements.txt file alongside the requirements.json file.
+
 v1.11.5 (2025-06-27)
 --------------------
 **Improvements**
