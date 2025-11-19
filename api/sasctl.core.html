@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.core &#8212; sasctl 1.11.5 documentation</title>
+    <title>sasctl.core &#8212; sasctl 1.11.6 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=48f43e50"></script>
+    <script src="../_static/documentation_options.js?v=e5a44e9c"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.core';</script>
@@ -49,8 +49,8 @@
     <link rel="prev" title="current_session" href="sasctl.current_session.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.5" />
-    <meta name="docbuild:last-update" content="Jun 27, 2025"/>
+  <meta name="docsearch:version" content="1.11.6" />
+    <meta name="docbuild:last-update" content="Nov 19, 2025"/>
   </head>
   
   
@@ -112,7 +112,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.5 documentation</p>
+    <p class="title logo__title">sasctl 1.11.6 documentation</p>
   
 </a></div>
     
@@ -345,7 +345,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">OAuth2Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#OAuth2Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.OAuth2Token" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.auth.AuthBase" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuthBase</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.auth.AuthBase" title="(in Requests v2.32.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AuthBase</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token.is_expired">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_expired</span></span><a class="headerlink" href="#sasctl.core.OAuth2Token.is_expired" title="Link to this definition">#</a></dt>
@@ -356,7 +356,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PageIterator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PageIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PageIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PageIterator" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Iterates through a collection that must be “paged” from the server.</p>
 <p>Pages contain a batch of items from the overall collection.  Iterates the
 series of pages and returns a single batch of items each time <cite>next()</cite> is
@@ -368,7 +368,7 @@ called.</p>
 retrieve additional items.</p></li>
 <li><p><strong>session</strong> (<a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><em>Session</em></a>) – The <a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> instance to use for requesting additional items.  Defaults
 to <a class="reference internal" href="#sasctl.core.current_session" title="sasctl.core.current_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">current_session()</span></code></a></p></li>
-<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of threads allocated to downloading additional pages.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of threads allocated to downloading additional pages.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
@@ -380,7 +380,7 @@ to <a class="reference internal" href="#sasctl.core.current_session" title="sasc
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PagedItemIterator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedItemIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedItemIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedItemIterator" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Iterates through a collection that must be “paged” from the server.</p>
 <p>Uses <a class="reference internal" href="#sasctl.core.PageIterator" title="sasctl.core.PageIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PageIterator</span></code></a> to transparently download pages of items from the server
 as needed.</p>
@@ -391,7 +391,7 @@ as needed.</p>
 retrieve additional items.</p></li>
 <li><p><strong>session</strong> (<a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><em>Session</em></a>) – The <a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> instance to use for requesting additional items.  Defaults
 to <a class="reference internal" href="#sasctl.core.current_session" title="sasctl.core.current_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">current_session()</span></code></a></p></li>
-<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of threads allocated to downloading additional items.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of threads allocated to downloading additional items.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
@@ -410,7 +410,7 @@ number of items returned may be greater than or less than this number.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PagedList">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedList" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
 <p>List that dynamically loads items from the server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -419,7 +419,7 @@ number of items returned may be greater than or less than this number.</p>
 retrieve additional items.</p></li>
 <li><p><strong>session</strong> (<a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><em>Session</em></a><em>, </em><em>optional</em>) – The <a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> instance to use for requesting additional items.  Defaults
 to <a class="reference internal" href="#sasctl.core.current_session" title="sasctl.core.current_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">current_session()</span></code></a></p></li>
-<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Number of threads allocated to loading additional items.</p></li>
+<li><p><strong>threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Number of threads allocated to loading additional items.</p></li>
 </ul>
 </dd>
 </dl>
@@ -435,11 +435,11 @@ length is not known until all items have been pulled from the server.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PagedListIterator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedListIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedListIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedListIterator" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Iterates over an instance of <a class="reference internal" href="#sasctl.core.PagedList" title="sasctl.core.PagedList"><code class="xref py py-class docutils literal notranslate"><span class="pre">PagedList</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>l</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>)</p>
+<dd class="field-odd"><p><strong>l</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -447,13 +447,13 @@ length is not known until all items have been pulled from the server.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.RestObj">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">RestObj</span></span><a class="reference internal" href="../_modules/sasctl/core.html#RestObj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.RestObj" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">SSLContextAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a></p>
 <p>HTTPAdapter that uses the default SSL context on the machine.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter.init_poolmanager">
@@ -461,7 +461,7 @@ length is not known until all items have been pulled from the server.</p>
 <dd><p>Initializes a urllib3 PoolManager.</p>
 <p>This method should not be called from user code, and is only
 exposed for use when subclassing the
-<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a>.</p>
+<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.32.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -479,37 +479,37 @@ exposed for use when subclassing the
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.Session">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authinfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_ssl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consul_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Session" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Session" title="(in Requests v2.32.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a></p>
 <p>Establish a connection to a SAS Viya server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.connection.CAS.html#swat.cas.connection.CAS" title="(in SWAT v1.15.0)"><em>swat.cas.connection.CAS</em></a>) – Name of the server to connect to or an established CAS session.</p></li>
-<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Username for authentication.  Not required if <cite>host</cite> is a CAS
+<li><p><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.connection.CAS.html#swat.cas.connection.CAS" title="(in SWAT v1.17.0)"><em>swat.cas.connection.CAS</em></a>) – Name of the server to connect to or an established CAS session.</p></li>
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Username for authentication.  Not required if <cite>host</cite> is a CAS
 connection, if Kerberos is used, or if <cite>token</cite> is provided.  If using Kerberos and an explicit
 username is desired, maybe be a string in <cite>‘user&#64;REALM’</cite> format.</p></li>
-<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Password for authentication.  Not required when <cite>host</cite> is a CAS
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Password for authentication.  Not required when <cite>host</cite> is a CAS
 connection, <cite>authinfo</cite> is provided, <cite>token</cite> is provided, or Kerberos is used.</p></li>
-<li><p><strong>authinfo</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a .authinfo or .netrc file from which credentials should be
+<li><p><strong>authinfo</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a .authinfo or .netrc file from which credentials should be
 pulled.</p></li>
-<li><p><strong>protocol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Choose from <code class="docutils literal notranslate"><span class="pre">{'http',</span> <span class="pre">'https'}</span></code>.
+<li><p><strong>protocol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Choose from <code class="docutils literal notranslate"><span class="pre">{'http',</span> <span class="pre">'https'}</span></code>.
 Whether to use HTTP or HTTPS connections.  Defaults to <cite>https</cite>.</p></li>
-<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Port number for the connection if a non-standard port is used.
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Port number for the connection if a non-standard port is used.
 Defaults to 80 or 443 depending on <cite>protocol</cite>.</p></li>
-<li><p><strong>verify_ssl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether server-side SSL certificates should be verified.  Defaults
+<li><p><strong>verify_ssl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether server-side SSL certificates should be verified.  Defaults
 to true.  Ignored for HTTP connections.</p></li>
-<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – OAuth token to use for authorization.</p></li>
-<li><p><strong>client_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Client ID requesting access.  Use if connection to Viya should be
+<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – OAuth token to use for authorization.</p></li>
+<li><p><strong>client_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Client ID requesting access.  Use if connection to Viya should be
 made using “client_credentials” method.</p></li>
-<li><p><strong>client_secret</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Client secret for client requesting access. Required if <cite>client_id</cite>
+<li><p><strong>client_secret</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Client secret for client requesting access. Required if <cite>client_id</cite>
 is provided.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>message_log</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.13)"><em>logging.Logger</em></a>) – A log to which all REST request and response messages will be sent.  Attach a handler using
+<li><p><strong>message_log</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.14)"><em>logging.Logger</em></a>) – A log to which all REST request and response messages will be sent.  Attach a handler using
 <a class="reference internal" href="sasctl.session.html#sasctl.core.Session.add_logger" title="sasctl.core.Session.add_logger"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_logger()</span></code></a> to capture these messages.</p></li>
-<li><p><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><em>Callable</em>) – A collection of functions that will be called with each request and response object <em>prior</em> to logging the
+<li><p><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><em>Callable</em>) – A collection of functions that will be called with each request and response object <em>prior</em> to logging the
 messages, allowing any sensitive information to be removed first.</p></li>
 </ul>
 </dd>
@@ -526,9 +526,9 @@ messages, allowing any sensitive information to be removed first.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>handler</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Handler" title="(in Python v3.13)"><em>logging.Handler</em></a>) – A Handler instance to use for logging the requests and responses.</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The logging level to assign to the handler.  Ignored if handler’s
-logging level is already set.  Defaults to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a>.</p></li>
+<li><p><strong>handler</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Handler" title="(in Python v3.14)"><em>logging.Handler</em></a>) – A Handler instance to use for logging the requests and responses.</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – The logging level to assign to the handler.  Ignored if handler’s
+logging level is already set.  Defaults to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -546,7 +546,7 @@ logging level is already set.  Defaults to <a class="reference external" href="h
 <dd><p>Log session requests and responses to stderr.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The logging level of the handler.  Defaults to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a></p>
+<dd class="field-odd"><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – The logging level of the handler.  Defaults to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>logging.StreamHandler</em></p>
@@ -562,8 +562,8 @@ logging level is already set.  Defaults to <a class="reference external" href="h
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The logical name of the CAS server, not the hostname.  Defaults to “cas-shared-default”.</p></li>
-<li><p><strong>**kwargs</strong> – Additional arguments to pass to the <a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.connection.CAS.html#swat.cas.connection.CAS" title="(in SWAT v1.15.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">swat.CAS</span></code></a> constructor.
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – The logical name of the CAS server, not the hostname.  Defaults to “cas-shared-default”.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments to pass to the <a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.connection.CAS.html#swat.cas.connection.CAS" title="(in SWAT v1.17.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">swat.CAS</span></code></a> constructor.
 Can be used to override this method’s default behavior or customize the CAS session.</p></li>
 </ul>
 </dd>
@@ -571,7 +571,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 <dd class="field-even"><p><em>swat.cas.connection.CAS</em> – An active SWAT connection</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.15.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> package is not available.</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.17.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> package is not available.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -596,7 +596,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>token</strong> (<a class="reference internal" href="#sasctl.core.OAuth2Token" title="sasctl.core.OAuth2Token"><em>OAuth2Token</em></a>) – Token to be cached.</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path to file containing cached tokens.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to file containing cached tokens.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -617,7 +617,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -634,7 +634,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -651,7 +651,7 @@ Can be used to override this method’s default behavior or customize the CAS se
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -676,7 +676,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -695,7 +695,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -706,7 +706,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 <dd><p>Read any cached access tokens from disk</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path to file containing cached tokens.</p>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to file containing cached tokens.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>OAuth2Token or None</em></p>
@@ -738,10 +738,10 @@ object to send in the body of the <code class="xref py py-class docutils literal
 for multipart encoding upload.</p></li>
 <li><p><strong>auth</strong> – (optional) Auth tuple or callable to enable
 Basic/Digest/Custom HTTP Auth.</p></li>
-<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – (optional) How long to wait for the server to send
-data before giving up, as a float, or a <a class="reference external" href="https://requests.readthedocs.io/en/latest/user/advanced/#timeouts" title="(in Requests v2.32.4)"><span class="xref std std-ref">(connect timeout,
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a>) – (optional) How many seconds to wait for the server to send
+data before giving up, as a float, or a <a class="reference external" href="https://requests.readthedocs.io/en/latest/user/advanced/#timeouts" title="(in Requests v2.32.5)"><span class="xref std std-ref">(connect timeout,
 read timeout)</span></a> tuple.</p></li>
-<li><p><strong>allow_redirects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – (optional) Set to True by default.</p></li>
+<li><p><strong>allow_redirects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – (optional) Set to True by default.</p></li>
 <li><p><strong>proxies</strong> – (optional) Dictionary mapping protocol or protocol and
 hostname to the URL of the proxy.</p></li>
 <li><p><strong>hooks</strong> – (optional) Dictionary mapping hook name to one event or
@@ -761,7 +761,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -772,7 +772,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 <dd><p>Send a given PreparedRequest.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)">requests.Response</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -802,15 +802,15 @@ SAS Viya server.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.VersionInfo">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">VersionInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cadence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#VersionInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.VersionInfo" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Stores the version information for a SAS Viya environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>major</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Major version number (e.g. 3 for Viya 3.5 or 4 for Viya 4.0)</p></li>
-<li><p><strong>minor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Minor version number (e.g. 5 for Viya 3.5 or 0 for Viya 4.0)</p></li>
-<li><p><strong>cadence</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Release cadence for Viya 4.  Should be one of ‘stable’ or ‘LTS’.</p></li>
-<li><p><strong>release</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Release number for Viya 4.  Two formats are currently possible:</p>
+<li><p><strong>major</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Major version number (e.g. 3 for Viya 3.5 or 4 for Viya 4.0)</p></li>
+<li><p><strong>minor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Minor version number (e.g. 5 for Viya 3.5 or 0 for Viya 4.0)</p></li>
+<li><p><strong>cadence</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Release cadence for Viya 4.  Should be one of ‘stable’ or ‘LTS’.</p></li>
+<li><p><strong>release</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Release number for Viya 4.  Two formats are currently possible:</p>
 <ul>
 <li><p>YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R</p></li>
 <li><p>YYYY.MM where MM is the month of the release.</p></li>
@@ -885,7 +885,7 @@ default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path portion of the URL.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path portion of the URL.</p></li>
 <li><p><strong>**kwargs</strong> – Passed to <a class="reference internal" href="#sasctl.core.request" title="sasctl.core.request"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request()</span></code></a>.</p></li>
 </ul>
 </dd>
@@ -902,7 +902,7 @@ default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path portion of the URL.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path portion of the URL.</p></li>
 <li><p><strong>**kwargs</strong> – Passed to <a class="reference internal" href="#sasctl.core.request" title="sasctl.core.request"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request()</span></code></a>.</p></li>
 </ul>
 </dd>
@@ -919,8 +919,8 @@ default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p></li>
-<li><p><strong>rel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>)</p></li>
+<li><p><strong>rel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -936,7 +936,7 @@ default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path portion of the URL.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path portion of the URL.</p></li>
 <li><p><strong>**kwargs</strong> – Passed to <a class="reference internal" href="#sasctl.core.request" title="sasctl.core.request"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request()</span></code></a>.</p></li>
 </ul>
 </dd>
@@ -972,7 +972,7 @@ default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path portion of the URL.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path portion of the URL.</p></li>
 <li><p><strong>**kwargs</strong> – Passed to <a class="reference internal" href="#sasctl.core.request" title="sasctl.core.request"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request()</span></code></a>.</p></li>
 </ul>
 </dd>
@@ -989,7 +989,7 @@ default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path portion of the URL.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path portion of the URL.</p></li>
 <li><p><strong>item</strong> (<a class="reference internal" href="#sasctl.core.RestObj" title="sasctl.core.RestObj"><em>RestObj</em></a><em>, </em><em>optional</em>) – A existing object to PUT.  If provided, ETag and Content-Type headers
 will automatically be specified.</p></li>
 <li><p><strong>**kwargs</strong> – Passed to <a class="reference internal" href="#sasctl.core.request" title="sasctl.core.request"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request()</span></code></a>.</p></li>
@@ -1008,16 +1008,16 @@ will automatically be specified.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>verb</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – A valid HTTP request verb.</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path portion of URL to request.</p></li>
+<li><p><strong>verb</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – A valid HTTP request verb.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path portion of URL to request.</p></li>
 <li><p><strong>session</strong> (<a class="reference internal" href="sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><em>Session</em></a><em>, </em><em>optional</em>) – Defaults to <cite>current_session()</cite>.</p></li>
-<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – <p>The format of the return response.  Defaults to <cite>auto</cite>.</p>
+<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – <p>The format of the return response.  Defaults to <cite>auto</cite>.</p>
 <ul>
 <li><p><cite>rest</cite>: <a class="reference internal" href="#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> constructed from JSON.</p></li>
-<li><p><cite>response</cite>: the raw <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Response</span></code></a> object.</p></li>
-<li><p><cite>content</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.content" title="(in Requests v2.32.4)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.content</span></code></a></p></li>
-<li><p><cite>json</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.json" title="(in Requests v2.32.4)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">requests.Response.json()</span></code></a></p></li>
-<li><p><cite>text</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.text" title="(in Requests v2.32.4)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.text</span></code></a></p></li>
+<li><p><cite>response</cite>: the raw <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Response</span></code></a> object.</p></li>
+<li><p><cite>content</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.content" title="(in Requests v2.32.5)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.content</span></code></a></p></li>
+<li><p><cite>json</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.json" title="(in Requests v2.32.5)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">requests.Response.json()</span></code></a></p></li>
+<li><p><cite>text</cite>: <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response.text" title="(in Requests v2.32.5)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests.Response.text</span></code></a></p></li>
 <li><p><cite>auto</cite>: <a class="reference internal" href="#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> constructed from JSON if possible, otherwise same as <cite>text</cite>.</p></li>
 </ul>
 </p></li>
@@ -1037,8 +1037,8 @@ will automatically be specified.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p></li>
-<li><p><strong>rel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>)</p></li>
+<li><p><strong>rel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
 <li><p><strong>**kwargs</strong> – Passed to <a class="reference internal" href="#sasctl.core.request" title="sasctl.core.request"><code class="xref py py-func docutils literal notranslate"><span class="pre">request()</span></code></a></p></li>
 </ul>
 </dd>
@@ -1054,7 +1054,7 @@ will automatically be specified.</p></li>
 <dd><p>Get the URI of a resource in string format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Strings are assumed to be URIs and are returned as is.  Dictionary
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Strings are assumed to be URIs and are returned as is.  Dictionary
 objects will be checked for a <cite>self</cite> URI and returned if found.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

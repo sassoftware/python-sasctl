@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.11.5 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.11.6 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=48f43e50"></script>
+    <script src="../../../_static/documentation_options.js?v=e5a44e9c"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.5" />
-    <meta name="docbuild:last-update" content="Jun 27, 2025"/>
+  <meta name="docsearch:version" content="1.11.6" />
+    <meta name="docbuild:last-update" content="Nov 19, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.5 documentation</p>
+    <p class="title logo__title">sasctl 1.11.6 documentation</p>
   
 </a></div>
     
@@ -2006,6 +2006,7 @@
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
         <span class="n">output_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">create_requirements_txt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Searches the model directory for Python scripts and pickle files and</span>
@@ -2028,7 +2029,11 @@
 <span class="sd">        environment.</span>
 
 <span class="sd">        When provided with an output_path argument, this function outputs a JSON file</span>
-<span class="sd">        named &quot;requirements.json&quot;. Otherwise, a list of dicts is returned.</span>
+<span class="sd">        named &quot;requirements.json&quot;. If create_requirements_txt is True, it will also</span>
+<span class="sd">        create a requirements.txt file. Otherwise, a list of dicts is returned.</span>
+
+<span class="sd">        Note: requirements.txt file is only created when both output_path and</span>
+<span class="sd">        create_requirements_txt are specified.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2036,6 +2041,10 @@
 <span class="sd">            The path to a Python project, by default the current working directory.</span>
 <span class="sd">        output_path : str or pathlib.Path, optional</span>
 <span class="sd">            The path for the output requirements.json file. The default value is None.</span>
+<span class="sd">        create_requirements_txt : bool, optional</span>
+<span class="sd">            Whether to also create a requirements.txt file in addition to the</span>
+<span class="sd">            requirements.json file. This is useful for SAS Event Stream Processing</span>
+<span class="sd">            environments. The default value is False.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2054,10 +2063,56 @@
         <span class="n">package_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">_flatten</span><span class="p">(</span><span class="n">package_list</span><span class="p">))))</span>
         <span class="n">package_list</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">remove_standard_library_packages</span><span class="p">(</span><span class="n">package_list</span><span class="p">)</span>
         <span class="n">package_and_version</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_local_package_version</span><span class="p">(</span><span class="n">package_list</span><span class="p">)</span>
+
         <span class="c1"># Identify packages with missing versions</span>
         <span class="n">missing_package_versions</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">package_and_version</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">]</span>
+
+        <span class="n">IMPORT_TO_INSTALL_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1"># Data Science &amp; ML Core</span>
+            <span class="s2">&quot;sklearn&quot;</span><span class="p">:</span> <span class="s2">&quot;scikit-learn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;skimage&quot;</span><span class="p">:</span> <span class="s2">&quot;scikit-image&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cv2&quot;</span><span class="p">:</span> <span class="s2">&quot;opencv-python&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PIL&quot;</span><span class="p">:</span> <span class="s2">&quot;Pillow&quot;</span><span class="p">,</span>
+            <span class="c1"># Data Formats &amp; Parsing</span>
+            <span class="s2">&quot;yaml&quot;</span><span class="p">:</span> <span class="s2">&quot;PyYAML&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bs4&quot;</span><span class="p">:</span> <span class="s2">&quot;beautifulsoup4&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;docx&quot;</span><span class="p">:</span> <span class="s2">&quot;python-docx&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pptx&quot;</span><span class="p">:</span> <span class="s2">&quot;python-pptx&quot;</span><span class="p">,</span>
+            <span class="c1"># Date &amp; Time Utilities</span>
+            <span class="s2">&quot;dateutil&quot;</span><span class="p">:</span> <span class="s2">&quot;python-dateutil&quot;</span><span class="p">,</span>
+            <span class="c1"># Database Connectors</span>
+            <span class="s2">&quot;MySQLdb&quot;</span><span class="p">:</span> <span class="s2">&quot;MySQL-python&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;psycopg2&quot;</span><span class="p">:</span> <span class="s2">&quot;psycopg2-binary&quot;</span><span class="p">,</span>
+            <span class="c1"># System &amp; Platform</span>
+            <span class="s2">&quot;win32api&quot;</span><span class="p">:</span> <span class="s2">&quot;pywin32&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;win32com&quot;</span><span class="p">:</span> <span class="s2">&quot;pywin32&quot;</span><span class="p">,</span>
+            <span class="c1"># Scientific Libraries</span>
+            <span class="s2">&quot;Bio&quot;</span><span class="p">:</span> <span class="s2">&quot;biopython&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Map import names to their corresponding package installation names</span>
+        <span class="n">package_and_version</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">IMPORT_TO_INSTALL_MAPPING</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">version</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">package_and_version</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">create_requirements_txt</span><span class="p">:</span>
+            <span class="n">requirements_txt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">missing_package_versions</span><span class="p">:</span>
+                <span class="n">requirements_txt</span> <span class="o">+=</span> <span class="s2">&quot;# Warning- The existence and/or versions for the following packages could not be determined:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">requirements_txt</span> <span class="o">+=</span> <span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_package_versions</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="k">for</span> <span class="n">package</span><span class="p">,</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">package_and_version</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">version</span><span class="p">:</span>
+                    <span class="n">requirements_txt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">package</span><span class="si">}</span><span class="s2">==</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>  <span class="c1"># skipcq: PTC-W6004</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;requirements.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">requirements_txt</span><span class="p">)</span>
 
         <span class="c1"># Create a list of dicts related to each package or warning</span>
         <span class="n">json_dicts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -2201,16 +2256,16 @@
             <span class="n">file_text</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="c1"># Parse the file to get the abstract syntax tree representation</span>
             <span class="n">tree</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">file_text</span><span class="p">)</span>
-            <span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">modules</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
             <span class="c1"># Walk through each node in the ast to find import calls</span>
             <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
                 <span class="c1"># Determine parent module for `from * import *` calls</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ImportFrom</span><span class="p">):</span>
-                    <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+                    <span class="n">modules</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Import</span><span class="p">):</span>
                     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-                        <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="n">modules</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="n">modules</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">modules</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>

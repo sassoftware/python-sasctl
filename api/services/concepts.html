@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.concepts &#8212; sasctl 1.11.5 documentation</title>
+    <title>sasctl.services.concepts &#8212; sasctl 1.11.6 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=48f43e50"></script>
+    <script src="../../_static/documentation_options.js?v=e5a44e9c"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/concepts';</script>
@@ -49,8 +49,8 @@
     <link rel="prev" title="sasctl.services.cas_management" href="cas_management.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.5" />
-    <meta name="docbuild:last-update" content="Jun 27, 2025"/>
+  <meta name="docsearch:version" content="1.11.6" />
+    <meta name="docbuild:last-update" content="Nov 19, 2025"/>
   </head>
   
   
@@ -112,7 +112,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.5 documentation</p>
+    <p class="title logo__title">sasctl 1.11.6 documentation</p>
   
 </a></div>
     
@@ -380,22 +380,22 @@ documents in CAS tables and analyzing documents that are uploaded directly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – Documents to analyze.  May be either the URI to a CAS table where the
+<li><p><strong>documents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>) – Documents to analyze.  May be either the URI to a CAS table where the
 documents are currently stored, or an iterable of strings containing
 the documents’ text.</p></li>
-<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a caslib in which the documents will be stored.  Required if
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a caslib in which the documents will be stored.  Required if
 <cite>documents</cite> is a list of strings.</p></li>
-<li><p><strong>id_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains a unique id for each
+<li><p><strong>id_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains a unique id for each
 document.  Required if <cite>documents</cite> is a CAS table URI.</p></li>
-<li><p><strong>text_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains the document text to
+<li><p><strong>text_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains the document text to
 analyze.  Required if <cite>documents</cite> is a CAS table URI.</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Description to add to the sentiment analysis job.</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Description to add to the sentiment analysis job.</p></li>
 <li><p><strong>model</strong></p></li>
-<li><p><strong>output_postfix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Text to be added to the end of all output table names.</p></li>
-<li><p><strong>match_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Choose from <code class="docutils literal notranslate"><span class="pre">{'all',</span> <span class="pre">'longest',</span> <span class="pre">'best'}</span></code>.
+<li><p><strong>output_postfix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Text to be added to the end of all output table names.</p></li>
+<li><p><strong>match_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Choose from <code class="docutils literal notranslate"><span class="pre">{'all',</span> <span class="pre">'longest',</span> <span class="pre">'best'}</span></code>.
 Type of matches to return. Defaults to ‘all’.</p></li>
-<li><p><strong>enable_facts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to enable facts in the results.  Defaults to False.</p></li>
-<li><p><strong>language</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Two letter
+<li><p><strong>enable_facts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to enable facts in the results.  Defaults to False.</p></li>
+<li><p><strong>language</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Two letter
 <a class="reference external" href="https://en.wikipedia.org/wiki/ISO_639">ISO 639-1</a>
 code indicating the source language.  Defaults to ‘en’.</p></li>
 </ul>
