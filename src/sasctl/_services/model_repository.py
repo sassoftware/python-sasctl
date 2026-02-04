@@ -18,7 +18,6 @@ import urllib
 from ..core import current_session, delete, get, sasctl_command, RestObj
 from .service import Service
 
-
 FUNCTIONS = {
     "Analytical",
     "Classification",
