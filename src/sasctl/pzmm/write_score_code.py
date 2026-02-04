@@ -767,9 +767,9 @@ def impute_missing_values(data):
     impute_values = \\\n + {"var1": 0, "var2": "", "var3": 125.3}
         """
         self.score_code += (
-            f"\n\n{'':4}# Specify downcasting behavior for pandas 2.x to avoid warnings\n" +
-            f"{'':4}if int(pd.__version__.split('.')[0]) == 2:\n{'':8}pd.set_option('future.no_silent_downcasting', True)\n" +
-            f"{'':4}return data.replace(r'^\\s*\\.$', np.nan, regex=True).fillna(impute_values).infer_objects()\n"
+            f"\n\n{'':4}# Specify downcasting behavior for pandas 2.x to avoid warnings\n"
+            + f"{'':4}if int(pd.__version__.split('.')[0]) == 2:\n{'':8}pd.set_option('future.no_silent_downcasting', True)\n"
+            + f"{'':4}return data.replace(r'^\\s*\\.$', np.nan, regex=True).fillna(impute_values).infer_objects()\n"
         )
         """      
     # Specify downcasting behavior for pandas 2.x to avoid warnings
