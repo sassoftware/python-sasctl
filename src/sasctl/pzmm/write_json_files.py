@@ -22,7 +22,7 @@ from pandas import DataFrame, Series
 from sasctl.pzmm.write_score_code import ScoreCode as sc
 from ..core import current_session
 from ..utils.decorators import deprecated, experimental
-from ..utils.misc import check_if_jupyter
+from ..utils.misc import check_if_jupyter, IMPORT_TO_INSTALL_MAPPING
 
 try:
     # noinspection PyPackageRequirements
@@ -1676,29 +1676,6 @@ class JSONFiles:
         missing_package_versions = [
             item[0] for item in package_and_version if not item[1]
         ]
-
-        IMPORT_TO_INSTALL_MAPPING = {
-            # Data Science & ML Core
-            "sklearn": "scikit-learn",
-            "skimage": "scikit-image",
-            "cv2": "opencv-python",
-            "PIL": "Pillow",
-            # Data Formats & Parsing
-            "yaml": "PyYAML",
-            "bs4": "beautifulsoup4",
-            "docx": "python-docx",
-            "pptx": "python-pptx",
-            # Date & Time Utilities
-            "dateutil": "python-dateutil",
-            # Database Connectors
-            "MySQLdb": "MySQL-python",
-            "psycopg2": "psycopg2-binary",
-            # System & Platform
-            "win32api": "pywin32",
-            "win32com": "pywin32",
-            # Scientific Libraries
-            "Bio": "biopython",
-        }
 
         # Map import names to their corresponding package installation names
         package_and_version = [

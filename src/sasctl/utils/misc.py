@@ -10,6 +10,31 @@ import string
 from .decorators import versionadded
 
 
+# Mapping of Python import names to their PyPI installation names
+IMPORT_TO_INSTALL_MAPPING = {
+    # Data Science & ML Core
+    "sklearn": "scikit-learn",
+    "skimage": "scikit-image",
+    "cv2": "opencv-python",
+    "PIL": "Pillow",
+    # Data Formats & Parsing
+    "yaml": "PyYAML",
+    "bs4": "beautifulsoup4",
+    "docx": "python-docx",
+    "pptx": "python-pptx",
+    # Date & Time Utilities
+    "dateutil": "python-dateutil",
+    # Database Connectors
+    "MySQLdb": "MySQL-python",
+    "psycopg2": "psycopg2-binary",
+    # System & Platform
+    "win32api": "pywin32",
+    "win32com": "pywin32",
+    # Scientific Libraries
+    "Bio": "biopython",
+}
+
+
 def installed_packages():
     """List Python packages installed in the current environment.
 

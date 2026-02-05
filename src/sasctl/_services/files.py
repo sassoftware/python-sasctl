@@ -61,7 +61,8 @@ class Files(Service):
 
             with open(file, "rb") as f:
                 file = f.read()
-        else:
+                
+        elif not isinstance(file, bytes):
             if filename is None:
                 raise ValueError(
                     "`filename` must be specified if `file` is not a path."
