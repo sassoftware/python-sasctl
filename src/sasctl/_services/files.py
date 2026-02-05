@@ -61,7 +61,7 @@ class Files(Service):
 
             with open(file, "rb") as f:
                 file = f.read()
-                
+
         elif not isinstance(file, bytes):
             if filename is None:
                 raise ValueError(
