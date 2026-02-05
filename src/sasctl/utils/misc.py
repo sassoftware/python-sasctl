@@ -9,7 +9,6 @@ import string
 
 from .decorators import versionadded
 
-
 # Mapping of Python import names to their PyPI installation names
 IMPORT_TO_INSTALL_MAPPING = {
     # Data Science & ML Core

@@ -10,7 +10,6 @@ from unittest import mock
 
 import pytest
 
-
 pytest.skip(
     "PyMAS functionality is deprecated and will be removed in a future release.",
     allow_module_level=True,
@@ -241,9 +240,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     end;
     
 endpackage;
-""".lstrip(
-        "\n"
-    )
+""".lstrip("\n")
 
     assert isinstance(p, PyMAS)
 
@@ -343,9 +340,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     end;
     
 endpackage;
-""".lstrip(
-        "\n"
-    )
+""".lstrip("\n")
 
     f = tmpdir.join("model.py")
     f.write(code)
