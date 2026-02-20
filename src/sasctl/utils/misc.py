@@ -59,13 +59,9 @@ def installed_packages():
         if version.parse(pip.__version__) >= version.parse("20.1"):
             from importlib.metadata import distributions, metadata
 
-            packages = distributions()
-            pac = [p for p in packages]
-            warnings.warn(f"imported importlib.metadata.distributions: {pac}")
-
-            return [
-                p.name + "==" + p.version for p in packages
-            ]
+            output = [p.name + "==" + p.version for p in distributions()]
+            warnings.warn(f'Output here: {output}')
+            return output
         else:
             warnings.warn(f"Invalid pip version")
 
