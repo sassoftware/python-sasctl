@@ -15,6 +15,7 @@ from ..services import files as file_service
 from ..services import folders as folders_service
 from .._services.service import Service
 
+
 class CodeFile(Service):
     """
     A class for creating Python code files formatted for SAS Intelligent Decisioning.
@@ -25,7 +26,6 @@ class CodeFile(Service):
     """
 
     _SERVICE_ROOT = "/decisions"
-
 
     @classmethod
     def _validate_code_format_via_api(cls, code: str) -> bool:
@@ -48,18 +48,18 @@ class CodeFile(Service):
         try:
             response = cls.post(
                 "/commons/validations/codeFiles",
-                json={"content": code, "type": "decisionPythonFile"}
+                json={"content": code, "type": "decisionPythonFile"},
             )
 
             # If validation fails, the response will contain an error
-            if not response.get('valid', True):
-                error = response.get('error', {})
+            if not response.get("valid", True):
+                error = response.get("error", {})
                 if isinstance(error, dict):
-                    error_message = error.get('message', str(error))
+                    error_message = error.get("message", str(error))
                 else:
                     error_message = str(error)
                 raise ValueError(error_message)
-                
+
         except Exception as e:
             # Re-raise ValueError as-is, wrap other exceptions
             if isinstance(e, ValueError):
@@ -67,7 +67,9 @@ class CodeFile(Service):
             raise ValueError(f"Code validation failed: {str(e)}")
 
     @classmethod
-    def _find_file_in_folder(cls, folder_id: str, file_name: str) -> Union[RestObj, None]:
+    def _find_file_in_folder(
+        cls, folder_id: str, file_name: str
+    ) -> Union[RestObj, None]:
         """
         Find a file in a specific folder by name.
 
@@ -84,29 +86,26 @@ class CodeFile(Service):
             File details if found, None otherwise.
         """
         from ..services import folders as folders_service
-        
+
         # Search for the file in the folder
         file_filter = f"and(eq(name, '{file_name}'), eq(contentType, 'file'))"
         response = folders_service.get(
-            f"/folders/{folder_id}/members",
-            params={"filter": file_filter}
+            f"/folders/{folder_id}/members", params={"filter": file_filter}
         )
-        
+
         if len(response) <= 0:
             # No files with file_name were found.
             return None
-        
-        file_uri = response.get('uri')
-        
+
+        file_uri = response.get("uri")
+
         if file_uri:
             return response
-        
+
         return None
-    
+
     @classmethod
-    def _load_python_code(
-        cls, code: Union[str, Path]
-    ) -> str:
+    def _load_python_code(cls, code: Union[str, Path]) -> str:
         """
         Load and prepare a Python code file for SAS Intelligent Decisioning.
 
@@ -205,7 +204,7 @@ class CodeFile(Service):
         folder_obj = folders_service.get_folder(folder)
         if not folder_obj:
             raise ValueError(f"Folder '{folder}' not found")
-        
+
         # Verify that a file with that name doesn't exist
         file_obj = cls._find_file_in_folder(folder_obj.id, file_name)
         if file_obj:
@@ -230,14 +229,15 @@ class CodeFile(Service):
             # Try to clean up the uploaded file since code file creation failed
             try:
                 # There is no response from deleting a file object
-                file_service.delete_file({"id": file_obj['id']})
+                file_service.delete_file({"id": file_obj["id"]})
 
             except Exception as delete_error:
                 raise RuntimeError(
                     f"There was an error creating the code file: {post_error}. "
                     f"Additionally, failed to delete the orphaned file: {delete_error}"
                 )
-            raise RuntimeError(f"There was an error with creating the code file: {post_error}")
-
+            raise RuntimeError(
+                f"There was an error with creating the code file: {post_error}"
+            )
 
         return code_file
