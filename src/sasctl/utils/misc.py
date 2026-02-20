@@ -6,6 +6,7 @@
 
 import random
 import string
+import warnings
 
 from .decorators import versionadded
 
@@ -50,25 +51,36 @@ def installed_packages():
     """
     from packaging import version
 
+    warnings.warn(f"Starting installed_packes call")
     try:
         import pip
 
+        warnings.warn(f"pip version {pip.__version__}")
         if version.parse(pip.__version__) >= version.parse("20.1"):
             import pkg_resources
+
+            warnings.warn("imported pkg_resources")
 
             return [
                 p.project_name + "==" + p.version for p in pkg_resources.working_set
             ]
         else:
+            warnings.warn(f"Invalid pip version")
+
             from pip._internal.operations import freeze
     except ImportError:
+        warnings.warn(f"Import Error")
+
         try:
             from pip.operations import freeze
         except ImportError:
+            warnings.warn(f"Import Error 2")
+
             freeze = None
 
     if freeze is not None:
         return list(freeze.freeze())
+    warnings.warn(f"End of call")
 
 
 
