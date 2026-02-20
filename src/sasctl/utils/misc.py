@@ -70,7 +70,6 @@ def installed_packages():
     if freeze is not None:
         return list(freeze.freeze())
 
-    return []
 
 
 @versionadded(version="1.5.1")
