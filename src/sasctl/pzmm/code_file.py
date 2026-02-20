@@ -12,7 +12,7 @@ from typing import Union
 # Package Imports
 from ..core import RestObj
 from ..services import files as file_service
-from ..services import folders as folders_service
+from ..services import folders as folder_service
 from .._services.service import Service
 
 
@@ -85,11 +85,10 @@ class CodeFile(Service):
         RestObj or None
             File details if found, None otherwise.
         """
-        from ..services import folders as folders_service
 
         # Search for the file in the folder
         file_filter = f"and(eq(name, '{file_name}'), eq(contentType, 'file'))"
-        response = folders_service.get(
+        response = folder_service.get(
             f"/folders/{folder_id}/members", params={"filter": file_filter}
         )
 
@@ -201,7 +200,7 @@ class CodeFile(Service):
             cls._validate_code_format_via_api(loaded_code)
 
         # Verify that the folder exists
-        folder_obj = folders_service.get_folder(folder)
+        folder_obj = folder_service.get_folder(folder)
         if not folder_obj:
             raise ValueError(f"Folder '{folder}' not found")
 
