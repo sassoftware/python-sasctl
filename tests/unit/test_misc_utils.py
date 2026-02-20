@@ -12,6 +12,7 @@ def test_list_packages():
     from sasctl.utils.misc import installed_packages
 
     packages = installed_packages()
+    print(packages)
 
     # We know that these packages should always be present
     assert any(re.match("requests==.*", p) for p in packages)
