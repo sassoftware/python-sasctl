@@ -46,7 +46,7 @@ def installed_packages():
     Uses pip freeze functionality so pip module must be present. For pip
     versions >=20.1, this functionality fails to provide versions for some
     conda installed, locally installed, and url installed packages. Instead
-    uses the pkg_resources package which is typically bundled with pip.
+    uses the importlib package which is typically bundled with python.
 
     """
     from packaging import version
