@@ -1,4 +1,4 @@
-# Copyright (c) 2025, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+# Copyright (c) 2026, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 """
@@ -43,7 +43,7 @@ class CodeFile(Service):
         Raises
         ------
         ValueError
-            If the code doesn't meet ID formatting requirements.
+            If the code does not meet ID formatting requirements.
         """
         try:
             response = cls.post(
@@ -135,7 +135,7 @@ class CodeFile(Service):
             if isinstance(code, str) and Path(code).exists():
                 code = Path(code)
         except OSError:
-            # Path is invalid (e.g., too long or malformed) - treat as raw code string
+            # Path is invalid (for example, too long or malformed) - treat as raw code string
             pass
 
         if isinstance(code, Path):
@@ -160,7 +160,7 @@ class CodeFile(Service):
         Validate and upload a Python code file to SAS Intelligent Decisioning.
 
         This method validates a properly formatted ID Python code file and uploads
-        it to a specified folder in SAS Viya, then registers it with the Decisions service.
+        it to a specified folder in SAS Viya, then it registers it with the Decisions service.
 
         Parameters
         ----------
@@ -168,9 +168,9 @@ class CodeFile(Service):
             Python code as a string or path to a Python file. The code must already
             be formatted for ID with an execute function and proper docstrings.
         file_name : str
-            Name for the code file (e.g., 'my_code.py'). Must end with .py
+            Name for the code file (for example, 'my_code.py'). Must end with .py
         folder : str or dict
-            Target folder in SAS Viya. Can be a folder name, path (e.g.,
+            Target folder in SAS Viya. Can be a folder name, path (for example,
             '/Public/MyFolder'), or folder object returned by folders.get_folder().
         validate_code: bool
             If True, validates code format via API before upload. If False, skips validation.
@@ -183,8 +183,8 @@ class CodeFile(Service):
         Raises
         ------
         ValueError
-            If file_name doesn't end with .py, if folder is not found, if code
-            doesn't contain required docstrings, or if code is invalid.
+            If file_name does not end with .py, if folder is not found, if code
+            does not contain required docstrings, or if code is invalid.
         SyntaxError
             If the provided code has syntax errors.
         """
@@ -204,12 +204,12 @@ class CodeFile(Service):
         if not folder_obj:
             raise ValueError(f"Folder '{folder}' not found")
 
-        # Verify that a file with that name doesn't exist
+        # Verify that a file with that name does not exist
         file_obj = cls._find_file_in_folder(folder_obj.id, file_name)
         if file_obj:
             raise ValueError(f"File '{file_name}' already exists in this folder.")
 
-        # Upload the file to Viya Files service
+        # Upload the file to SAS Viya Files service
         file_obj = file_service.create_file(
             file=loaded_code.encode("utf-8"),
             folder=folder,
@@ -232,8 +232,8 @@ class CodeFile(Service):
 
             except Exception as delete_error:
                 raise RuntimeError(
-                    f"There was an error creating the code file: {post_error}. "
-                    f"Additionally, failed to delete the orphaned file: {delete_error}"
+                    f"There was an error creating the code file: {post_error}."
+                    f"Also, could not delete the orphaned file: {delete_error}"
                 )
             raise RuntimeError(
                 f"There was an error with creating the code file: {post_error}"

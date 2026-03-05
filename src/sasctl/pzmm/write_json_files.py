@@ -14,7 +14,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, Generator, List, Optional, Type, Union
 
-# Third Party Imports
+# Third-Party Imports
 import pandas as pd
 from pandas import DataFrame, Series
 
@@ -45,7 +45,7 @@ except ImportError:
         pass
 
 
-# TODO: add converter for any type of dataset (list, dataframe, numpy array)
+# TODO: add converter for any type of data set (list, dataframe, numpy array)
 
 # Constants
 INPUT = "inputVar.json"
@@ -300,14 +300,14 @@ class JSONFiles:
         Model Manager. If these values are detected, they will be supplied as custom
         user properties.
 
-        If a json_path is supplied, this function outputs a JSON file named
+        If a json_path is supplied, this function writes a JSON file named
         "ModelProperties.json". Otherwise, a dict is returned.
 
         Parameters
         ----------
         model_name : str
             User-defined model name. This value is overwritten by SAS Model Manager
-            based on the name of the zip file used for importing the model.
+            based on the name of the ZIP file used for importing the model.
         target_variable : str
             Target variable to be predicted by the model.
         target_values : list, optional
@@ -477,7 +477,7 @@ class JSONFiles:
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
-        This function outputs a JSON file named "fileMetadata.json".
+        This function writes a JSON file named "fileMetadata.json".
 
         Parameters
         ----------
@@ -651,7 +651,7 @@ class JSONFiles:
         Raises
         ------
         ValueError
-            If an parameter within the tuple list is not a tuple or has a length
+            If a parameter within the tuple list is not a tuple or has a length
             different from the expected three.
 
         """
@@ -696,7 +696,7 @@ class JSONFiles:
         Returns
         -------
         list of dict
-            List of dicts with the user provided values inputted.
+            List of dicts with the user provided values entered.
         """
         while True:
             input_param_name = input("What is the parameter name?\n")
@@ -706,7 +706,7 @@ class JSONFiles:
                     f"{input_param_name} is not a valid parameter.",
                     category=UserWarning,
                 )
-                if input("Would you like to input more parameters? (Y/N)") == "N":
+                if input("Would you like to enter more parameters? (Y/N)") == "N":
                     break
                 continue
             param_value = input("What is the parameter's value?\n")
@@ -723,7 +723,7 @@ class JSONFiles:
                     f"1, 2, or 3 or TRAIN, TEST, or VALIDATE respectively.",
                     category=UserWarning,
                 )
-                if input("Would you like to input more parameters? (Y/N)") == "N":
+                if input("Would you like to enter more parameters? (Y/N)") == "N":
                     break
                 continue
             data[data_role - 1]["dataMap"][param_name] = param_value
@@ -929,7 +929,7 @@ class JSONFiles:
             maxdiff_dfs=maxdiff_dfs, datarole=datarole
         )
 
-        # getting json files
+        # Getting JSON files
         json_files = cls.bias_dataframes_to_json(
             groupmetrics=group_metrics,
             maxdifference=max_differences,
@@ -973,7 +973,7 @@ class JSONFiles:
         Returns
         -------
         pandas.DataFrame
-            A singluar DataFrame containing all max differences data
+            A singular DataFrame containing all max differences data
         """
         maxdiff_df = pd.concat(maxdiff_dfs)
         maxdiff_df = maxdiff_df.rename(
@@ -1102,7 +1102,7 @@ class JSONFiles:
             conventions (no spaces and the name cannot begin with a number or symbol). Required for regression problems.
             The default value is None.
         json_path : str or pathlib.Path, optional
-            Location for the output JSON files. If a path is passed, the json files will populate in the directory and
+            Location for the output JSON files. If a path is passed, the JSON files will populate in the directory and
             the function will return None, unless return_dataframes is True. Otherwise, the function will return the json
             strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
             None.
@@ -1200,19 +1200,19 @@ class JSONFiles:
         cutoff: Optional[float] = None,
     ) -> Union[dict, None]:
         """
-        Calculates fit statistics (including ROC and Lift curves) from datasets and then
+        Calculates fit statistics (including ROC and Lift curves) from data sets and then
         either writes them to JSON files or returns them as a single dictionary.
 
         Calculations are performed using a call to SAS CAS via the swat package. An
         error will be raised if the swat package is not installed or if a connection to
         a SAS Viya system is not possible.
 
-        Datasets must contain the actual and predicted values and may optionally contain
+        Data sets must contain the actual and predicted values and can optionally contain
         the predicted probabilities. If no probabilities are provided, a dummy
-        probability dataset is generated based on the predicted values and normalized by
+        probability data set is generated based on the predicted values and normalized by
         the target value.
 
-        Datasets can be provided in the following forms, with the assumption that data
+        Data sets can be provided in the following forms, with the assumption that data
         is ordered as `actual`, `predict`, and `probability` respectively:
 
         * pandas dataframe: the actual and predicted values are their own columns
@@ -1220,7 +1220,7 @@ class JSONFiles:
         * numpy array: the actual and predicted values are their own columns or rows \
         and ordered such that the actual values come first and the predicted second
 
-        If a json_path is supplied, then this function outputs a set of JSON files named
+        If a json_path is supplied, then this function writes a set of JSON files named
         "dmcas_fitstat.json", "dmcas_roc.json", "dmcas_lift.json".
 
         Parameters
@@ -1228,11 +1228,11 @@ class JSONFiles:
         target_value : str, int, or float
             Target event value for model prediction events.
         validate_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
-            Dataset pertaining to the validation data. The default value is None.
+            Data set pertaining to the validation data. The default value is None.
         train_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
-            Dataset pertaining to the training data. The default value is None.
+            Data set pertaining to the training data. The default value is None.
         test_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
-            Dataset pertaining to the test data. The default value is None.
+            Data set pertaining to the test data. The default value is None.
         json_path : str or pathlib.Path, optional
             Location for the output JSON files. The default value is None.
         target_type: str, optional
@@ -1242,7 +1242,7 @@ class JSONFiles:
         Returns
         -------
         dict
-            Dictionary containing a key-value pair representing the files name and json
+            Dictionary containing a key-value pair representing the files name and JSON
             dumps respectively.
 
         Raises
@@ -1375,21 +1375,21 @@ class JSONFiles:
         test: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
     ) -> list:
         """
-        Check which datasets were provided and return a list of flags.
+        Check which data sets were provided and return a list of flags.
 
         Parameters
         ----------
         validate : pandas.DataFrame, list of list, or numpy.ndarray, optional
-            Dataset pertaining to the validation data. The default value is None.
+            Data set pertaining to the validation data. The default value is None.
         train : pandas.DataFrame, list of list, or numpy.ndarray, optional
-            Dataset pertaining to the training data. The default value is None.
+            Data set pertaining to the training data. The default value is None.
         test : pandas.DataFrame, list of list, or numpy.ndarray, optional
-            Dataset pertaining to the test data. The default value is None.
+            Data set pertaining to the test data. The default value is None.
 
         Returns
         -------
         data_partitions : list
-            A list of flags indicating which partitions have datasets.
+            A list of flags indicating which partitions have data sets.
 
         Raises
         ------
@@ -1416,7 +1416,7 @@ class JSONFiles:
         target_type: str = "classification",
     ) -> DataFrame:
         """
-        Convert the user supplied statistical dataset from either a pandas DataFrame,
+        Convert the user supplied statistical data set from either a pandas DataFrame,
         list of lists, or numpy array to a DataFrame formatted for SAS CAS upload.
 
         If the prediction probabilities are not provided, the prediction data will be
@@ -1428,7 +1428,7 @@ class JSONFiles:
         Parameters
         ----------
         data : pandas.DataFrame, list of list, or numpy.ndarray
-            Dataset representing the actual and predicted values of the model. May also
+            Data set representing the actual and predicted values of the model. May also
             include the prediction probabilities.
         target_value : str, int, or float, optional
             Target event value for model prediction events. Used for creating a binary
@@ -1438,7 +1438,7 @@ class JSONFiles:
         Returns
         -------
         data : pandas.DataFrame
-            Dataset formatted for SAS CAS upload.
+            Data set formatted for SAS CAS upload.
 
         Raises
         ------
@@ -1493,12 +1493,12 @@ class JSONFiles:
     ) -> dict:
         """
         Map the values of the ROC or Lift charts from SAS CAS to the dictionary
-        representation of the respective json file.
+        representation of the respective JSON file.
 
         Parameters
         ----------
         json_dict : dict
-            Dictionary representation of the ROC or Lift chart json file.
+            Dictionary representation of the ROC or Lift chart JSON file.
         partition : int
             Numerical representation of the data partition. Either 0, 1, or 2.
         stat_df : pandas.DataFrame
@@ -1510,7 +1510,7 @@ class JSONFiles:
         Returns
         -------
         json_dict : dict
-            Dictionary representation of the ROC or Lift chart json file, with the
+            Dictionary representation of the ROC or Lift chart JSON file, with the
             values from the SAS CAS percentile action set added in.
         """
         for row_num in range(len(stat_df)):
@@ -1624,9 +1624,9 @@ class JSONFiles:
         current working environment. Then the package and version are written to a
         requirements.json file.
 
-        WARNING: The methods utilized in this function can determine package
+        WARNING: The methods used in this function can determine package
         dependencies from provided scripts and pickle files, but CANNOT determine the
-        required package versions without being in the development environment which
+        required package versions without being in the development environment, in which
         they were originally created.
 
         This function works best when run in the model development environment and is
@@ -1636,11 +1636,11 @@ class JSONFiles:
         the requirements.json file's package versions to match the model development
         environment.
 
-        When provided with an output_path argument, this function outputs a JSON file
+        When provided with an output_path argument, this function writes a JSON file
         named "requirements.json". If create_requirements_txt is True, it will also
         create a requirements.txt file. Otherwise, a list of dicts is returned.
 
-        Note: requirements.txt file is only created when both output_path and
+        Note: The requirements.txt file is created only when the both output_path and
         create_requirements_txt are specified.
 
         Parameters
@@ -1657,7 +1657,7 @@ class JSONFiles:
         Returns
         -------
         list of dict
-            List of dictionary representations of the json file contents, split into
+            List of dictionary representations of the JSON file contents, split into
             each package and/or warning.
         """
         pickle_packages = []
@@ -1789,7 +1789,7 @@ class JSONFiles:
         Get the package dependencies for all Python scripts in the provided directory
         path.
 
-        Note that currently this functionality only works for .py files.
+        Note that currently this functionality works only for .py files.
 
         Parameters
         ----------
@@ -1934,7 +1934,7 @@ class JSONFiles:
         # Convert to a pandas dataframe for ease of conditional filtering
         df_pickle = pd.DataFrame({"opcode": opcode, "arg": arg, "pos": pos})
 
-        # For all opcodes labelled GLOBAL or STACK_GLOBAL pull out the package names
+        # For all opcodes labeled GLOBAL or STACK_GLOBAL pull out the package names
         global_stack = df_pickle[
             (df_pickle.opcode == "GLOBAL") | (df_pickle.opcode == "STACK_GLOBAL")
         ]
@@ -1944,12 +1944,12 @@ class JSONFiles:
             global_stack.arg.str.split().str[0].str.split(".").str[0].unique().tolist()
         )
 
-        # For all opcodes labelled BINUNICODE or SHORT_BINUNICODE grab the package names
+        # For all opcodes labeled BINUNICODE or SHORT_BINUNICODE grab the package names
         binunicode = df_pickle[
             (df_pickle.opcode == "BINUNICODE")
             | (df_pickle.opcode == "SHORT_BINUNICODE")
         ]
-        # From the argument column, split the string by `.`, then return only unique
+        # From the argument column, split the string by `.`, and then return only unique
         # cells with at least one split
         arg_binunicode = binunicode.arg.str.split(".")
         unicode_packages = (
@@ -2396,7 +2396,7 @@ class JSONFiles:
             target_value=target_value,
         )
 
-        # Formats all new ModelProperties information into one dictionary that can be used to update the json file
+        # Formats all new ModelProperties information into one dictionary that can be used to update the JSON file
         update_dict["trainTable"] = training_table
         update_dict["selectionStatistic"] = selection_statistic
         update_dict["algorithm"] = algorithm
@@ -2497,7 +2497,7 @@ class JSONFiles:
         Returns
         -------
         dict
-        Returns a dictionary with a key value pair that represents the outcome average.
+        Returns a dictionary with a key-value pair that represents the outcome average.
         """
         import numbers
 
@@ -2540,7 +2540,7 @@ class JSONFiles:
         Returns
         -------
         float
-        Returns the numerical value assoicated with the chosen selection statistic.
+        Returns the numerical value associated with the chosen selection statistic.
         """
         if isinstance(model_files, dict):
             if FITSTAT not in model_files:
@@ -2555,7 +2555,7 @@ class JSONFiles:
                         or fitstat["dataMap"][selection_statistic] == None
                     ):
                         raise RuntimeError(
-                            "The chosen selection statistic was not generated properly. Please ensure the value has been "
+                            "The chosen selection statistic was not generated properly. Please ensure that the value has been "
                             "properly created then try again."
                         )
                     return fitstat["dataMap"][selection_statistic]
@@ -2574,7 +2574,7 @@ class JSONFiles:
                             or fitstat["dataMap"][selection_statistic] == None
                         ):
                             raise RuntimeError(
-                                "The chosen selection statistic was not generated properly. Please ensure the value has been "
+                                "The chosen selection statistic was not generated properly. Please ensure that the value has been "
                                 "properly created then try again."
                             )
                         return fitstat["dataMap"][selection_statistic]

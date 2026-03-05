@@ -43,10 +43,10 @@ def installed_packages():
 
     Notes
     -----
-    Uses pip freeze functionality so pip module must be present. For pip
+    Uses pip freeze functionality, so pip module must be present. For pip
     versions >=20.1, this functionality fails to provide versions for some
-    conda installed, locally installed, and url installed packages. Instead
-    uses the importlib package which is typically bundled with python.
+    conda installed, locally installed, and url installed packages. Instead,
+    uses the importlib package, which is typically bundled with python.
 
     """
     from packaging import version
@@ -74,7 +74,7 @@ def installed_packages():
 
 @versionadded(version="1.5.1")
 def random_string(length):
-    """Generates a random alpha-numeric string of a given length.
+    """Generates a random alphanumeric string of a given length.
 
     Parameters
     ----------
@@ -87,7 +87,7 @@ def random_string(length):
 
     """
 
-    # random.choices() wasn't added until Python 3.6, so repeatedly call .choice() instead
+    # random.choices() was not added until Python 3.6, so repeatedly call .choice() instead
     chars = string.ascii_letters + string.digits
     return "".join(random.choice(chars) for _ in range(length))
 
@@ -95,7 +95,7 @@ def random_string(length):
 @versionadded(version="1.9.0")
 def check_if_jupyter() -> bool:
     """
-    Check if the code is being executed from a jupyter notebook.
+    Check if the code is being executed from a Jupyter notebook.
 
     Source: https://stackoverflow.com/questions/47211324/check-if-module-is-running-in-
     jupyter-or-not
@@ -103,7 +103,7 @@ def check_if_jupyter() -> bool:
     Returns
     -------
     bool
-        True if a jupyter notebook is detected. False otherwise.
+        True if a Jupyter notebook is detected. False otherwise.
     """
     try:
         shell = get_ipython().__class__.__name__
