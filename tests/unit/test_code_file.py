@@ -475,9 +475,7 @@ def execute():
 
         code = "def execute():\n    return 'test'"
 
-        with pytest.raises(
-            RuntimeError
-        ):
+        with pytest.raises(RuntimeError):
             CodeFile.write_id_code_file(
                 code=code,
                 file_name="test_code.py",
