@@ -160,7 +160,7 @@ class CodeFile(Service):
         Validate and upload a Python code file to SAS Intelligent Decisioning.
 
         This method validates a properly formatted ID Python code file and uploads
-        it to a specified folder in SAS Viya, then it registers it with the Decisions service.
+        it to a specified folder in SAS Viya, it then registers it with the Decisions service.
 
         Parameters
         ----------
