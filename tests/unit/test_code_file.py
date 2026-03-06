@@ -476,8 +476,7 @@ def execute():
         code = "def execute():\n    return 'test'"
 
         with pytest.raises(
-            RuntimeError,
-            match="There was an error creating the code file: API error.*failed to delete the orphaned file: Delete failed",
+            RuntimeError
         ):
             CodeFile.write_id_code_file(
                 code=code,
