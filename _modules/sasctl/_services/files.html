@@ -47,7 +47,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="1.11.6" />
-    <meta name="docbuild:last-update" content="Nov 19, 2025"/>
+    <meta name="docbuild:last-update" content="Mar 12, 2026"/>
   </head>
   
   
@@ -338,8 +338,8 @@
 <span class="sd">    The file can be associated with the URI of another identifiable object</span>
 <span class="sd">    (for example, a parentUri). Every file must have an assigned content type</span>
 <span class="sd">    and name. Files can be retrieved individually by using the file&#39;s</span>
-<span class="sd">    identifier or as a list of files by using a parentUri. Each file has its</span>
-<span class="sd">    content stream associated with it.  After creation, the metadata that is</span>
+<span class="sd">    identifier or as a list of files by using a parentUri. Each file is</span>
+<span class="sd">    associated with its content stream. After creation, the metadata that is</span>
 <span class="sd">    associated with the file or the actual content can be updated. A single</span>
 <span class="sd">    file can be deleted by using a specific ID. Multiple files can be deleted</span>
 <span class="sd">    by specifying a parentUri.  A file can be uploaded via raw request or</span>
@@ -381,7 +381,8 @@
 
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">file</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;`filename` must be specified if `file` is not a path.&quot;</span>

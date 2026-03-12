@@ -47,7 +47,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="1.11.6" />
-    <meta name="docbuild:last-update" content="Nov 19, 2025"/>
+    <meta name="docbuild:last-update" content="Mar 12, 2026"/>
   </head>
   
   
@@ -334,7 +334,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">sasctl_command</span><span class="p">,</span> <span class="n">RestObj</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 
-
 <span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;Analytical&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Classification&quot;</span><span class="p">,</span>
@@ -490,7 +489,7 @@
         <span class="n">contents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">)</span>
 
         <span class="c1"># By default, request_link() will unwrap a length-1 list.</span>
-        <span class="c1"># If that happens, re-wrap so a list is always returned.</span>
+        <span class="c1"># If that happens, re-wrap so that a list is always returned.</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">contents</span>
 
@@ -518,7 +517,7 @@
 
 <span class="sd">        Notes</span>
 <span class="sd">        -------</span>
-<span class="sd">        If `repository` is a complete representation of the repository it will be</span>
+<span class="sd">        If `repository` is a complete representation of the repository, it will be</span>
 <span class="sd">        returned unless `refresh` is set.  This prevents unnecessary REST</span>
 <span class="sd">        calls when data is already available on the client.</span>
 
@@ -535,7 +534,7 @@
 
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">repository</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="c1"># Attempt to GET the repository directly.  Access may be restricted, so allow HTTP 403 errors</span>
+                <span class="c1"># Attempt to GET the repository directly. Access might be restricted, so allow HTTP 403 errors</span>
                 <span class="c1"># and fall back to using list_repositories() instead.</span>
                 <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/repositories/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">repository</span><span class="p">))</span>
             <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
