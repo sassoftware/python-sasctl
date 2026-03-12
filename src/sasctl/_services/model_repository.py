@@ -160,7 +160,7 @@ class ModelRepository(Service):
         contents = cls.request_link(link, "contents")
 
         # By default, request_link() will unwrap a length-1 list.
-        # If that happens, re-wrap so a list is always returned.
+        # If that happens, re-wrap so that a list is always returned.
         if isinstance(contents, list):
             return contents
 
@@ -185,7 +185,7 @@ class ModelRepository(Service):
 
         Notes
         -------
-        If `repository` is a complete representation of the repository it will be
+        If `repository` is a complete representation of the repository, it will be
         returned unless `refresh` is set.  This prevents unnecessary REST
         calls when data is already available on the client.
 
@@ -202,7 +202,7 @@ class ModelRepository(Service):
 
         if cls.is_uuid(repository):
             try:
-                # Attempt to GET the repository directly.  Access may be restricted, so allow HTTP 403 errors
+                # Attempt to GET the repository directly. Access might be restricted, so allow HTTP 403 errors
                 # and fall back to using list_repositories() instead.
                 return cls.get("/repositories/{id}".format(id=repository))
             except HTTPError as e:

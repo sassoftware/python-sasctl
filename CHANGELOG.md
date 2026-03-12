@@ -1,3 +1,14 @@
+v1.11.7 (2026-03-12)
+-------------
+**Improvements**
+- Added `CodeFile` class to pzmm module for creating and uploading Python code files to SAS Intelligent Decisioning
+  - New method `write_id_code_file()` uploads a Python code file to a specified Viya folder and registers it with the Decisions service
+    - Accepts code as a raw string, file path, or `Path` object
+    - Validates code format via the SAS Viya API before upload; can be disabled with `validate_code=False`
+    - Raises `ValueError` if the file already exists in the target folder, if the folder is not found, or if validation fails
+    - Cleans up the uploaded file if Decisions service registration fails
+  - See `examples/pzmm_id_code_file_example.ipynb` for usage examples
+
 v1.11.6 (2025-11-18)
 --------------------
 **Improvements**

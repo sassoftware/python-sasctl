@@ -20,8 +20,8 @@ class Files(Service):
     The file can be associated with the URI of another identifiable object
     (for example, a parentUri). Every file must have an assigned content type
     and name. Files can be retrieved individually by using the file's
-    identifier or as a list of files by using a parentUri. Each file has its
-    content stream associated with it.  After creation, the metadata that is
+    identifier or as a list of files by using a parentUri. Each file is
+    associated with its content stream. After creation, the metadata that is
     associated with the file or the actual content can be updated. A single
     file can be deleted by using a specific ID. Multiple files can be deleted
     by specifying a parentUri.  A file can be uploaded via raw request or
@@ -61,7 +61,8 @@ class Files(Service):
 
             with open(file, "rb") as f:
                 file = f.read()
-        else:
+
+        elif not isinstance(file, bytes):
             if filename is None:
                 raise ValueError(
                     "`filename` must be specified if `file` is not a path."
