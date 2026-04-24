@@ -1,3 +1,8 @@
+v1.11.8 (2026-04-24)
+--------------------
+**Bugfixes**
+- Narrowed range that pandas downcasting option is set
+
 v1.11.7 (2026-03-12)
 -------------
 **Improvements**
