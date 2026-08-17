@@ -1,7 +1,7 @@
 import json
 import time
 import warnings
-from distutils.version import StrictVersion
+from packaging.version import Version
 from typing import Union
 
 import pandas as pd
@@ -219,7 +219,7 @@ gateway.return_table("Execution Results", df = table, label = "label", title = "
         Pandas Dataframe
 
         """
-        if pd.__version__ >= StrictVersion("1.0.3"):
+        if Version(pd.__version__) >= Version("1.0.3"):
             from pandas import json_normalize
         else:
             from pandas.io.json import json_normalize

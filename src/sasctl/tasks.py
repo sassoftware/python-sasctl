@@ -895,12 +895,12 @@ def get_project_kpis(
         A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
         missing values are replaced with pandas valid missing values.
     """
-    from distutils.version import StrictVersion
+    from packaging.version import Version
 
     from .core import is_uuid
 
     # Check the pandas version for where the json_normalize function exists
-    if pd.__version__ >= StrictVersion("1.0.3"):
+    if Version(pd.__version__) >= Version("1.0.3"):
         from pandas import json_normalize
     else:
         from pandas.io.json import json_normalize
