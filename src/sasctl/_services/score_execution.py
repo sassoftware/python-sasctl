@@ -147,7 +147,7 @@ class ScoreExecution(Service):
 
     @classmethod
     def get_score_execution_results(
-        cls, score_execution: Union[dict, str], use_cas_gateway: False
+        cls, score_execution: Union[dict, str], use_cas_gateway: True
     ):
         """Generates an output table for the score_execution results.
 
