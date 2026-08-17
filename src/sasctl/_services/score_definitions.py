@@ -47,7 +47,7 @@ class ScoreDefinitions(Service):
         server_name: str = "cas-shared-default",
         library_name: str = "Public",
         model_version: Union[str, dict] = "latest",
-        input_mapping: Optional[Dict] = None
+        input_mapping: Optional[Dict] = None,
     ):
         """Creates the score definition service.
 
