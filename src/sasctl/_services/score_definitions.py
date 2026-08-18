@@ -4,7 +4,7 @@ import sys
 
 from pathlib import Path
 import json
-from typing import Union, Optional
+from typing import Dict, Union, Optional
 
 from ..core import current_session, delete, get, sasctl_command, RestObj
 from .cas_management import CASManagement
@@ -41,12 +41,13 @@ class ScoreDefinitions(Service):
         score_def_name: str,
         model: Union[str, dict],
         table_name: str,
-        use_cas_gateway: Optional[bool] = False,
+        use_cas_gateway: Optional[bool] = True,
         table_file: Union[str, Path] = None,
         description: str = "",
         server_name: str = "cas-shared-default",
         library_name: str = "Public",
         model_version: Union[str, dict] = "latest",
+        input_mapping: Optional[Dict] = None,
     ):
         """Creates the score definition service.
 
@@ -70,6 +71,8 @@ class ScoreDefinitions(Service):
             The library within the CAS server the table exists in. Defaults to "Public".
         model_version: str, optional
             The user-chosen version of the model. Deafaults to "latest".
+        input_mapping: list, optional
+            A list of dictionaries mapping variables from the data table to the variables in the model if they are different. Defaults to None.
 
         Returns
         -------
@@ -101,11 +104,18 @@ class ScoreDefinitions(Service):
         try:
             inputMapping = []
             for input_item in model.get("inputVariables"):
-                var = {
-                    "mappingValue": input_item["name"],
-                    "mappingType": "datasource",
-                    "variableName": input_item["name"],
-                }
+                if input_mapping and input_item["name"] in input_mapping:
+                    var = {
+                        "mappingValue": input_mapping[input_item["name"]],
+                        "mappingType": "datasource",
+                        "variableName": input_item["name"],
+                    }
+                else:
+                    var = {
+                        "mappingValue": input_item["name"],
+                        "mappingType": "datasource",
+                        "variableName": input_item["name"],
+                    }
                 inputMapping.append(var)
 
         except:
@@ -133,7 +143,7 @@ class ScoreDefinitions(Service):
         # Checks if the model version is valid and how to find the name
 
         save_score_def = {
-            "name": model_name,  # used to be score_def_name
+            "name": score_def_name,  # used to be score_def_name
             "description": description,
             "objectDescriptor": {
                 "uri": object_uri,
