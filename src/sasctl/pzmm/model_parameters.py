@@ -1,11 +1,11 @@
 # Copyright (c) 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 import json
-from distutils.version import StrictVersion
 from pathlib import Path
 from typing import Any, Optional, Tuple, Union
 
 import pandas as pd
+from packaging.version import Version
 from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
@@ -325,7 +325,7 @@ class ModelParameters:
             missing values are replaced with pandas-valid missing values.
         """
         # Check the pandas version for where the json_normalize function exists
-        if pd.__version__ >= StrictVersion("1.0.3"):
+        if Version(pd.__version__) >= Version("1.0.3"):
             from pandas import json_normalize
         else:
             from pandas.io.json import json_normalize
