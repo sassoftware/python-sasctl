@@ -40,6 +40,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install build-essential libkrb5-dev
 
+      - name: Install dependencies (macOS)
+        if: startsWith(matrix.os-version, 'macos')
+        run: brew install libomp
+
       - name: Install dependencies (Common)
         run: |
           # Setup tox & code coverage
