@@ -1169,7 +1169,7 @@ def test_input_var_lists():
     if Version(pd.__version__) < Version("3.0.0"):
         assert dtypes_list == ["int64", "object"]
     else:
-        assert dtypes_list == ["int64", "string"]
+        assert dtypes_list == ["int64", "str"]
 
     data = [{"name": "First", "type": "int"}, {"name": "Second", "type": "string"}]
     var_list, dtypes_list = sc._input_var_lists(data)
