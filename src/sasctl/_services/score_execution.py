@@ -158,7 +158,7 @@ class ScoreExecution(Service):
 
         Returns
         -------
-        Table reference
+        pandas.DataFrame
 
         """
         try:
@@ -216,7 +216,7 @@ gateway.return_table("Execution Results", df = table, label = "label", title = "
 
         Returns
         -------
-        Pandas Dataframe
+        pandas.DataFrame
 
         """
         if Version(pd.__version__) >= Version("1.0.3"):
