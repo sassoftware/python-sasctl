@@ -251,13 +251,16 @@ def test_create_score_definition():
                                 == "test_model (1.0)"
                             )
 
-                            #Input mapping test case
+                            # Input mapping test case
                             get_model.return_value = {
                                 "id": "12345",
                                 "projectId": "p",
                                 "projectVersionId": "pv",
                                 "name": "test_model",
-                                "inputVariables": [{"name": "first"}, {"name": "second"}],
+                                "inputVariables": [
+                                    {"name": "first"},
+                                    {"name": "second"},
+                                ],
                             }
                             get_table.return_value = {"tableName": "t"}
                             input_mapping = {"first": "mapped_first"}
@@ -284,13 +287,16 @@ def test_create_score_definition():
                                     "variableName": "second",
                                 },
                             ]
-                            #Input mapping is provided, but model has no input variables
+                            # Input mapping is provided, but model has no input variables
                             get_model.return_value = {
                                 "id": "12345",
                                 "projectId": "p",
                                 "projectVersionId": "pv",
                                 "name": "test_model",
-                                "inputVariables": [{"name": "first"}, {"name": "second"}],
+                                "inputVariables": [
+                                    {"name": "first"},
+                                    {"name": "second"},
+                                ],
                             }
                             get_table.return_value = {"tableName": "t"}
                             input_mapping = {"third": "mapped_third"}
@@ -316,6 +322,4 @@ def test_create_score_definition():
                                     "mappingType": "datasource",
                                     "variableName": "second",
                                 },
-                        ]
-                        
-
+                            ]
