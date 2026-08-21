@@ -102,7 +102,7 @@ class ScoreDefinitions(Service):
         # Checking if the model exists and if it's in a project
 
         try:
-            inputMapping = []
+            mappings = []
             for input_item in model.get("inputVariables"):
                 if input_mapping and input_item["name"] in input_mapping:
                     var = {
@@ -116,7 +116,7 @@ class ScoreDefinitions(Service):
                         "mappingType": "datasource",
                         "variableName": input_item["name"],
                     }
-                inputMapping.append(var)
+                mappings.append(var)
 
         except:
             print("This model does not have the optional 'inputVariables' parameter.")
@@ -164,7 +164,7 @@ class ScoreDefinitions(Service):
                 "publishDestination": "",
                 "versionedModel": f"{model_name} ({model_version})",
             },
-            "mappings": inputMapping,
+            "mappings": mappings,
         }
         # Consolidating all of the model and table information to create the score definition information
 

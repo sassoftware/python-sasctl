@@ -250,3 +250,72 @@ def test_create_score_definition():
                                 json_data["properties"]["versionedModel"]
                                 == "test_model (1.0)"
                             )
+
+                            #Input mapping test case
+                            get_model.return_value = {
+                                "id": "12345",
+                                "projectId": "p",
+                                "projectVersionId": "pv",
+                                "name": "test_model",
+                                "inputVariables": [{"name": "first"}, {"name": "second"}],
+                            }
+                            get_table.return_value = {"tableName": "t"}
+                            input_mapping = {"first": "mapped_first"}
+                            sd.create_score_definition(
+                                score_def_name="sd_test",
+                                model="12345",
+                                table_name="t",
+                                input_mapping=input_mapping,
+                            )
+                            assert response
+                            assert post.call_count == 7
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+
+                            assert json_data["mappings"] == [
+                                {
+                                    "mappingValue": "mapped_first",
+                                    "mappingType": "datasource",
+                                    "variableName": "first",
+                                },
+                                {
+                                    "mappingValue": "second",
+                                    "mappingType": "datasource",
+                                    "variableName": "second",
+                                },
+                            ]
+                            #Input mapping is provided, but model has no input variables
+                            get_model.return_value = {
+                                "id": "12345",
+                                "projectId": "p",
+                                "projectVersionId": "pv",
+                                "name": "test_model",
+                                "inputVariables": [{"name": "first"}, {"name": "second"}],
+                            }
+                            get_table.return_value = {"tableName": "t"}
+                            input_mapping = {"third": "mapped_third"}
+                            sd.create_score_definition(
+                                score_def_name="sd_test",
+                                model="12345",
+                                table_name="t",
+                                input_mapping=input_mapping,
+                            )
+                            assert response
+                            assert post.call_count == 8
+                            data = post.call_args
+                            json_data = json.loads(data.kwargs["data"])
+
+                            assert json_data["mappings"] == [
+                                {
+                                    "mappingValue": "first",
+                                    "mappingType": "datasource",
+                                    "variableName": "first",
+                                },
+                                {
+                                    "mappingValue": "second",
+                                    "mappingType": "datasource",
+                                    "variableName": "second",
+                                },
+                        ]
+                        
+
