@@ -1,11 +1,13 @@
-import ast
 import copy
 import json
 import tempfile
+import unittest
+import uuid
 import warnings
 from pathlib import Path
 from unittest import mock
 
+import numpy as np
 import pandas as pd
 import pytest
 from requests.models import Response
@@ -14,9 +16,6 @@ from sklearn.linear_model import LogisticRegression
 
 from sasctl import RestObj, current_session
 from sasctl.pzmm import ModelParameters as mp
-import unittest
-import uuid
-import numpy as np
 
 
 class BadModel:
@@ -47,9 +46,7 @@ def sklearn_model(train_data):
     X, y = train_data
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        model = LogisticRegression(
-            multi_class="multinomial", solver="lbfgs", max_iter=1000
-        )
+        model = LogisticRegression(solver="lbfgs", max_iter=1000)
         model.fit(X, y)
     return model
 
