@@ -88,7 +88,7 @@ def test_sklearn_binary_classifier(cancer_dataset, model, algorithm):
     assert info.analytic_function == "classification"
     assert info.algorithm == algorithm
     assert info.output_column_names == [target]  # target_variable
-    assert info.target_values == ["malignant"]  # target_event
+    assert info.target_values == ["benign", "malignant"]  # [non-event, event]
     assert info.predict_function == model.predict
 
     # If output frame contains a column name then it should be retained
@@ -130,6 +130,33 @@ def test_sklearn_binary_classifier_target_column_name(cancer_dataset):
     info = get_model_info(model, X, y)
 
     assert info.output_column_names == ["I_Target"]
+
+
+def test_sklearn_binary_classifier_target_values_registration(cancer_dataset):
+    """Regression test: registering a binary classifier should not raise ValueError.
+
+    write_model_properties_json requires either 0, 2, or >2 target values (raising
+    a ValueError otherwise), but SklearnModelInfo.target_values used to return only
+    the single event class for binary classifiers, which broke register_model.
+    See: https://github.com/sassoftware/python-sasctl/issues/200
+    """
+    from sasctl.pzmm import JSONFiles
+
+    target = "Type"
+    X = cancer_dataset.drop(columns=target)
+    y = cancer_dataset[target]
+
+    model = LogisticRegression(max_iter=5000).fit(X, y)
+    info = get_model_info(model, X, y)
+
+    assert len(info.target_values) == 2
+
+    properties = JSONFiles().write_model_properties_json(
+        model_name="test_model",
+        target_variable=info.target_column,
+        target_values=info.target_values,
+    )
+    assert properties is not None
 
 
 @pytest.mark.parametrize(

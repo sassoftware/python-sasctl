@@ -612,7 +612,12 @@ class SklearnModelInfo(ModelInfo):
     @property
     def target_values(self):
         if self.is_binary_classifier:
-            return [self.model.classes_[-1]]
+            # Model Manager requires both the event and no-event values for binary
+            # classification models (see write_model_properties_json), so return
+            # both classes rather than just the "positive" one. Order matches
+            # `classes_`, which is also the order used for probability columns
+            # (see `output_column_names`), i.e. [non-event, event].
+            return list(self.model.classes_)
         if self.is_classifier:
             return list(self.model.classes_)
 
