@@ -4,7 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-__version__ = "1.11.8"
+__version__ = "1.12.0"
 __author__ = "SAS"
 __credits__ = [
     "Yi Jian Ching",
@@ -17,6 +17,7 @@ __credits__ = [
     "DJ Moore",
     "Samya Potlapalli",
     "Samuel Babak",
+    "Hailey Patel",
 ]
 __license__ = "Apache 2.0"
 __copyright__ = (
