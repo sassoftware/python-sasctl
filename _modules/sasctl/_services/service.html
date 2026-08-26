@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.service &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl._services.service &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/service';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -320,7 +320,7 @@
 <span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="sd">&quot;&quot;&quot;Base functionality for all services.&quot;&quot;&quot;</span>
+<span class="sd">"""Base functionality for all services."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
@@ -333,7 +333,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Service</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for all services.  Should not be used directly.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Base class for all services.  Should not be used directly."""</span>
 
     <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -349,33 +349,33 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the service is currently available.</span>
+<span class="w">        </span><span class="sd">"""Check if the service is currently available.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s2">&quot;response&quot;</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s2">"response"</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
         <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Version and build information for the service.</span>
+<span class="w">        </span><span class="sd">"""Version and build information for the service.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        RestObj</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/apiMeta&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/apiMeta"</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send an HTTP request with a session.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Send an HTTP request with a session.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -386,7 +386,7 @@
 <span class="sd">            `_SERVICE_ROOT`.</span>
 <span class="sd">        session : Session, optional</span>
 <span class="sd">            Defaults to `current_session()`.</span>
-<span class="sd">        format_ : {&#39;auto&#39;, &#39;response&#39;, &#39;content&#39;, &#39;json&#39;, &#39;text&#39;}</span>
+<span class="sd">        format_ : {'auto', 'response', 'content', 'json', 'text'}</span>
 <span class="sd">            The format of the return response.  Defaults to `auto`.</span>
 <span class="sd">            response: the raw `Response` object.</span>
 <span class="sd">            content: Response.content</span>
@@ -400,19 +400,19 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"/"</span><span class="p">):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_SERVICE_ROOT</span> <span class="o">+</span> <span class="n">path</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_SERVICE_ROOT</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">path</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_SERVICE_ROOT</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="n">path</span>
 
         <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">format_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a GET request.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Send a GET request."""</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"get"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Resource not found</span>
@@ -420,29 +420,29 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a HEAD request.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Send a HEAD request."""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"head"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a POST request.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Send a POST request."""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"post"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a PUT request.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Send a PUT request."""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"put"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a DELETE request.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Send a DELETE request."""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"delete"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_crud_funcs</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span> <span class="n">single_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plural_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">get_filter</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility method for defining CRUD functions.</span>
+<span class="w">        </span><span class="sd">"""Utility method for defining CRUD functions.</span>
 
 <span class="sd">        Can be used to define simple functions that perform CRUD operations</span>
 <span class="sd">        on a REST endpoint.</span>
@@ -474,20 +474,20 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; list_spam, get_spam, update_spam, delete_spam = _build_crud_funcs(&#39;/spam&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; list_spam, get_spam, update_spam, delete_spam = _build_crud_funcs('/spam')</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Set a default filter</span>
         <span class="k">if</span> <span class="n">get_filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
             <span class="k">def</span><span class="w"> </span><span class="nf">default_filter</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
-                <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="s1">&#39;eq(name, &quot;</span><span class="si">%s</span><span class="s1">&quot;)&#39;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="s1">'eq(name, "</span><span class="si">%s</span><span class="s1">")'</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
 
             <span class="n">get_filter</span> <span class="o">=</span> <span class="n">default_filter</span>
 
-        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">"list"</span><span class="p">)</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">list_items</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;List all {items} available in the environment.</span>
+<span class="w">            </span><span class="sd">"""List all {items} available in the environment.</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
@@ -508,16 +508,16 @@
 
 <span class="sd">            .. _filtering: https://developer.sas.com/reference/filtering/</span>
 
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">filter</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">"filter"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">filter</span>
             <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">"start"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">"limit"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
 
-            <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;/(),&quot;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="s2">"&amp;"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="s2">"</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">safe</span><span class="o">=</span><span class="s1">'/(),"'</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="p">)</span>
 
             <span class="n">results</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
@@ -528,9 +528,9 @@
 
             <span class="k">return</span> <span class="p">[</span><span class="n">results</span><span class="p">]</span>
 
-        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">)</span>
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">"get"</span><span class="p">)</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">get_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Return a {item} instance.</span>
+<span class="w">            </span><span class="sd">"""Return a {item} instance.</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
@@ -550,50 +550,50 @@
 <span class="sd">            returned unless `refresh` is set.  This prevents unnecessary REST</span>
 <span class="sd">            calls when data is already available on the client.</span>
 
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">item</span>
 
             <span class="c1"># If the input already appears to be the requested object just</span>
             <span class="c1"># return it, unless a refresh of the data was explicitly requested.</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
-                    <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">item</span>
 
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">))</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/</span><span class="si">{id}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">))</span>
             <span class="n">results</span> <span class="o">=</span> <span class="n">list_items</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">get_filter</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 
             <span class="n">match</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
                     <span class="c1"># The first result that matches on name should be stored.</span>
-                    <span class="c1"># Will be returned after determining that there aren&#39;t additional</span>
+                    <span class="c1"># Will be returned after determining that there aren't additional</span>
                     <span class="c1"># matches</span>
                     <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="c1"># Make a request for the specific object so that ETag</span>
                         <span class="c1"># is included, allowing updates.</span>
-                        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">):</span>
-                            <span class="n">match</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">):</span>
+                            <span class="n">match</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">id_</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
-                            <span class="n">match</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">id_</span><span class="p">))</span>
+                            <span class="n">id_</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
+                            <span class="n">match</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/</span><span class="si">{id}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">id_</span><span class="p">))</span>
                     <span class="c1"># We already found a match so this is a duplicate.  Warn the user so they know</span>
                     <span class="c1"># the item returned may not be the one they were expecting.</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="s2">&quot;Multiple items found with name &#39;</span><span class="si">%s</span><span class="s2">&#39;.  Only the first result is returned.&quot;</span>
+                            <span class="s2">"Multiple items found with name '</span><span class="si">%s</span><span class="s2">'.  Only the first result is returned."</span>
                             <span class="o">%</span> <span class="n">item</span>
                         <span class="p">)</span>
                         <span class="k">break</span>
 
             <span class="k">return</span> <span class="n">match</span>
 
-        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">)</span>
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">"update"</span><span class="p">)</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">update_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Update a {item} instance.</span>
+<span class="w">            </span><span class="sd">"""Update a {item} instance.</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
@@ -603,27 +603,27 @@
 <span class="sd">            -------</span>
 <span class="sd">            None</span>
 
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="n">headers</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;_headers&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">headers</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;etag&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find ETag for update of </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+<span class="sd">            """</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"_headers"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">headers</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"etag"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Could not find ETag for update of </span><span class="si">%s</span><span class="s2">."</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
 
-            <span class="n">id_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"id"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">id_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Could not find property `id` for update of </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">item</span>
+                    <span class="s2">"Could not find property `id` for update of </span><span class="si">%s</span><span class="s2">."</span> <span class="o">%</span> <span class="n">item</span>
                 <span class="p">)</span>
 
             <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;If-Match&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;etag&quot;</span><span class="p">),</span>
-                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">),</span>
+                <span class="s2">"If-Match"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"etag"</span><span class="p">),</span>
+                <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content-type"</span><span class="p">),</span>
             <span class="p">}</span>
 
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 
-        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">)</span>
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">"delete"</span><span class="p">)</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">delete_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Delete a {item} instance.</span>
+<span class="w">            </span><span class="sd">"""Delete a {item} instance.</span>
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
@@ -633,41 +633,41 @@
 <span class="sd">            -------</span>
 <span class="sd">            None</span>
 
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="n">item_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-            <span class="c1"># Try to find the item if the id can&#39;t be found</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
+            <span class="c1"># Try to find the item if the id can't be found</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
                 <span class="n">item</span> <span class="o">=</span> <span class="n">get_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Object &#39;</span><span class="si">%s</span><span class="s2">&#39; not found.  Skipping delete.&quot;</span><span class="p">,</span> <span class="n">item_name</span><span class="p">)</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Object '</span><span class="si">%s</span><span class="s2">' not found.  Skipping delete."</span><span class="p">,</span> <span class="n">item_name</span><span class="p">)</span>
                     <span class="k">return</span>
 
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-                <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
-                <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">))</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/</span><span class="si">{id}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">))</span>
                 <span class="c1"># Response generally seems to be an empty string.  If so, just return None</span>
                 <span class="c1"># BUT, if the service provides an actual response, return it.</span>
                 <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">response</span>
                 <span class="k">return</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized id &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unrecognized id '</span><span class="si">%s</span><span class="s2">'"</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
 
         <span class="c1"># Pull object name from path if unspecified (many paths end in</span>
         <span class="c1"># nouns like /folders or /repositories).</span>
-        <span class="n">plural_term</span> <span class="o">=</span> <span class="n">plural_term</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">plural_term</span> <span class="o">=</span> <span class="n">plural_term</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">single_term</span> <span class="o">=</span> <span class="n">single_term</span> <span class="ow">or</span> <span class="n">plural_term</span>
         <span class="n">service_name</span> <span class="o">=</span> <span class="n">service_name</span> <span class="ow">or</span> <span class="n">plural_term</span>
-        <span class="n">service_name</span> <span class="o">=</span> <span class="n">service_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="n">service_name</span> <span class="o">=</span> <span class="n">service_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="p">[</span><span class="n">list_items</span><span class="p">,</span> <span class="n">get_item</span><span class="p">,</span> <span class="n">update_item</span><span class="p">,</span> <span class="n">delete_item</span><span class="p">]:</span>
             <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">single_term</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">plural_term</span><span class="p">)</span>
             <span class="n">func</span><span class="o">.</span><span class="n">_cli_service</span> <span class="o">=</span> <span class="n">service_name</span>
 
-            <span class="n">prefix</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="n">plural_term</span> <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot;list_&quot;</span> <span class="k">else</span> <span class="n">single_term</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"_"</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="n">plural_term</span> <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s2">"list_"</span> <span class="k">else</span> <span class="n">single_term</span>
             <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">suffix</span>
 
         <span class="k">return</span> <span class="p">[</span>
@@ -679,7 +679,7 @@
     <span class="c1"># skipcq: PYL-W1113</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_rel</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get `item` and request a link.</span>
+<span class="w">        </span><span class="sd">"""Get `item` and request a link.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -695,14 +695,14 @@
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;filter=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filter_</span><span class="p">)</span> <span class="k">if</span> <span class="n">filter_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="s2">"filter=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filter_</span><span class="p">)</span> <span class="k">if</span> <span class="n">filter_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
 
         <span class="n">resources</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 
@@ -713,7 +713,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_monitor_job</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Continually poll a job until it reaches the desired status.</span>
+<span class="w">        </span><span class="sd">"""Continually poll a job until it reaches the desired status.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -731,25 +731,25 @@
 <span class="sd">        TimeoutError</span>
 <span class="sd">            `max_retries` reached with a successful status check</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">completed</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;completed&quot;</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">job</span><span class="p">[</span><span class="s2">"state"</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"completed"</span><span class="p">,</span> <span class="s2">"failed"</span><span class="p">)</span>
 
         <span class="n">retries</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Link &#39;self&#39; not found on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">job</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Link 'self' not found on </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">job</span><span class="p">)</span>
 
         <span class="c1"># TODO: Log</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="n">completed</span><span class="p">(</span><span class="n">job</span><span class="p">)</span> <span class="ow">and</span> <span class="n">retries</span> <span class="o">&lt;</span> <span class="n">max_retries</span><span class="p">:</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
             <span class="n">retries</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">job</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">completed</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">job</span>
-        <span class="k">raise</span> <span class="n">JobTimeoutError</span><span class="p">(</span><span class="s2">&quot;Timeout while waiting on job </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">job</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">JobTimeoutError</span><span class="p">(</span><span class="s2">"Timeout while waiting on job </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">job</span><span class="p">)</span>
 </pre></div>
 
                 </article>

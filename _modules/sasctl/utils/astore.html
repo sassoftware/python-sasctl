@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.astore &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl.utils.astore &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/utils/astore';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -337,7 +337,7 @@
 <div class="viewcode-block" id="create_package">
 <a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_package</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an importable model package from a CAS table.</span>
+<span class="w">    </span><span class="sd">"""Create an importable model package from a CAS table.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -360,17 +360,17 @@
 <span class="sd">    --------</span>
 <span class="sd">    ~.model_repository.ModelRepository.import_model_from_zip</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">swat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The &#39;swat&#39; package is required to work with SAS models.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The 'swat' package is required to work with SAS models."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Parameter &#39;table&#39; should be an instance of &#39;</span><span class="si">%r</span><span class="s2">&#39; but &quot;</span>
-            <span class="s2">&quot;received &#39;</span><span class="si">%r</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+            <span class="s2">"Parameter 'table' should be an instance of '</span><span class="si">%r</span><span class="s2">' but "</span>
+            <span class="s2">"received '</span><span class="si">%r</span><span class="s2">'."</span> <span class="o">%</span> <span class="p">(</span><span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;DataStepSrc&quot;</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"DataStepSrc"</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="c1"># Input only passed to datastep</span>
         <span class="k">return</span> <span class="n">create_package_from_datastep</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">create_package_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
@@ -380,7 +380,7 @@
 <div class="viewcode-block" id="create_package_from_datastep">
 <a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package_from_datastep">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_package_from_datastep</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an importable model package from a score code table.</span>
+<span class="w">    </span><span class="sd">"""Create an importable model package from a score code table.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -403,17 +403,17 @@
 <span class="sd">    --------</span>
 <span class="sd">    ~.model_repository.ModelRepository.import_model_from_zip</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dscode</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;DataStepSrc&quot;</span><span class="p">]</span>
+<span class="sd">    """</span>
+    <span class="n">dscode</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"DataStepSrc"</span><span class="p">]</span>
 
     <span class="c1"># Extract inputs if provided</span>
     <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Workaround because sasdataframe does not like to be check if exist</span>
-    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"None"</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.pymas.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">ds2_variables</span>
 
         <span class="n">variables</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">):</span>
             <span class="c1"># Assuming input is a DataFrame representing model inputs.  Use to</span>
             <span class="c1"># get input variables</span>
             <span class="n">variables</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
@@ -424,43 +424,43 @@
 
     <span class="c1"># Find outputs from ds code</span>
     <span class="n">output_vars</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">sasline</span> <span class="ow">in</span> <span class="n">dscode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">sasline</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">sasline</span> <span class="ow">in</span> <span class="n">dscode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sasline</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"label"</span><span class="p">):</span>
             <span class="n">output_var</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">sasline</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">):</span>
-                <span class="k">if</span> <span class="s2">&quot;label&quot;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
-                    <span class="n">ovarname</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">ovarname</span><span class="p">})</span>
+            <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">sasline</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">):</span>
+                <span class="k">if</span> <span class="s2">"label"</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+                    <span class="n">ovarname</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"label"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">ovarname</span><span class="p">})</span>
                     <span class="c1"># Determine type of variable is decimal or string</span>
-                    <span class="k">if</span> <span class="s2">&quot;length &quot;</span> <span class="o">+</span> <span class="n">ovarname</span> <span class="ow">in</span> <span class="n">dscode</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">"length "</span> <span class="o">+</span> <span class="n">ovarname</span> <span class="ow">in</span> <span class="n">dscode</span><span class="p">:</span>
                         <span class="n">sastype</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="n">dscode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;length &quot;</span> <span class="o">+</span> <span class="n">ovarname</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                            <span class="n">dscode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"length "</span> <span class="o">+</span> <span class="n">ovarname</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                         <span class="p">)</span>
-                        <span class="k">if</span> <span class="s2">&quot;$&quot;</span> <span class="ow">in</span> <span class="n">sastype</span><span class="p">:</span>
-                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">})</span>
-                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">sastype</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]})</span>
+                        <span class="k">if</span> <span class="s2">"$"</span> <span class="ow">in</span> <span class="n">sastype</span><span class="p">:</span>
+                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">})</span>
+                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"length"</span><span class="p">:</span> <span class="n">sastype</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"$"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]})</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">})</span>
-                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">sastype</span><span class="p">})</span>
+                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"decimal"</span><span class="p">})</span>
+                            <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"length"</span><span class="p">:</span> <span class="n">sastype</span><span class="p">})</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># If no length for variable, default is decimal, 8</span>
-                        <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">})</span>
-                        <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
+                        <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"decimal"</span><span class="p">})</span>
+                        <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"length"</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_var</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                        <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)}</span>
+                        <span class="p">{</span><span class="s2">"description"</span><span class="p">:</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"'"</span><span class="p">)}</span>
                     <span class="p">)</span>
             <span class="n">output_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_var</span><span class="p">)</span>
 
-    <span class="n">file_metadata</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dmcas_scorecode.sas&quot;</span><span class="p">}]</span>
+    <span class="n">file_metadata</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"score"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"dmcas_scorecode.sas"</span><span class="p">}]</span>
 
     <span class="n">zip_file</span> <span class="o">=</span> <span class="n">_build_zip_from_files</span><span class="p">(</span>
         <span class="p">{</span>
-            <span class="s2">&quot;fileMetadata.json&quot;</span><span class="p">:</span> <span class="n">file_metadata</span><span class="p">,</span>
-            <span class="s2">&quot;dmcas_scorecode.sas&quot;</span><span class="p">:</span> <span class="n">dscode</span><span class="p">,</span>
-            <span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scoreCodeType&quot;</span><span class="p">:</span> <span class="s2">&quot;dataStep&quot;</span><span class="p">},</span>
-            <span class="s2">&quot;outputVar.json&quot;</span><span class="p">:</span> <span class="n">output_vars</span><span class="p">,</span>
-            <span class="s2">&quot;inputVar.json&quot;</span><span class="p">:</span> <span class="n">input_vars</span><span class="p">,</span>
+            <span class="s2">"fileMetadata.json"</span><span class="p">:</span> <span class="n">file_metadata</span><span class="p">,</span>
+            <span class="s2">"dmcas_scorecode.sas"</span><span class="p">:</span> <span class="n">dscode</span><span class="p">,</span>
+            <span class="s2">"ModelProperties.json"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"scoreCodeType"</span><span class="p">:</span> <span class="s2">"dataStep"</span><span class="p">},</span>
+            <span class="s2">"outputVar.json"</span><span class="p">:</span> <span class="n">output_vars</span><span class="p">,</span>
+            <span class="s2">"inputVar.json"</span><span class="p">:</span> <span class="n">input_vars</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -471,7 +471,7 @@
 <div class="viewcode-block" id="create_package_from_astore">
 <a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package_from_astore">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_package_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an importable model package from an ASTORE.</span>
+<span class="w">    </span><span class="sd">"""Create an importable model package from an ASTORE.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -487,7 +487,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    ~.model_repository.ModelRepository.import_model_from_zip</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">files</span> <span class="o">=</span> <span class="n">create_files_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_build_zip_from_files</span><span class="p">(</span><span class="n">files</span><span class="p">)</span></div>
@@ -497,7 +497,7 @@
 <div class="viewcode-block" id="create_files_from_astore">
 <a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_files_from_astore">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_files_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate files for importing a model from an ASTORE.</span>
+<span class="w">    </span><span class="sd">"""Generate files for importing a model from an ASTORE.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -509,20 +509,20 @@
 <span class="sd">    dict</span>
 <span class="sd">        Dictionary of filename: content pairs.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">swat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-            <span class="s2">&quot;The &#39;swat&#39; package is required to work with &quot;</span> <span class="s2">&quot;ASTORE models.&quot;</span>
+            <span class="s2">"The 'swat' package is required to work with "</span> <span class="s2">"ASTORE models."</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Parameter &#39;table&#39; should be an instance of &#39;</span><span class="si">%r</span><span class="s2">&#39; but &quot;</span>
-            <span class="s2">&quot;received &#39;</span><span class="si">%r</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+            <span class="s2">"Parameter 'table' should be an instance of '</span><span class="si">%r</span><span class="s2">' but "</span>
+            <span class="s2">"received '</span><span class="si">%r</span><span class="s2">'."</span> <span class="o">%</span> <span class="p">(</span><span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="n">sess</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
-    <span class="n">sess</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">&quot;astore&quot;</span><span class="p">)</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">"astore"</span><span class="p">)</span>
 
     <span class="n">result</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">rstore</span><span class="o">=</span><span class="n">table</span><span class="p">,</span> <span class="n">epcode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -536,10 +536,10 @@
 
     <span class="n">astore_key</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">Key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-    <span class="c1"># Remove &quot;Keep&quot; sas code from CAS/EP code so full table plus output are</span>
+    <span class="c1"># Remove "Keep" sas code from CAS/EP code so full table plus output are</span>
     <span class="c1"># returned. This is so the MM performance charts and test work.</span>
-    <span class="n">keepstart</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Keep&quot;</span><span class="p">)</span>
-    <span class="n">keepend</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">keepstart</span><span class="p">)</span>
+    <span class="n">keepstart</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"Keep"</span><span class="p">)</span>
+    <span class="n">keepend</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">";"</span><span class="p">,</span> <span class="n">keepstart</span><span class="p">)</span>
     <span class="n">ep_ds2</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">keepstart</span><span class="p">]</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="p">[</span><span class="n">keepend</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
 
     <span class="n">package_ds2</span> <span class="o">=</span> <span class="n">_generate_package_code</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -547,48 +547,48 @@
     <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">get_variable_properties</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">InputVariables</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
     <span class="p">]</span>
-    <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_vars</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">]</span>
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_vars</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"role"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"INPUT"</span><span class="p">]</span>
     <span class="n">output_vars</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">get_variable_properties</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
     <span class="p">]</span>
-    <span class="n">astore_filename</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">25</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">astore_filename</span> <span class="o">=</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">25</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
     <span class="c1"># Copy the ASTORE table to the ModelStore.</span>
     <span class="c1"># Raise an error if the action fails</span>
     <span class="k">with</span> <span class="n">swat</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">exception_on_severity</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="n">table</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">astore_filename</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;ModelStore&quot;</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">astore_filename</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">"ModelStore"</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">file_metadata</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;analyticStore&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dmcas_epscorecode.sas&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"analyticStore"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">""</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"score"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"dmcas_epscorecode.sas"</span><span class="p">},</span>
     <span class="p">]</span>
 
     <span class="n">astore_metadata</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">astore_filename</span><span class="p">,</span>
-            <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;ModelStore&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/dataTables/dataSources/cas~fs~cas-shared-default~fs~ModelStore/tables/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="n">astore_filename</span><span class="p">,</span>
+            <span class="s2">"caslib"</span><span class="p">:</span> <span class="s2">"ModelStore"</span><span class="p">,</span>
+            <span class="s2">"uri"</span><span class="p">:</span> <span class="s2">"/dataTables/dataSources/cas~fs~cas-shared-default~fs~ModelStore/tables/</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">astore_filename</span>
             <span class="p">),</span>
-            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">astore_key</span><span class="p">,</span>
+            <span class="s2">"key"</span><span class="p">:</span> <span class="n">astore_key</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">]</span>
 
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;dmcas_packagescorecode.sas&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">package_ds2</span><span class="p">),</span>
-        <span class="s2">&quot;dmcas_epscorecode.sas&quot;</span><span class="p">:</span> <span class="n">ep_ds2</span><span class="p">,</span>
+        <span class="s2">"dmcas_packagescorecode.sas"</span><span class="p">:</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">package_ds2</span><span class="p">),</span>
+        <span class="s2">"dmcas_epscorecode.sas"</span><span class="p">:</span> <span class="n">ep_ds2</span><span class="p">,</span>
         <span class="n">astore_filename</span><span class="p">:</span> <span class="n">astore</span><span class="p">,</span>
-        <span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">:</span> <span class="n">model_properties</span><span class="p">,</span>
-        <span class="s2">&quot;fileMetadata.json&quot;</span><span class="p">:</span> <span class="n">file_metadata</span><span class="p">,</span>
-        <span class="s2">&quot;AstoreMetadata.json&quot;</span><span class="p">:</span> <span class="n">astore_metadata</span><span class="p">,</span>
-        <span class="s2">&quot;inputVar.json&quot;</span><span class="p">:</span> <span class="n">input_vars</span><span class="p">,</span>
-        <span class="s2">&quot;outputVar.json&quot;</span><span class="p">:</span> <span class="n">output_vars</span><span class="p">,</span>
+        <span class="s2">"ModelProperties.json"</span><span class="p">:</span> <span class="n">model_properties</span><span class="p">,</span>
+        <span class="s2">"fileMetadata.json"</span><span class="p">:</span> <span class="n">file_metadata</span><span class="p">,</span>
+        <span class="s2">"AstoreMetadata.json"</span><span class="p">:</span> <span class="n">astore_metadata</span><span class="p">,</span>
+        <span class="s2">"inputVar.json"</span><span class="p">:</span> <span class="n">input_vars</span><span class="p">,</span>
+        <span class="s2">"outputVar.json"</span><span class="p">:</span> <span class="n">output_vars</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_build_zip_from_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a ZIP file containing the provided files.</span>
+<span class="w">    </span><span class="sd">"""Create a ZIP file containing the provided files.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -600,7 +600,7 @@
 <span class="sd">    BytesIO</span>
 <span class="sd">        Byte stream representation of the .zip file.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># Create a temp folder</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
@@ -609,25 +609,25 @@
             <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
             <span class="c1"># Write JSON file</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">".json"</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;wb&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="s2">"wb"</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"w"</span>
 
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
         <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;model.zip&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">"model.zip"</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
                 <span class="n">z</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">file</span><span class="p">)</span>
 
         <span class="c1"># Need to return the ZIP file data but also need to ensure the</span>
         <span class="c1"># directory is cleaned up.</span>
-        <span class="c1"># Read the bytes from disk and return an in memory &quot;file&quot;.</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;model.zip&quot;</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+        <span class="c1"># Read the bytes from disk and return an in memory "file".</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">"model.zip"</span><span class="p">),</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
@@ -637,22 +637,22 @@
 <a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.get_variable_properties">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_variable_properties</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
     <span class="n">type_mapping</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;num&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;character&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;varchar&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+        <span class="s2">"interval"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"num"</span><span class="p">:</span> <span class="s2">"decimal"</span><span class="p">,</span>
+        <span class="s2">"character"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+        <span class="s2">"varchar"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">var</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">Length</span><span class="p">)}</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">var</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s2">"length"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">Length</span><span class="p">)}</span>
 
     <span class="c1"># Input variable table has Type &amp; RawType columns, but RawType aligns with Type column from Output variable table.</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">&quot;RawType&quot;</span><span class="p">):</span>
-        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_mapping</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">RawType</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">"RawType"</span><span class="p">):</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_mapping</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">RawType</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_mapping</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_mapping</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
 
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">&quot;Role&quot;</span><span class="p">):</span>
-        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">Role</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">"Role"</span><span class="p">):</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s2">"role"</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">Role</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">meta</span></div>
 
@@ -660,167 +660,167 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_model_properties</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
     <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;custom properties&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;externalUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;trainTable&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;trainCodeType&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="s2">&quot;SAS Visual Data Mining and Machine Learning&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;toolVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;targetVariable&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;scoreCodeType&quot;</span><span class="p">:</span> <span class="s2">&quot;ds2MultiType&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;externalModelId&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;eventProbVar&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;modeler&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;targetEvent&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;targetLevel&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">"custom properties"</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">"externalUrl"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"trainTable"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"trainCodeType"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"description"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"tool"</span><span class="p">:</span> <span class="s2">"SAS Visual Data Mining and Machine Learning"</span><span class="p">,</span>
+        <span class="s2">"toolVersion"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"targetVariable"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"scoreCodeType"</span><span class="p">:</span> <span class="s2">"ds2MultiType"</span><span class="p">,</span>
+        <span class="s2">"externalModelId"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"function"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"eventProbVar"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"modeler"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"targetEvent"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"targetLevel"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"algorithm"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">Description</span><span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">Attribute</span> <span class="o">==</span> <span class="s2">&quot;Analytic Engine&quot;</span><span class="p">]</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">Description</span><span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">Description</span><span class="o">.</span><span class="n">Attribute</span> <span class="o">==</span> <span class="s2">"Analytic Engine"</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">algorithm</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Value</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">algorithm</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">is_classification</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if the ASTORE model describes a classification model.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Determine if the ASTORE model describes a classification model."""</span>
         <span class="k">return</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">classification_target</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the classification target variable.&quot;&quot;&quot;</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;I_&quot;</span><span class="p">)]</span>
+<span class="w">        </span><span class="sd">"""Get the name of the classification target variable."""</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"I_"</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;I_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"I_"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">regression_target</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the regression target variable.&quot;&quot;&quot;</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P_&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Get the name of the regression target variable."""</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"P_"</span><span class="p">)</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;P_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"P_"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;glm&quot;</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Linear regression&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SAS Visual Analytics&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">"glm"</span><span class="p">:</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Linear regression"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"tool"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"SAS Visual Analytics"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"prediction"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;logistic&quot;</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Logistic regression&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SAS Visual Analytics&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">"logistic"</span><span class="p">:</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Logistic regression"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"tool"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"SAS Visual Analytics"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"classification"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;forest&quot;</span><span class="p">,</span> <span class="s2">&quot;gradboost&quot;</span><span class="p">,</span> <span class="s2">&quot;tree-based models&quot;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;forest&quot;</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Random forest&quot;</span>
-        <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;gradboost&quot;</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Gradient boosting&quot;</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"forest"</span><span class="p">,</span> <span class="s2">"gradboost"</span><span class="p">,</span> <span class="s2">"tree-based models"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">"forest"</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Random forest"</span>
+        <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">"gradboost"</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Gradient boosting"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Tree-based model&quot;</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Tree-based model"</span>
 
         <span class="k">if</span> <span class="n">is_classification</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"classification"</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span>
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"P_"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">properties</span><span class="p">[</span><span class="s2">"targetLevel"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"binary"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"prediction"</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;svmachine&quot;</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Support vector machine&quot;</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">"svmachine"</span><span class="p">:</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Support vector machine"</span>
 
         <span class="k">if</span> <span class="n">is_classification</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"classification"</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"targetLevel"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"binary"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"prediction"</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;bnet&quot;</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Bayesian network&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">"bnet"</span><span class="p">:</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"algorithm"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Bayesian network"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"function"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"classification"</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"P_"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">"targetLevel"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"binary"</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">"tool"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="c1"># todo: warn</span>
     <span class="k">return</span> <span class="n">properties</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_package_code</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates package-style DS2 code from EP-style DS2 code.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Generates package-style DS2 code from EP-style DS2 code."""</span>
 
-    <span class="n">id_</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span>  <span class="c1"># Random ID for package</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span>  <span class="c1"># Random ID for package</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">Key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="n">header</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;package ds2score / overwrite=yes;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;    dcl package score </span><span class="si">{}</span><span class="s2">();&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
+        <span class="s2">"package ds2score / overwrite=yes;"</span><span class="p">,</span>
+        <span class="s2">"    dcl package score </span><span class="si">{}</span><span class="s2">();"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="n">dcl_lines</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">epcode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">):</span>
         <span class="c1"># Ignore the package declaration since it will be redefined</span>
-        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;dcl &quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
-            <span class="s2">&quot;dcl package &quot;</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"dcl "</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="s2">"dcl package "</span>
         <span class="p">):</span>
             <span class="n">dcl_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
     <span class="n">init_method</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;    varlist allvars [_all_];&quot;</span><span class="p">,</span>
-        <span class="s2">&quot; &quot;</span><span class="p">,</span>
-        <span class="s2">&quot;    method init();&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;       </span><span class="si">{}</span><span class="s2">.setvars(allvars);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
-        <span class="s2">&quot;       </span><span class="si">{}</span><span class="s2">.setkey(n&#39;</span><span class="si">{}</span><span class="s2">&#39;);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span>
-        <span class="s2">&quot;    end;&quot;</span><span class="p">,</span>
+        <span class="s2">"    varlist allvars [_all_];"</span><span class="p">,</span>
+        <span class="s2">" "</span><span class="p">,</span>
+        <span class="s2">"    method init();"</span><span class="p">,</span>
+        <span class="s2">"       </span><span class="si">{}</span><span class="s2">.setvars(allvars);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
+        <span class="s2">"       </span><span class="si">{}</span><span class="s2">.setkey(n'</span><span class="si">{}</span><span class="s2">');"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span>
+        <span class="s2">"    end;"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">extract_type</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># Find the matching variable declarations and extract the type</span>
         <span class="n">var</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dcl_lines</span> <span class="k">if</span> <span class="s1">&#39; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;dcl &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dcl_lines</span> <span class="k">if</span> <span class="s1">' "</span><span class="si">{}</span><span class="s1">"'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"dcl "</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># Remove the length component from output variables to prevent</span>
         <span class="c1"># compilation warning which prevents publishing to MAS</span>
-        <span class="k">if</span> <span class="n">out</span> <span class="ow">and</span> <span class="s2">&quot;(&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">and</span> <span class="s2">"("</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"("</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="n">variables</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="c1"># Despite being call &quot;InputVariables&quot; at least some ASTORE models</span>
+    <span class="c1"># Despite being call "InputVariables" at least some ASTORE models</span>
     <span class="c1"># include the target variable in the list</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">InputVariables</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="k">if</span> <span class="s2">&quot;Role&quot;</span> <span class="ow">in</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Role&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span>
-            <span class="n">variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;       </span><span class="si">%s</span><span class="s1"> &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extract_type</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">"Role"</span> <span class="ow">in</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">row</span><span class="p">[</span><span class="s2">"Role"</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"target"</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"Name"</span><span class="p">]</span>
+            <span class="n">variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'       </span><span class="si">%s</span><span class="s1"> "</span><span class="si">%s</span><span class="s1">"'</span> <span class="o">%</span> <span class="p">(</span><span class="n">extract_type</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">name</span><span class="p">))</span>
     <span class="n">variables</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="s1">&#39;       IN_OUT </span><span class="si">{}</span><span class="s1"> &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extract_type</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">var</span><span class="p">)</span>
+        <span class="s1">'       IN_OUT </span><span class="si">{}</span><span class="s1"> "</span><span class="si">{}</span><span class="s1">"'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extract_type</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">var</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span>
     <span class="p">]</span>
 
-    <span class="n">score_method</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;    method score(&quot;</span><span class="p">,</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variables</span><span class="p">),</span> <span class="s2">&quot;   );&quot;</span><span class="p">)</span>
+    <span class="n">score_method</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"    method score("</span><span class="p">,</span> <span class="s2">",</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variables</span><span class="p">),</span> <span class="s2">"   );"</span><span class="p">)</span>
     <span class="n">score_method</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span>
-        <span class="s1">&#39;       this.&quot;</span><span class="si">{var}</span><span class="s1">&quot; = &quot;</span><span class="si">{var}</span><span class="s1">&quot;;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+        <span class="s1">'       this."</span><span class="si">{var}</span><span class="s1">" = "</span><span class="si">{var}</span><span class="s1">";'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">InputVariables</span><span class="o">.</span><span class="n">Name</span>
     <span class="p">)</span>
-    <span class="n">score_method</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;       </span><span class="si">{}</span><span class="s2">.scorerecord();&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="n">score_method</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"       </span><span class="si">{}</span><span class="s2">.scorerecord();"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span> <span class="s2">" "</span><span class="p">)</span>
     <span class="n">score_method</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span>
-        <span class="s1">&#39;       &quot;</span><span class="si">{var}</span><span class="s1">&quot; = this.&quot;</span><span class="si">{var}</span><span class="s1">&quot;;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+        <span class="s1">'       "</span><span class="si">{var}</span><span class="s1">" = this."</span><span class="si">{var}</span><span class="s1">";'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">Name</span>
     <span class="p">)</span>
 
-    <span class="n">footer</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;    end;&quot;</span><span class="p">,</span> <span class="s2">&quot;endpackage;&quot;</span><span class="p">)</span>
+    <span class="n">footer</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"    end;"</span><span class="p">,</span> <span class="s2">"endpackage;"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">header</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">dcl_lines</span><span class="p">)</span> <span class="o">+</span> <span class="n">init_method</span> <span class="o">+</span> <span class="n">score_method</span> <span class="o">+</span> <span class="n">footer</span>
 </pre></div>

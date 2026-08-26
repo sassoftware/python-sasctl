@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.pymas.ds2 &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl.utils.pymas.ds2 &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/utils/pymas/ds2';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -320,7 +320,7 @@
 <span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="sd">&quot;&quot;&quot;The ds2 module contains classes representing DS2 code constructs.&quot;&quot;&quot;</span>
+<span class="sd">"""The ds2 module contains classes representing DS2 code constructs."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
@@ -331,7 +331,7 @@
 
 <div class="viewcode-block" id="DS2Package">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Package">[docs]</a>
-<span class="nd">@deprecated</span><span class="p">(</span><span class="s2">&quot;Use DS2PyMASPackage instead.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;1.6&quot;</span><span class="p">)</span>
+<span class="nd">@deprecated</span><span class="p">(</span><span class="s2">"Use DS2PyMASPackage instead."</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.5"</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">"1.6"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DS2Package</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span>
@@ -347,10 +347,10 @@
         <span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_body</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;dcl package pymas py;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dcl package logger logr(&#39;App.tk.MAS&#39;);&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dcl varchar(67108864) character set utf8 pycode;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dcl int revision;&quot;</span><span class="p">,</span>
+            <span class="s2">"dcl package pymas py;"</span><span class="p">,</span>
+            <span class="s2">"dcl package logger logr('App.tk.MAS');"</span><span class="p">,</span>
+            <span class="s2">"dcl varchar(67108864) character set utf8 pycode;"</span><span class="p">,</span>
+            <span class="s2">"dcl int revision;"</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -360,28 +360,28 @@
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Max length in some SAS products in 32 characters</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))[:</span><span class="mi">32</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">"_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))[:</span><span class="mi">32</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">code</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span><span class="s2">&quot;package </span><span class="si">%s</span><span class="s2"> / overwrite=yes;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,)</span>
-            <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">)</span>
-            <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,)</span>
+            <span class="p">(</span><span class="s2">"package </span><span class="si">%s</span><span class="s2"> / overwrite=yes;"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,)</span>
+            <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">)</span>
+            <span class="o">+</span> <span class="p">(</span><span class="s2">""</span><span class="p">,)</span>
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
-            <span class="n">code</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
-        <span class="n">code</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;endpackage;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">code</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+        <span class="n">code</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">"endpackage;"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="DS2BasePackage">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2BasePackage">[docs]</a>
-<span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
+<span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"1.5"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DS2BasePackage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines a DS2 package.</span>
+<span class="w">    </span><span class="sd">"""Defines a DS2 package.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -394,7 +394,7 @@
 <span class="sd">        A collection of :class:`DS2BaseMethod` instances that will be included</span>
 <span class="sd">        in the package definition.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
@@ -403,58 +403,58 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique identifier generated for the package.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Unique identifier generated for the package."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique name generated for the package.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Unique name generated for the package."""</span>
         <span class="c1"># Max length in some SAS products in 32 characters</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))[:</span><span class="mi">32</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">"_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))[:</span><span class="mi">32</span><span class="p">]</span>
 
 <div class="viewcode-block" id="DS2BasePackage.code">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2BasePackage.code">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the DS2 code for the package.</span>
+<span class="w">        </span><span class="sd">"""Get the DS2 code for the package.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">code</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span><span class="s2">&quot;package </span><span class="si">%s</span><span class="s2"> / overwrite=yes;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,)</span>
-            <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">)</span>
-            <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,)</span>
+            <span class="p">(</span><span class="s2">"package </span><span class="si">%s</span><span class="s2"> / overwrite=yes;"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,)</span>
+            <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">)</span>
+            <span class="o">+</span> <span class="p">(</span><span class="s2">""</span><span class="p">,)</span>
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
-            <span class="n">code</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
-        <span class="n">code</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;endpackage;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">code</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+        <span class="n">code</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">"endpackage;"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
 </div>
 
 
 
 <div class="viewcode-block" id="DS2PyMASPackage">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2PyMASPackage">[docs]</a>
-<span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
+<span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"1.5"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DS2PyMASPackage</span><span class="p">(</span><span class="n">DS2BasePackage</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A DS2 package that uses PyMAS to invoke Python code.</span>
+<span class="w">    </span><span class="sd">"""A DS2 package that uses PyMAS to invoke Python code.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    code</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">body</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;dcl package pymas py;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dcl package logger logr(&#39;App.tk.MAS&#39;);&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dcl varchar(67108864) character set utf8 pycode;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dcl int revision;&quot;</span><span class="p">,</span>
+            <span class="s2">"dcl package pymas py;"</span><span class="p">,</span>
+            <span class="s2">"dcl package logger logr('App.tk.MAS');"</span><span class="p">,</span>
+            <span class="s2">"dcl varchar(67108864) character set utf8 pycode;"</span><span class="p">,</span>
+            <span class="s2">"dcl int revision;"</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">DS2PyMASPackage</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
@@ -471,14 +471,14 @@
                 <span class="n">return_code</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">return_message</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span>
+                <span class="n">method_name</span><span class="o">=</span><span class="s2">"init"</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="DS2PyMASPackage.add_method">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2PyMASPackage.add_method">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a DS2 method that calls a Python function defined by the package.</span>
+<span class="w">        </span><span class="sd">"""Add a DS2 method that calls a Python function defined by the package.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -493,42 +493,42 @@
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">public_variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
         <span class="n">private_variables</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Add a return code if not already present</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">public_variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;rc&quot;</span><span class="p">):</span>
-            <span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">public_variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"rc"</span><span class="p">):</span>
+            <span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"rc"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 
         <span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">as_declaration</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">private_variables</span><span class="p">]</span>
 
         <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="s2">&quot;dcl varchar(4068) msg;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;rc = py.useMethod(&#39;</span><span class="si">%s</span><span class="s2">&#39;);&quot;</span> <span class="o">%</span> <span class="n">target</span><span class="p">,</span>
-            <span class="s2">&quot;if rc then return;&quot;</span><span class="p">,</span>
+            <span class="s2">"dcl varchar(4068) msg;"</span><span class="p">,</span>
+            <span class="s2">"rc = py.useMethod('</span><span class="si">%s</span><span class="s2">');"</span> <span class="o">%</span> <span class="n">target</span><span class="p">,</span>
+            <span class="s2">"if rc then return;"</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="c1"># Set Python input variables</span>
         <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">    if rc then return;&quot;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span>
+            <span class="s2">"</span><span class="si">%s</span><span class="s2">    if rc then return;"</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">public_variables</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span>
         <span class="p">]</span>
 
         <span class="c1"># Execute Python method</span>
-        <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;rc = py.execute();    if rc then return;&quot;</span><span class="p">]</span>
+        <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"rc = py.execute();    if rc then return;"</span><span class="p">]</span>
 
         <span class="c1"># Get Python output variables</span>
         <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">public_variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;rc&quot;</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">public_variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"rc"</span>
         <span class="p">]</span>
 
         <span class="c1"># Log any error messages returned</span>
         <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="s2">&quot;msg = py.getString(&#39;msg&#39;);&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;if not null(msg) then logr.log(&#39;e&#39;, &#39;Error executing &quot;</span>
-            <span class="s1">&#39;Python function &quot;</span><span class="si">%s</span><span class="s1">&quot;: $s</span><span class="se">\&#39;</span><span class="s1">, msg);&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">"msg = py.getString('msg');"</span><span class="p">,</span>
+            <span class="s2">"if not null(msg) then logr.log('e', 'Error executing "</span>
+            <span class="s1">'Python function "</span><span class="si">%s</span><span class="s1">": $s</span><span class="se">\'</span><span class="s1">, msg);'</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2BaseMethod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">body</span><span class="p">))</span></div>
@@ -546,7 +546,7 @@
         <span class="k">if</span> <span class="n">body</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_body</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_body</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
 
@@ -557,20 +557,20 @@
 <div class="viewcode-block" id="DS2BaseMethod.code">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2BaseMethod.code">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">vars</span> <span class="o">=</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">as_parameter</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+        <span class="nb">vars</span> <span class="o">=</span> <span class="s2">",</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"    </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">as_parameter</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
 
-        <span class="c1"># Don&#39;t spread signature over multiple lines if there are no variables</span>
+        <span class="c1"># Don't spread signature over multiple lines if there are no variables</span>
         <span class="k">if</span> <span class="nb">vars</span><span class="p">:</span>
-            <span class="n">func</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;method </span><span class="si">%s</span><span class="s2">(&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="s2">&quot;    );&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"method </span><span class="si">%s</span><span class="s2">("</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="s2">"    );"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">func</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;method </span><span class="si">%s</span><span class="s2">();&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"method </span><span class="si">%s</span><span class="s2">();"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">:</span>
-            <span class="n">func</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span><span class="p">)</span>
 
-        <span class="n">func</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;end;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">func</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">"end;"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div>
 </div>
 
 
@@ -578,7 +578,7 @@
 <div class="viewcode-block" id="DS2PyMASMethod">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2PyMASMethod">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DS2PyMASMethod</span><span class="p">(</span><span class="n">DS2BaseMethod</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A DS2 method that builds a PyMAS object.</span>
+<span class="w">    </span><span class="sd">"""A DS2 method that builds a PyMAS object.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -590,7 +590,7 @@
 <span class="sd">    return_message</span>
 <span class="sd">    target</span>
 <span class="sd">    method_name</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -599,64 +599,64 @@
         <span class="n">python_code</span><span class="p">,</span>
         <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;wrapper&quot;</span><span class="p">,</span>
-        <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;score&quot;</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"wrapper"</span><span class="p">,</span>
+        <span class="n">method_name</span><span class="o">=</span><span class="s2">"score"</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="c1"># target = target or &#39;wrapper&#39;</span>
+        <span class="c1"># target = target or 'wrapper'</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">python_code</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">python_code</span> <span class="o">=</span> <span class="n">python_code</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">python_code</span> <span class="o">=</span> <span class="n">python_code</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span> <span class="o">=</span> <span class="n">variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">return_code</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"rc"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"rc"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">return_message</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"msg"</span><span class="p">,</span> <span class="s2">"char"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 
         <span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">as_declaration</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="p">]</span>
 
         <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="s2">&quot;if null(py) then do;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;    py = _new_ pymas();&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;    rc = py.useModule(&#39;</span><span class="si">%s</span><span class="s2">&#39;, 1);&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;    if rc then do;&quot;</span><span class="p">,</span>
+            <span class="s2">"if null(py) then do;"</span><span class="p">,</span>
+            <span class="s2">"    py = _new_ pymas();"</span><span class="p">,</span>
+            <span class="s2">"    rc = py.useModule('</span><span class="si">%s</span><span class="s2">', 1);"</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">"    if rc then do;"</span><span class="p">,</span>
         <span class="p">]</span>
 
-        <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;        rc = py.appendSrcLine(&#39;</span><span class="si">%s</span><span class="s2">&#39;);&quot;</span> <span class="o">%</span> <span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">python_code</span><span class="p">]</span>
+        <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"        rc = py.appendSrcLine('</span><span class="si">%s</span><span class="s2">');"</span> <span class="o">%</span> <span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">python_code</span><span class="p">]</span>
         <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="s2">&quot;        pycode = py.getSource();&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;        revision = py.publish(pycode, &#39;</span><span class="si">%s</span><span class="s2">&#39;);&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;        if revision lt 1 then do;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;            logr.log(&#39;e&#39;, &#39;py.publish() failed.&#39;);&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;            rc = -1;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;        end;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;    end;&quot;</span><span class="p">,</span>
+            <span class="s2">"        pycode = py.getSource();"</span><span class="p">,</span>
+            <span class="s2">"        revision = py.publish(pycode, '</span><span class="si">%s</span><span class="s2">');"</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">"        if revision lt 1 then do;"</span><span class="p">,</span>
+            <span class="s2">"            logr.log('e', 'py.publish() failed.');"</span><span class="p">,</span>
+            <span class="s2">"            rc = -1;"</span><span class="p">,</span>
+            <span class="s2">"        end;"</span><span class="p">,</span>
+            <span class="s2">"    end;"</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;    rc = py.useMethod(&#39;</span><span class="si">%s</span><span class="s2">&#39;);&quot;</span> <span class="o">%</span> <span class="n">target</span><span class="p">,</span> <span class="s2">&quot;    if rc then return;&quot;</span><span class="p">]</span>
-        <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;end;&quot;</span><span class="p">]</span>
+            <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"    rc = py.useMethod('</span><span class="si">%s</span><span class="s2">');"</span> <span class="o">%</span> <span class="n">target</span><span class="p">,</span> <span class="s2">"    if rc then return;"</span><span class="p">]</span>
+        <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"end;"</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Set Python input variables</span>
             <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">    if rc then return;&quot;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span>
+                <span class="s2">"</span><span class="si">%s</span><span class="s2">    if rc then return;"</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span>
             <span class="p">]</span>
 
             <span class="c1"># Execute Python method</span>
-            <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;rc = py.execute();    if rc then return;&quot;</span><span class="p">]</span>
+            <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"rc = py.execute();    if rc then return;"</span><span class="p">]</span>
 
             <span class="c1"># Get Python output variables</span>
             <span class="n">body</span> <span class="o">+=</span> <span class="p">[</span>
                 <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span>
-                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;rc&quot;</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"rc"</span>
             <span class="p">]</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">DS2PyMASMethod</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span></div>
@@ -665,14 +665,14 @@
 
 <div class="viewcode-block" id="DS2ScoreMethod">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2ScoreMethod">[docs]</a>
-<span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;1.6&quot;</span><span class="p">)</span>
+<span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"1.5"</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">"1.6"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DS2ScoreMethod</span><span class="p">(</span><span class="n">DS2BaseMethod</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">variables</span><span class="p">,</span>
         <span class="n">return_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">return_message</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;wrapper&quot;</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"wrapper"</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">target</span>
 
@@ -680,35 +680,35 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">return_code</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"rc"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"rc"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">return_message</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"msg"</span><span class="p">,</span> <span class="s2">"char"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="s2">"msg"</span><span class="p">,</span> <span class="s2">"char"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 
         <span class="n">body_statements</span> <span class="o">=</span> <span class="p">(</span>
             <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">as_declaration</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">private_variables</span><span class="p">]</span>
             <span class="o">+</span> <span class="p">[</span>
-                <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;    if rc then return;&quot;</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"    if rc then return;"</span>
                 <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span>
             <span class="p">]</span>
-            <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;rc = py.execute();    if rc then return;&quot;</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">[</span><span class="s2">"rc = py.execute();    if rc then return;"</span><span class="p">]</span>
             <span class="o">+</span> <span class="p">[</span>
                 <span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_variables</span>
-                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;rc&quot;</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"rc"</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">DS2ScoreMethod</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body_statements</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DS2ScoreMethod</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"score"</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body_statements</span><span class="p">)</span></div>
 
 
 
-<span class="c1"># @versionadded(version=&#39;1.5&#39;)</span>
+<span class="c1"># @versionadded(version='1.5')</span>
 <span class="c1"># class DS2PredictProbaMethod(DS2BaseMethod):</span>
 <span class="c1">#     def __init__(self, variables):</span>
 <span class="c1">#</span>
@@ -717,65 +717,65 @@
 <span class="c1">#</span>
 <span class="c1">#         body_statements = []</span>
 <span class="c1">#</span>
-<span class="c1">#         super(DS2PredictProbaMethod, self).__init__(&#39;predict_proba&#39;,</span>
+<span class="c1">#         super(DS2PredictProbaMethod, self).__init__('predict_proba',</span>
 <span class="c1">#         variables,</span>
 <span class="c1">#                                                     body=body_statements)</span>
 
 
 <div class="viewcode-block" id="DS2Method">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Method">[docs]</a>
-<span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;1.6&quot;</span><span class="p">)</span>
+<span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"1.5"</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">"1.6"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DS2Method</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;wrapper&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">"wrapper"</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_code</span> <span class="o">=</span> <span class="n">code</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;score&quot;</span>
+        <span class="k">return</span> <span class="s2">"score"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">signature</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">as_parameter</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">return_code</span><span class="p">:</span>
-            <span class="n">signature</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;in_out double rc&quot;</span><span class="p">]</span>
+            <span class="n">signature</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"in_out double rc"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">return_message</span><span class="p">:</span>
-            <span class="n">signature</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;in_out char msg&quot;</span><span class="p">]</span>
+            <span class="n">signature</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"in_out char msg"</span><span class="p">]</span>
 
-        <span class="n">signature</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
 
         <span class="c1"># Python code to be embedded passed to PyMAS</span>
         <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_code</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_code</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_code</span>
-        <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">err = py.appendSrcLine(&#39;</span><span class="si">{}</span><span class="s2">&#39;);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">code</span><span class="p">]</span>
-        <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">err = py.appendSrcLine('</span><span class="si">{}</span><span class="s2">');"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">code</span><span class="p">]</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 
         <span class="n">set_statements</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">]</span>
         <span class="n">get_statements</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">pymas_statement</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">return_code</span><span class="p">:</span>
-            <span class="n">get_statements</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;rc = err;&quot;</span><span class="p">]</span>
+            <span class="n">get_statements</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"rc = err;"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">return_message</span><span class="p">:</span>
-            <span class="n">get_statements</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;msg = py.getString(&#39;msg&#39;);&quot;</span><span class="p">]</span>
+            <span class="n">get_statements</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"msg = py.getString('msg');"</span><span class="p">]</span>
 
-        <span class="n">ds2_statements</span> <span class="o">=</span> <span class="n">set_statements</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;err = py.execute();&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">get_statements</span>
-        <span class="n">ds2_statements</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t\t\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ds2_statements</span><span class="p">)</span>
+        <span class="n">ds2_statements</span> <span class="o">=</span> <span class="n">set_statements</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"err = py.execute();"</span><span class="p">]</span> <span class="o">+</span> <span class="n">get_statements</span>
+        <span class="n">ds2_statements</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"</span><span class="se">\t\t\t\t</span><span class="s2">"</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ds2_statements</span><span class="p">)</span>
 
         <span class="n">func</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;            method </span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">signature</span><span class="p">),</span>
-            <span class="s2">&quot;                dcl double err;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;                if null(py) then do;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;                    py = _new_ pymas();&quot;</span><span class="p">,</span>
+            <span class="s2">"            method </span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">signature</span><span class="p">),</span>
+            <span class="s2">"                dcl double err;"</span><span class="p">,</span>
+            <span class="s2">"                if null(py) then do;"</span><span class="p">,</span>
+            <span class="s2">"                    py = _new_ pymas();"</span><span class="p">,</span>
             <span class="n">code</span><span class="p">,</span>
-            <span class="s2">&quot;                    pycode = py.getSource();&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;                    revision = py.publish( pycode, &#39;mypymodule&#39; );&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;                    err = py.useMethod(&#39;</span><span class="si">{}</span><span class="s2">&#39;);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">),</span>
-            <span class="s2">&quot;                    if err then return;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;                end;&quot;</span><span class="p">,</span>
+            <span class="s2">"                    pycode = py.getSource();"</span><span class="p">,</span>
+            <span class="s2">"                    revision = py.publish( pycode, 'mypymodule' );"</span><span class="p">,</span>
+            <span class="s2">"                    err = py.useMethod('</span><span class="si">{}</span><span class="s2">');"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">),</span>
+            <span class="s2">"                    if err then return;"</span><span class="p">,</span>
+            <span class="s2">"                end;"</span><span class="p">,</span>
             <span class="n">ds2_statements</span><span class="p">,</span>
-            <span class="s2">&quot;            end;&quot;</span><span class="p">,</span>
+            <span class="s2">"            end;"</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">func</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">func</span></div>
 
@@ -803,12 +803,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">package</span> <span class="o">=</span> <span class="n">package</span>
 
         <span class="c1"># Default to predict() method if present</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;predict&quot;</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span><span class="p">):</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;predict&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"predict"</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span><span class="p">):</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"predict"</span><span class="p">)</span>
 
         <span class="c1"># Fall back to score() method if present</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;score&quot;</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span><span class="p">):</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;score&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"score"</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span><span class="p">):</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">package</span><span class="o">.</span><span class="n">methods</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"score"</span><span class="p">)</span>
 
         <span class="c1"># Assume first method is init(), so fall back to next method</span>
         <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">package</span><span class="o">.</span><span class="n">methods</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -822,7 +822,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;pyMasThread&quot;</span>
+        <span class="k">return</span> <span class="s2">"pyMasThread"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">array_input</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">is_array</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">)</span>
@@ -831,35 +831,35 @@
         <span class="k">if</span> <span class="n">array_input</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">array</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">is_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">))</span>
             <span class="n">var_assignments</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}</span><span class="s2">] = </span><span class="si">{}</span><span class="s2">;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="s2">"</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}</span><span class="s2">] = </span><span class="si">{}</span><span class="s2">;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)))</span>
             <span class="p">]</span>
-            <span class="n">var_assignments</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">var_assignments</span><span class="p">)</span>
+            <span class="n">var_assignments</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">var_assignments</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">var_assignments</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">var_assignments</span> <span class="o">=</span> <span class="s2">""</span>
 
         <span class="c1"># Declare output variables.  Input variables are assumed to be columns in the input table.</span>
-        <span class="n">declarations</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">declarations</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="n">v</span><span class="o">.</span><span class="n">as_declaration</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span> <span class="ow">or</span> <span class="n">v</span><span class="o">.</span><span class="n">is_array</span>
         <span class="p">)</span>
 
         <span class="n">keep_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
 
         <span class="n">code</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;thread </span><span class="si">{}</span><span class="s2"> / inline;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
-            <span class="s2">&quot;  dcl package </span><span class="si">{}</span><span class="s2"> pythonPackage();&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+            <span class="s2">"thread </span><span class="si">{}</span><span class="s2"> / inline;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+            <span class="s2">"  dcl package </span><span class="si">{}</span><span class="s2"> pythonPackage();"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
             <span class="n">declarations</span><span class="p">,</span>
-            <span class="s2">&quot;  method run();&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;    set SASEP.in;&quot;</span><span class="p">,</span>
+            <span class="s2">"  method run();"</span><span class="p">,</span>
+            <span class="s2">"    set SASEP.in;"</span><span class="p">,</span>
             <span class="n">var_assignments</span><span class="p">,</span>
-            <span class="s2">&quot;    pythonPackage.init();&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;    pythonPackage.</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keep_vars</span><span class="p">)),</span>
-            <span class="s2">&quot;    output;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;  end;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;endthread;&quot;</span><span class="p">,</span>
+            <span class="s2">"    pythonPackage.init();"</span><span class="p">,</span>
+            <span class="s2">"    pythonPackage.</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keep_vars</span><span class="p">)),</span>
+            <span class="s2">"    output;"</span><span class="p">,</span>
+            <span class="s2">"  end;"</span><span class="p">,</span>
+            <span class="s2">"endthread;"</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">code</span></div>
 
@@ -867,41 +867,41 @@
 
 <div class="viewcode-block" id="DS2Variable">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">DS2Variable</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Ds2Variable&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;out&quot;</span><span class="p">])):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DS2Variable</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">"Ds2Variable"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"type"</span><span class="p">,</span> <span class="s2">"out"</span><span class="p">])):</span>
     <span class="n">PY_TYPE_TO_DS2</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
         <span class="p">[</span>
-            <span class="p">(</span><span class="s2">&quot;double64&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;double32&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"double64"</span><span class="p">,</span> <span class="s2">"double"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"double32"</span><span class="p">,</span> <span class="s2">"double"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"double"</span><span class="p">,</span> <span class="s2">"double"</span><span class="p">),</span>
             <span class="c1"># Terminates search if full string matches</span>
-            <span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;str&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;varchar&quot;</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;integer64&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;integer32&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"float64"</span><span class="p">,</span> <span class="s2">"double"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"float32"</span><span class="p">,</span> <span class="s2">"double"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"float"</span><span class="p">,</span> <span class="s2">"double"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"string"</span><span class="p">,</span> <span class="s2">"char"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"str"</span><span class="p">,</span> <span class="s2">"char"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"varchar"</span><span class="p">,</span> <span class="s2">"char"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"integer64"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"integer32"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"integer"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
             <span class="c1"># Terminates search if full string matches</span>
-            <span class="p">(</span><span class="s2">&quot;int64&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;uint16&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;uint64&quot;</span><span class="p">,</span> <span class="s2">&quot;integer&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"int64"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"int32"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"int"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"uint8"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"uint16"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"uint32"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"uint64"</span><span class="p">,</span> <span class="s2">"integer"</span><span class="p">),</span>
         <span class="p">]</span>
     <span class="p">)</span>
 
     <span class="n">DS2_TYPE_TO_VIYA</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
-        <span class="p">[(</span><span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;varchar&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;char&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">)]</span>
+        <span class="p">[(</span><span class="s2">"double"</span><span class="p">,</span> <span class="s2">"decimal"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"varchar"</span><span class="p">,</span> <span class="s2">"string"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"char"</span><span class="p">,</span> <span class="s2">"string"</span><span class="p">)]</span>
     <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Convert Python types to DS2 types if necessary</span>
-        <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DS2Variable</span><span class="o">.</span><span class="n">_map_type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">PY_TYPE_TO_DS2</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"type"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">DS2Variable</span><span class="o">.</span><span class="n">_map_type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">PY_TYPE_TO_DS2</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"type"</span><span class="p">])</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
             <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">DS2Variable</span><span class="o">.</span><span class="n">_map_type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">PY_TYPE_TO_DS2</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -925,21 +925,21 @@
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.as_model_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">as_model_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">viya_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DS2_TYPE_TO_VIYA</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-        <span class="n">role</span> <span class="o">=</span> <span class="s2">&quot;Output&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="k">else</span> <span class="s2">&quot;input&quot;</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="s2">"Output"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="k">else</span> <span class="s2">"input"</span>
 
-        <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="n">role</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">viya_type</span><span class="p">)])</span></div>
+        <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s2">"name"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="s2">"role"</span><span class="p">,</span> <span class="n">role</span><span class="p">),</span> <span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="n">viya_type</span><span class="p">)])</span></div>
 
 
 <div class="viewcode-block" id="DS2Variable.as_declaration">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.as_declaration">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">as_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;DS2 variable declaration statement.&quot;&quot;&quot;</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\d+\]$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""DS2 variable declaration statement."""</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\[\d+\]$"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;dcl </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">"dcl </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># Type is an array</span>
-        <span class="k">return</span> <span class="s2">&quot;dcl </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}{}</span><span class="s2">;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="k">return</span> <span class="s2">"dcl </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}{}</span><span class="s2">;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[:</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()],</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="p">:]</span>
         <span class="p">)</span></div>
 
@@ -947,23 +947,23 @@
 <div class="viewcode-block" id="DS2Variable.as_parameter">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.as_parameter">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">as_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;DS2 parameter syntax for method signatures.&quot;&quot;&quot;</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\d+\]$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""DS2 parameter syntax for method signatures."""</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\[\d+\]$"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
         <span class="n">param</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">param</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="n">param</span>
             <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[:</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">param</span> <span class="o">+</span> <span class="s2">&quot;[*]&quot;</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[:</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="p">:]</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="n">param</span> <span class="o">+</span> <span class="s2">"[*]"</span>
         <span class="p">)</span>
-        <span class="n">param</span> <span class="o">=</span> <span class="s2">&quot;in_out &quot;</span> <span class="o">+</span> <span class="n">param</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="k">else</span> <span class="n">param</span>
+        <span class="n">param</span> <span class="o">=</span> <span class="s2">"in_out "</span> <span class="o">+</span> <span class="n">param</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="k">else</span> <span class="n">param</span>
 
         <span class="k">return</span> <span class="n">param</span></div>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\d+\]$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\[\d+\]$"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="mi">0</span>
@@ -971,7 +971,7 @@
 <div class="viewcode-block" id="DS2Variable.pymas_statement">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.pymas_statement">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">pymas_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">python_var_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns appropriate PyMAS get/set statements to move values between</span>
+<span class="w">        </span><span class="sd">"""Returns appropriate PyMAS get/set statements to move values between</span>
 <span class="sd">        a Python variable and the DS2 variable.</span>
 
 <span class="sd">        Parameters</span>
@@ -983,61 +983,61 @@
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Default Python variable name to DS2 variable name</span>
         <span class="n">python_var_name</span> <span class="o">=</span> <span class="n">python_var_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"double"</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_array</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="s2">&quot;py.getDoubleArray(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">, ret);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="k">return</span> <span class="s2">"py.getDoubleArray('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">, ret);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
                     <span class="p">)</span>
-                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = py.getDouble(&#39;</span><span class="si">{}</span><span class="s2">&#39;);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">python_var_name</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;char&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s2">"</span><span class="si">{}</span><span class="s2"> = py.getDouble('</span><span class="si">{}</span><span class="s2">');"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">python_var_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"char"</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_array</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="s2">&quot;py.getStringArray(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">, ret);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="k">return</span> <span class="s2">"py.getStringArray('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">, ret);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
                     <span class="p">)</span>
-                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = py.getString(&#39;</span><span class="si">{}</span><span class="s2">&#39;);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">python_var_name</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;integer&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s2">"</span><span class="si">{}</span><span class="s2"> = py.getString('</span><span class="si">{}</span><span class="s2">');"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">python_var_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"integer"</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_array</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="s2">&quot;py.getIntArray(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">, ret);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="k">return</span> <span class="s2">"py.getIntArray('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">, ret);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
                     <span class="p">)</span>
-                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = py.getInt(&#39;</span><span class="si">{}</span><span class="s2">&#39;);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">python_var_name</span><span class="p">)</span>
+                <span class="k">return</span> <span class="s2">"</span><span class="si">{}</span><span class="s2"> = py.getInt('</span><span class="si">{}</span><span class="s2">');"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">python_var_name</span><span class="p">)</span>
 
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t generate a DS2 statement for type `</span><span class="si">%s</span><span class="s2">`&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Can't generate a DS2 statement for type `</span><span class="si">%s</span><span class="s2">`"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 
-        <span class="c1"># If we got this far, it&#39;s an input variable</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">):</span>
+        <span class="c1"># If we got this far, it's an input variable</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"double"</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_array</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s2">&quot;rc = py.setDoubleArray(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="k">return</span> <span class="s2">"rc = py.setDoubleArray('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
                 <span class="p">)</span>
-            <span class="k">return</span> <span class="s2">&quot;rc = py.setDouble(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">"rc = py.setDouble('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;char&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"char"</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_array</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s2">&quot;rc = py.setStringArray(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="k">return</span> <span class="s2">"rc = py.setStringArray('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
                 <span class="p">)</span>
-            <span class="k">return</span> <span class="s2">&quot;rc = py.setString(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">"rc = py.setString('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;integer&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"integer"</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_array</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s2">&quot;rc = py.setIntArray(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="k">return</span> <span class="s2">"rc = py.setIntArray('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
                 <span class="p">)</span>
-            <span class="k">return</span> <span class="s2">&quot;rc = py.setInt(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t generate a DS2 statement for type `</span><span class="si">%s</span><span class="s2">`&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="s2">"rc = py.setInt('</span><span class="si">{}</span><span class="s2">', </span><span class="si">{}</span><span class="s2">);"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Can't generate a DS2 statement for type `</span><span class="si">%s</span><span class="s2">`"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># If type contains [n] then it&#39;s an array</span>
-        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\d+\]$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+        <span class="c1"># If type contains [n] then it's an array</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\[\d+\]$"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
 
 </pre></div>
 

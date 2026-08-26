@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.model_parameters &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl.pzmm.model_parameters &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/model_parameters';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -317,11 +317,11 @@
 <span></span><span class="c1"># Copyright (c) 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">distutils.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">StrictVersion</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">packaging.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">Version</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._services.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
@@ -333,17 +333,17 @@
     <span class="n">xgboost</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">MODEL_PROPERTIES</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;targetVariable&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;targetLevel&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;targetEventValue&quot;</span><span class="p">,</span> <span class="s2">&quot;targetEvent&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;eventProbVar&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"targetVariable"</span><span class="p">,</span> <span class="s2">"targetVariable"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"targetLevel"</span><span class="p">,</span> <span class="s2">"targetLevel"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"targetEventValue"</span><span class="p">,</span> <span class="s2">"targetEvent"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"eventProbabilityVariable"</span><span class="p">,</span> <span class="s2">"eventProbVar"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"function"</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">),</span>
 <span class="p">]</span>
 
 
 <span class="c1"># TODO: Maybe just move _find_file altogether?</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_file</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RestObj</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Retrieves the contents of the first file from a registered model on SAS Model</span>
 <span class="sd">    Manager that contains the provided file_name as an exact match or substring.</span>
 
@@ -359,14 +359,14 @@
 <span class="sd">    -------</span>
 <span class="sd">    RestObj, str</span>
 <span class="sd">        The contents and name of the first file with a name containing file_name.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">file_list</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model_contents</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">correct_file</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;models/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">/contents/</span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/content&quot;</span><span class="p">)</span>
+            <span class="n">correct_file</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"models/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">/contents/</span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/content"</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">correct_file</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No file containing &quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">&quot; exists within model files.&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'No file containing "</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">" exists within model files.'</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ModelParameters">
@@ -374,7 +374,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ModelParameters</span><span class="p">:</span>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_update_json</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">kpis</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Updates the contents of the hyperparameter json file</span>
 
 <span class="sd">        Parameters</span>
@@ -391,15 +391,15 @@
 <span class="sd">        -------</span>
 <span class="sd">        dict</span>
 <span class="sd">            The updated hyperparameter json file to be uploaded to SAS Model Manager.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
-        <span class="n">model_rows</span> <span class="o">=</span> <span class="n">kpis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kpis</span><span class="p">[</span><span class="s2">&quot;ModelUUID&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">]</span>
+        <span class="n">model_rows</span> <span class="o">=</span> <span class="n">kpis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kpis</span><span class="p">[</span><span class="s2">"ModelUUID"</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">model_rows</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-            <span class="n">model_rows</span> <span class="o">=</span> <span class="n">model_rows</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ModelUUID&quot;</span><span class="p">])</span>
-            <span class="n">model_rows</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;TimeLabel&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">kpi_json</span> <span class="o">=</span> <span class="n">model_rows</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+            <span class="n">model_rows</span> <span class="o">=</span> <span class="n">model_rows</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"ModelUUID"</span><span class="p">])</span>
+            <span class="n">model_rows</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"TimeLabel"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">kpi_json</span> <span class="o">=</span> <span class="n">model_rows</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"index"</span><span class="p">)</span>
             <span class="n">parsed_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">kpi_json</span><span class="p">)</span>
-            <span class="n">model_json</span><span class="p">[</span><span class="s2">&quot;kpis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed_json</span>
+            <span class="n">model_json</span><span class="p">[</span><span class="s2">"kpis"</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed_json</span>
         <span class="k">return</span> <span class="n">model_json</span>
 
 <div class="viewcode-block" id="ModelParameters.generate_hyperparameters">
@@ -408,7 +408,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_hyperparameters</span><span class="p">(</span>
         <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pickle_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Generates hyperparameters for a given model and creates a JSON file</span>
 <span class="sd">        representation.</span>
 
@@ -422,88 +422,88 @@
 <span class="sd">            Python object representing the model.</span>
 <span class="sd">        model_prefix : str</span>
 <span class="sd">            Name used to create model files. (e.g. (model_prefix) +</span>
-<span class="sd">            &quot;Hyperparameters.json&quot;)</span>
+<span class="sd">            "Hyperparameters.json")</span>
 <span class="sd">        pickle_path : str, pathlib.Path</span>
 <span class="sd">            Directory location of model files.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">sklearn_params</span><span class="p">():</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""</span>
 <span class="sd">            Generates hyperparameters for the models generated by scikit-learn.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
-            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hyperparameters"</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json"</span><span class="p">,</span> <span class="s2">"w"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">tf_params</span><span class="p">():</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""</span>
 <span class="sd">            Generates hyperparameters for the models generated by tensorflow.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
-            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hyperparameters"</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json"</span><span class="p">,</span> <span class="s2">"w"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">xg_params</span><span class="p">():</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""</span>
 <span class="sd">            Generates hyperparameters for the models generated by xgboost.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">xgboost</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="s2">&quot;XGBoost is required to generate xgboost hyperparameters.&quot;</span>
+                    <span class="s2">"XGBoost is required to generate xgboost hyperparameters."</span>
                 <span class="p">)</span>
             <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">save_config</span><span class="p">())</span>
-            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hyperparameters"</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json"</span><span class="p">,</span> <span class="s2">"w"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">h2o_params</span><span class="p">():</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""</span>
 <span class="sd">            Generates hyperparameters for the models generated by h2o.ai.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
-            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hyperparameters"</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json"</span><span class="p">,</span> <span class="s2">"w"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">statsmodels_params</span><span class="p">():</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""</span>
 <span class="sd">            Generates hyperparameters for the models generated by statsmodels.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="n">hyperparameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;model_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;input_variables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">exog_names</span>
-            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;weights&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"model_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"input_variables"</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">exog_names</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"weights"</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hyperparameters"</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json"</span><span class="p">,</span> <span class="s2">"w"</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s2">&quot;sklearn&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s2">"sklearn"</span><span class="p">):</span>
             <span class="n">sklearn_params</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;keras&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"keras"</span><span class="p">):</span>
             <span class="n">tf_params</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;xgboost&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"xgboost"</span><span class="p">):</span>
             <span class="n">xg_params</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;h2o&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"h2o"</span><span class="p">):</span>
             <span class="n">h2o_params</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;statsmodels&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"statsmodels"</span><span class="p">):</span>
             <span class="n">statsmodels_params</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;This model type is not currently supported for hyperparameter &quot;</span>
-                <span class="s2">&quot;generation.&quot;</span>
+                <span class="s2">"This model type is not currently supported for hyperparameter "</span>
+                <span class="s2">"generation."</span>
             <span class="p">)</span></div>
 
 
@@ -513,10 +513,10 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">update_kpis</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
-        <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
-        <span class="n">caslib</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ModelPerformanceData&quot;</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"cas-shared-default"</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"ModelPerformanceData"</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Updates hyperparameter file to include KPIs generated by performance</span>
 <span class="sd">        definitions, as well as any custom KPIs imported by user to the SAS KPI data</span>
 <span class="sd">        table.</span>
@@ -528,20 +528,20 @@
 <span class="sd">            project.</span>
 <span class="sd">        server : str, optional</span>
 <span class="sd">            Server on which the KPI data table is stored. The default value is</span>
-<span class="sd">            &quot;cas-shared-default&quot;.</span>
+<span class="sd">            "cas-shared-default".</span>
 <span class="sd">        caslib : str, optional</span>
 <span class="sd">            CAS Library on which the KPI data table is stored. The default value is</span>
-<span class="sd">            &quot;ModelPerformanceData&quot;.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            "ModelPerformanceData".</span>
+<span class="sd">        """</span>
         <span class="n">kpis</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_project_kpis</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">)</span>
-        <span class="n">models_to_update</span> <span class="o">=</span> <span class="n">kpis</span><span class="p">[</span><span class="s2">&quot;ModelUUID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">models_to_update</span> <span class="o">=</span> <span class="n">kpis</span><span class="p">[</span><span class="s2">"ModelUUID"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models_to_update</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">current_params</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">_find_file</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;hyperparameters&quot;</span><span class="p">)</span>
+                <span class="n">current_params</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">_find_file</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">"hyperparameters"</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s1">&#39;No hyperparameter file for current model </span><span class="si">{</span><span class="n">kpis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kpis</span><span class="p">[</span><span class="s2">&quot;ModelUUID&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ModelName&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">. Attempting for next model...&#39;</span>
+                    <span class="sa">f</span><span class="s1">'No hyperparameter file for current model </span><span class="si">{</span><span class="n">kpis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kpis</span><span class="p">[</span><span class="s2">"ModelUUID"</span><span class="p">]</span><span class="o">==</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s2">"ModelName"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">. Attempting for next model...'</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">updated_json</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_update_json</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">current_params</span><span class="p">,</span> <span class="n">kpis</span><span class="p">)</span>
@@ -554,7 +554,7 @@
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_hyperparameters">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_hyperparameters</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Retrieves the hyperparameter json file from specified model on SAS Model</span>
 <span class="sd">        Manager.</span>
 
@@ -568,15 +568,15 @@
 <span class="sd">        dict, str</span>
 <span class="sd">            Dictionary containing the contents of the hyperparameter file and the file</span>
 <span class="sd">            name.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">mr</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
             <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
-        <span class="n">file_contents</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">_find_file</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;hyperparameters&quot;</span><span class="p">)</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
+        <span class="n">file_contents</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">_find_file</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">"hyperparameters"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">file_contents</span><span class="p">,</span> <span class="n">file_name</span></div>
 
 
@@ -584,7 +584,7 @@
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.add_hyperparameters">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_hyperparameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Adds custom hyperparameters to the hyperparameter file contained within the</span>
 <span class="sd">        model in SAS Model Manager.</span>
 
@@ -595,18 +595,18 @@
 <span class="sd">        **kwargs</span>
 <span class="sd">            Named variables pairs representing hyperparameters to be added to the</span>
 <span class="sd">            hyperparameter file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">mr</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
             <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="n">hyperparameters</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"hyperparameters"</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span>
             <span class="n">model</span><span class="p">,</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">hyperparameters</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
@@ -619,12 +619,12 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_project_kpis</span><span class="p">(</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
-        <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
-        <span class="n">caslib</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ModelPerformanceData&quot;</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"cas-shared-default"</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"ModelPerformanceData"</span><span class="p">,</span>
         <span class="n">filter_column</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">filter_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a call to CAS to return the MM_STD_KPI table (SAS Model Manager</span>
 <span class="sd">        Standard KPI) generated when custom KPIs are uploaded or when a performance</span>
 <span class="sd">        definition is executed on SAS Model Manager on SAS Viya 4.</span>
@@ -640,10 +640,10 @@
 <span class="sd">            project.</span>
 <span class="sd">        server : str, optional</span>
 <span class="sd">            SAS Viya 4 server where the MM_STD_KPI table exists. The default value is</span>
-<span class="sd">            &quot;cas-shared-default&quot;.</span>
+<span class="sd">            "cas-shared-default".</span>
 <span class="sd">        caslib : str, optional</span>
 <span class="sd">            SAS Viya 4 caslib where the MM_STD_KPI table exists. The default value is</span>
-<span class="sd">            &quot;ModelPerformanceData&quot;.</span>
+<span class="sd">            "ModelPerformanceData".</span>
 <span class="sd">        filter_column : str, optional</span>
 <span class="sd">            Column name from the MM_STD_KPI table to be filtered. The default value is</span>
 <span class="sd">            None.</span>
@@ -655,9 +655,9 @@
 <span class="sd">        kpi_table_df : pandas.DataFrame</span>
 <span class="sd">            A pandas DataFrame representing the MM_STD_KPI table. Note that SAS</span>
 <span class="sd">            missing values are replaced with pandas-valid missing values.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Check the pandas version for where the json_normalize function exists</span>
-        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="n">StrictVersion</span><span class="p">(</span><span class="s2">&quot;1.0.3&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">Version</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">Version</span><span class="p">(</span><span class="s2">"1.0.3"</span><span class="p">):</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_normalize</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">pandas.io.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_normalize</span>
@@ -668,63 +668,63 @@
         <span class="c1"># Step through options to determine project UUID</span>
         <span class="k">if</span> <span class="n">is_uuid</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
             <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
-            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
 
         <span class="c1"># TODO: include case for large MM_STD_KPI tables</span>
         <span class="c1"># Call the casManagement service to collect the column names in the table</span>
         <span class="n">kpi_table_columns</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;casManagement/servers/</span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">/&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;caslibs/</span><span class="si">{</span><span class="n">caslib</span><span class="si">}</span><span class="s2">/tables/&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.MM_STD_KPI/columns?limit=10000&quot;</span>
+            <span class="sa">f</span><span class="s2">"casManagement/servers/</span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">/"</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">"caslibs/</span><span class="si">{</span><span class="n">caslib</span><span class="si">}</span><span class="s2">/tables/"</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.MM_STD_KPI/columns?limit=10000"</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">kpi_table_columns</span><span class="p">:</span>
             <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No KPI table exists for project </span><span class="si">{</span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; Please confirm that the performance definition completed&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; or custom KPIs have been uploaded successfully.&quot;</span>
+                <span class="sa">f</span><span class="s2">"No KPI table exists for project </span><span class="si">{</span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">."</span>
+                <span class="o">+</span> <span class="s2">" Please confirm that the performance definition completed"</span>
+                <span class="o">+</span> <span class="s2">" or custom KPIs have been uploaded successfully."</span>
             <span class="p">)</span>
         <span class="c1"># Parse through the json response to create a pandas DataFrame</span>
-        <span class="n">cols</span> <span class="o">=</span> <span class="n">json_normalize</span><span class="p">(</span><span class="n">kpi_table_columns</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="s2">&quot;items&quot;</span><span class="p">)</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">json_normalize</span><span class="p">(</span><span class="n">kpi_table_columns</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="s2">"items"</span><span class="p">)</span>
         <span class="c1"># Convert the columns to a readable list</span>
-        <span class="n">col_names</span> <span class="o">=</span> <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">col_names</span> <span class="o">=</span> <span class="n">cols</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
 
         <span class="c1"># Filter rows returned by column and value provided in arguments</span>
-        <span class="n">where_statement</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">where_statement</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="k">if</span> <span class="n">filter_column</span> <span class="ow">and</span> <span class="n">filter_value</span><span class="p">:</span>
-            <span class="n">where_statement</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&amp;where=</span><span class="si">{</span><span class="n">filter_column</span><span class="si">}</span><span class="s2">=&#39;</span><span class="si">{</span><span class="n">filter_value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="n">where_statement</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"&amp;where=</span><span class="si">{</span><span class="n">filter_column</span><span class="si">}</span><span class="s2">='</span><span class="si">{</span><span class="n">filter_value</span><span class="si">}</span><span class="s2">'"</span>
 
         <span class="c1"># Call the casRowSets service to return row values</span>
         <span class="c1"># Optional where statement is included</span>
         <span class="n">kpi_table_rows</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;casRowSets/servers/</span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">/&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;caslibs/</span><span class="si">{</span><span class="n">caslib</span><span class="si">}</span><span class="s2">/tables/&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.MM_STD_KPI/rows?limit=10000&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">where_statement</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"casRowSets/servers/</span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">/"</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">"caslibs/</span><span class="si">{</span><span class="n">caslib</span><span class="si">}</span><span class="s2">/tables/"</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">.MM_STD_KPI/rows?limit=10000"</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">where_statement</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
-        <span class="c1"># If no &quot;cells&quot; are found in the json response, return an error</span>
+        <span class="c1"># If no "cells" are found in the json response, return an error</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">kpi_table_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-                <span class="n">json_normalize</span><span class="p">(</span><span class="n">kpi_table_rows</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;items&quot;</span><span class="p">])[</span><span class="s2">&quot;cells&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span>
+                <span class="n">json_normalize</span><span class="p">(</span><span class="n">kpi_table_rows</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"items"</span><span class="p">])[</span><span class="s2">"cells"</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span>
                 <span class="n">columns</span><span class="o">=</span><span class="n">col_names</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">filter_column</span> <span class="ow">and</span> <span class="n">filter_value</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span>
-                    <span class="s2">&quot;No KPIs were found when filtering with </span><span class="si">{filter_column}</span><span class="s2">=&#39;{&quot;</span>
-                    <span class="s2">&quot;filter_value}&#39;.&quot;</span>
+                    <span class="s2">"No KPIs were found when filtering with </span><span class="si">{filter_column}</span><span class="s2">='{"</span>
+                    <span class="s2">"filter_value}'."</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">project_name</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-                <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No KPIs were found for project </span><span class="si">{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">project_name</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)[</span><span class="s2">"name"</span><span class="p">]</span>
+                <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No KPIs were found for project </span><span class="si">{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
         <span class="c1"># Strip leading spaces from cells of KPI table; convert missing values to None</span>
         <span class="n">kpi_table_df</span> <span class="o">=</span> <span class="n">kpi_table_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-            <span class="p">{</span><span class="s2">&quot;.&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+            <span class="p">{</span><span class="s2">"."</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">""</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">kpi_table_df</span></div>
@@ -739,20 +739,20 @@
         <span class="c1"># Step through options to determine project UUID</span>
         <span class="k">if</span> <span class="n">is_uuid</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
             <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
-            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="c1"># Get List of Models that exist in project</span>
-        <span class="n">models</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/models&quot;</span><span class="p">)</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/models"</span><span class="p">)</span>
         <span class="n">model_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
         <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">model_ids</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">project_property</span><span class="p">,</span> <span class="n">model_property</span> <span class="ow">in</span> <span class="n">MODEL_PROPERTIES</span><span class="p">:</span>
                 <span class="c1"># Check if property is set in project</span>
                 <span class="k">if</span> <span class="n">project_property</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
-                    <span class="c1"># If property is set in project, check if it&#39;s set in model, and update model accordingly</span>
+                    <span class="c1"># If property is set in project, check if it's set in model, and update model accordingly</span>
                     <span class="k">if</span> <span class="n">model_property</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">overrwrite</span><span class="p">:</span>
                         <span class="n">model</span><span class="p">[</span><span class="n">model_property</span><span class="p">]</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="n">project_property</span><span class="p">]</span>
             <span class="n">mr</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>

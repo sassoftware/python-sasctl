@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.model_management &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl._services.model_management &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/model_management';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -328,11 +328,11 @@
 <div class="viewcode-block" id="ModelManagement">
 <a class="viewcode-back" href="../../../api/services/model_management.html#sasctl._services.model_management.ModelManagement">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ModelManagement</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Model Management API provides basic resources for monitoring</span>
+<span class="w">    </span><span class="sd">"""The Model Management API provides basic resources for monitoring</span>
 <span class="sd">    performance, comparing models, and running workflow processes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/modelManagement&quot;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">"/modelManagement"</span>
 
     <span class="p">(</span>
         <span class="n">list_performance_definitions</span><span class="p">,</span>
@@ -340,7 +340,7 @@
         <span class="n">update_performance_definition</span><span class="p">,</span>
         <span class="n">delete_performance_definition</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
-        <span class="s2">&quot;/performanceTasks&quot;</span><span class="p">,</span> <span class="s2">&quot;performance task&quot;</span><span class="p">,</span> <span class="s2">&quot;performance tasks&quot;</span>
+        <span class="s2">"/performanceTasks"</span><span class="p">,</span> <span class="s2">"performance task"</span><span class="p">,</span> <span class="s2">"performance tasks"</span>
     <span class="p">)</span>
 
     <span class="c1"># TODO:  set ds2MultiType</span>
@@ -351,12 +351,12 @@
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model</span><span class="p">,</span>
         <span class="n">destination</span><span class="p">,</span>
-        <span class="n">model_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+        <span class="n">model_version</span><span class="o">=</span><span class="s2">"latest"</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">reload_model_table</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -365,7 +365,7 @@
 <span class="sd">        destination : str</span>
 <span class="sd">            Name of destination to publish the model to.</span>
 <span class="sd">        model_version : str or dict, optional</span>
-<span class="sd">            Provide the version id, name, or dict to publish. Defaults to &#39;latest&#39;.</span>
+<span class="sd">            Provide the version id, name, or dict to publish. Defaults to 'latest'.</span>
 <span class="sd">        name : str, optional</span>
 <span class="sd">            Provide a custom name for the published model. Defaults to None.</span>
 <span class="sd">        force : bool, optional</span>
@@ -378,7 +378,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.model_publish</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelPublish</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span>
 
@@ -388,58 +388,58 @@
         <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Model &#39;</span><span class="si">{}</span><span class="s2">&#39; was not found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_name</span><span class="p">))</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Model '</span><span class="si">{}</span><span class="s2">' was not found."</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_name</span><span class="p">))</span>
 
         <span class="c1"># Include refresh in case get_model call does not return enough information</span>
-        <span class="n">model_uri</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">model_uri</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># TODO: Verify allowed formats by destination type.</span>
         <span class="c1"># As of 19w04 MAS throws HTTP 500 if name is in invalid format.</span>
-        <span class="k">if</span> <span class="n">model_version</span> <span class="o">!=</span> <span class="s2">&quot;latest&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_version</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;modelVersionName&quot;</span> <span class="ow">in</span> <span class="n">model_version</span><span class="p">:</span>
-                <span class="n">model_version_name</span> <span class="o">=</span> <span class="n">model_version</span><span class="p">[</span><span class="s2">&quot;modelVersionName&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">model_version</span> <span class="o">!=</span> <span class="s2">"latest"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_version</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"modelVersionName"</span> <span class="ow">in</span> <span class="n">model_version</span><span class="p">:</span>
+                <span class="n">model_version_name</span> <span class="o">=</span> <span class="n">model_version</span><span class="p">[</span><span class="s2">"modelVersionName"</span><span class="p">]</span>
             <span class="k">elif</span> <span class="p">(</span>
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_version</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
-                <span class="ow">and</span> <span class="s2">&quot;modelVersionName&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_version</span>
+                <span class="ow">and</span> <span class="s2">"modelVersionName"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_version</span>
             <span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Model version is not recognized.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Model version is not recognized."</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_version</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model_version</span><span class="p">):</span>
                 <span class="n">model_version_name</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model_or_version</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_version</span><span class="p">)[</span>
-                    <span class="s2">&quot;modelVersionName&quot;</span>
+                    <span class="s2">"modelVersionName"</span>
                 <span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">model_version_name</span> <span class="o">=</span> <span class="n">model_version</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">model_version_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">model_version_name</span> <span class="o">=</span> <span class="s2">""</span>
 
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">model_obj</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">model_obj</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">"</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">model_obj</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span> <span class="n">model_obj</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
         <span class="n">request</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;modelContents&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">),</span>
+            <span class="s2">"notes"</span><span class="p">:</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">),</span>
+            <span class="s2">"modelContents"</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;modelName&quot;</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">_publish_name</span><span class="p">(</span><span class="n">model_name</span><span class="p">),</span>
-                    <span class="s2">&quot;sourceUri&quot;</span><span class="p">:</span> <span class="n">model_uri</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">),</span>
-                    <span class="s2">&quot;modelVersionID&quot;</span><span class="p">:</span> <span class="n">model_version_name</span><span class="p">,</span>
-                    <span class="s2">&quot;publishLevel&quot;</span><span class="p">:</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span>
+                    <span class="s2">"modelName"</span><span class="p">:</span> <span class="n">mp</span><span class="o">.</span><span class="n">_publish_name</span><span class="p">(</span><span class="n">model_name</span><span class="p">),</span>
+                    <span class="s2">"sourceUri"</span><span class="p">:</span> <span class="n">model_uri</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"uri"</span><span class="p">),</span>
+                    <span class="s2">"modelVersionID"</span><span class="p">:</span> <span class="n">model_version_name</span><span class="p">,</span>
+                    <span class="s2">"publishLevel"</span><span class="p">:</span> <span class="s2">"model"</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">],</span>
-            <span class="s2">&quot;destinationName&quot;</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
+            <span class="s2">"destinationName"</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># Publishes a model that has already been registered in the model</span>
         <span class="c1"># repository.</span>
         <span class="c1"># Unlike model_publish service, does not require Code to be specified.</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s2">&quot;/publish&quot;</span><span class="p">,</span>
+            <span class="s2">"/publish"</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
             <span class="n">params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span> <span class="n">reloadModelTable</span><span class="o">=</span><span class="n">reload_model_table</span><span class="p">),</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.publishing.request.asynchronous+json&quot;</span>
+                <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/vnd.sas.models.publishing.request.asynchronous+json"</span>
             <span class="p">},</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">r</span></div>
@@ -454,7 +454,7 @@
         <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">models</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">modelVersions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">library_name</span><span class="o">=</span><span class="s2">&quot;Public&quot;</span><span class="p">,</span>
+        <span class="n">library_name</span><span class="o">=</span><span class="s2">"Public"</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">monitor_champion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -468,7 +468,7 @@
         <span class="n">cas_server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">trace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the performance task definition in the model project to monitor model performance. In order to</span>
+<span class="w">        </span><span class="sd">"""Create the performance task definition in the model project to monitor model performance. In order to</span>
 <span class="sd">        execute the performance task definition, run the execute_performance_definition function with the output from</span>
 <span class="sd">        this function.</span>
 
@@ -489,7 +489,7 @@
 <span class="sd">        modelVersions: str, list, optional</span>
 <span class="sd">            The name of the model version(s). Defaults to None, so all models are latest.</span>
 <span class="sd">        library_name : str</span>
-<span class="sd">            The library containing the input data, default is &#39;Public&#39;.</span>
+<span class="sd">            The library containing the input data, default is 'Public'.</span>
 <span class="sd">        name : str, optional</span>
 <span class="sd">            The name of the performance task, default is None.</span>
 <span class="sd">        description : str, optional</span>
@@ -509,11 +509,11 @@
 <span class="sd">        save_output : bool, optional</span>
 <span class="sd">            Whether to save the computed results to a table in `output_library`. Defaults to True.</span>
 <span class="sd">        output_library : str, optional</span>
-<span class="sd">            Name of a CASLIB where computed results should be saved.  Defaults to &#39;ModelPerformanceData&#39;.</span>
+<span class="sd">            Name of a CASLIB where computed results should be saved.  Defaults to 'ModelPerformanceData'.</span>
 <span class="sd">        autoload_output : bool, optional</span>
 <span class="sd">            Whether computed results should automatically be re-loaded after a CAS server restart, defaults to False.</span>
 <span class="sd">        cas_server : str, optional</span>
-<span class="sd">            The CAS Server for the monitoring task, default is &#39;cas-shared-default&#39;.</span>
+<span class="sd">            The CAS Server for the monitoring task, default is 'cas-shared-default'.</span>
 <span class="sd">        trace : bool, optional</span>
 <span class="sd">            Whether to enable trace messages in the SAS job log when executing the performance definition, defaults to</span>
 <span class="sd">            False.</span>
@@ -523,19 +523,19 @@
 <span class="sd">        RestObj</span>
 <span class="sd">            The performance task definition schema</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">scoring_required</span> <span class="ow">and</span> <span class="s2">&quot;_&quot;</span> <span class="ow">in</span> <span class="n">table_prefix</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scoring_required</span> <span class="ow">and</span> <span class="s2">"_"</span> <span class="ow">in</span> <span class="n">table_prefix</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Parameter &#39;table_prefix&#39; cannot contain underscores.&quot;</span>
-                <span class="s2">&quot; Received a value of &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">table_prefix</span>
+                <span class="s2">"Parameter 'table_prefix' cannot contain underscores."</span>
+                <span class="s2">" Received a value of '</span><span class="si">%s</span><span class="s2">'."</span> <span class="o">%</span> <span class="n">table_prefix</span>
             <span class="p">)</span>
 
         <span class="n">max_bins</span> <span class="o">=</span> <span class="mi">10</span> <span class="k">if</span> <span class="n">max_bins</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_bins</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_bins</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Parameter &#39;max_bins&#39; must be at least 2. Received a value of &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span>
+                <span class="s2">"Parameter 'max_bins' must be at least 2. Received a value of '</span><span class="si">%s</span><span class="s2">'."</span>
                 <span class="o">%</span> <span class="n">max_bins</span>
             <span class="p">)</span>
 
@@ -545,13 +545,13 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">project</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;No project or model specified for performance definition creation.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;Please specify at least one of the two values.&quot;</span>
+                <span class="s2">"No project or model specified for performance definition creation.</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"Please specify at least one of the two values."</span>
             <span class="p">)</span>
         <span class="c1"># If no models were specified, search the supplied project for all models</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">models</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;eq(projectName, &#39;</span><span class="si">{</span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span><span class="p">)</span>
+            <span class="n">models</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="sa">f</span><span class="s2">"eq(projectName, '</span><span class="si">{</span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">')"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">models</span><span class="p">):</span>
                 <span class="n">models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -562,83 +562,83 @@
             <span class="c1"># Ensures that all models are in the same project</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">projectId</span> <span class="o">==</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Not all models are contained within the same project. Try &quot;</span>
-                    <span class="s2">&quot;specifying a project in the arguments and verify that all models&quot;</span>
-                    <span class="s2">&quot;are from the same project.&quot;</span>
+                    <span class="s2">"Not all models are contained within the same project. Try "</span>
+                    <span class="s2">"specifying a project in the arguments and verify that all models"</span>
+                    <span class="s2">"are from the same project."</span>
                 <span class="p">)</span>
 
         <span class="c1"># Performance data cannot be captured unless certain project properties have been configured.</span>
-        <span class="k">for</span> <span class="n">required</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;targetLevel&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">required</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"targetVariable"</span><span class="p">,</span> <span class="s2">"targetLevel"</span><span class="p">]:</span>
             <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">required</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Project </span><span class="si">%s</span><span class="s2"> must have the &#39;</span><span class="si">%s</span><span class="s2">&#39; property set.&quot;</span>
+                    <span class="s2">"Project </span><span class="si">%s</span><span class="s2"> must have the '</span><span class="si">%s</span><span class="s2">' property set."</span>
                     <span class="o">%</span> <span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">required</span><span class="p">)</span>
                 <span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span>
-            <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"function"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"classification"</span>
+            <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"eventProbabilityVariable"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Project </span><span class="si">%s</span><span class="s2"> must have the &quot;</span>
-                <span class="s2">&quot;&#39;eventProbabilityVariable&#39; property set.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span>
+                <span class="s2">"Project </span><span class="si">%s</span><span class="s2"> must have the "</span>
+                <span class="s2">"'eventProbabilityVariable' property set."</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span>
-            <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;predictionVariable&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"function"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"prediction"</span>
+            <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"predictionVariable"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Project </span><span class="si">%s</span><span class="s2"> must have the &#39;predictionVariable&#39; &quot;</span>
-                <span class="s2">&quot;property set.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span>
+                <span class="s2">"Project </span><span class="si">%s</span><span class="s2"> must have the 'predictionVariable' "</span>
+                <span class="s2">"property set."</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span>
             <span class="p">)</span>
 
         <span class="c1"># Creating the new array of modelIds with version names appended</span>
         <span class="n">updated_models</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">check_model_versions</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">modelVersions</span><span class="p">)</span>
 
         <span class="n">request</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;projectId&quot;</span><span class="p">:</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; Performance&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;modelIds&quot;</span><span class="p">:</span> <span class="n">updated_models</span><span class="p">,</span>
-            <span class="s2">&quot;championMonitored&quot;</span><span class="p">:</span> <span class="n">monitor_champion</span><span class="p">,</span>
-            <span class="s2">&quot;challengerMonitored&quot;</span><span class="p">:</span> <span class="n">monitor_challenger</span><span class="p">,</span>
-            <span class="s2">&quot;maxBins&quot;</span><span class="p">:</span> <span class="n">max_bins</span><span class="p">,</span>
-            <span class="s2">&quot;resultLibrary&quot;</span><span class="p">:</span> <span class="n">output_library</span> <span class="ow">or</span> <span class="s2">&quot;ModelPerformanceData&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;includeAllData&quot;</span><span class="p">:</span> <span class="n">all_data</span><span class="p">,</span>
-            <span class="s2">&quot;scoreExecutionRequired&quot;</span><span class="p">:</span> <span class="n">scoring_required</span><span class="p">,</span>
-            <span class="s2">&quot;performanceResultSaved&quot;</span><span class="p">:</span> <span class="n">save_output</span><span class="p">,</span>
-            <span class="s2">&quot;loadPerformanceResult&quot;</span><span class="p">:</span> <span class="n">autoload_output</span><span class="p">,</span>
-            <span class="s2">&quot;dataLibrary&quot;</span><span class="p">:</span> <span class="n">library_name</span> <span class="ow">or</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span>
-            <span class="ow">or</span> <span class="s2">&quot;Performance definition for model &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]),</span>
-            <span class="s2">&quot;casServerId&quot;</span><span class="p">:</span> <span class="n">cas_server</span> <span class="ow">or</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;dataPrefix&quot;</span><span class="p">:</span> <span class="n">table_prefix</span><span class="p">,</span>
-            <span class="s2">&quot;traceOn&quot;</span><span class="p">:</span> <span class="n">trace</span><span class="p">,</span>
+            <span class="s2">"projectId"</span><span class="p">:</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">" Performance"</span><span class="p">,</span>
+            <span class="s2">"modelIds"</span><span class="p">:</span> <span class="n">updated_models</span><span class="p">,</span>
+            <span class="s2">"championMonitored"</span><span class="p">:</span> <span class="n">monitor_champion</span><span class="p">,</span>
+            <span class="s2">"challengerMonitored"</span><span class="p">:</span> <span class="n">monitor_challenger</span><span class="p">,</span>
+            <span class="s2">"maxBins"</span><span class="p">:</span> <span class="n">max_bins</span><span class="p">,</span>
+            <span class="s2">"resultLibrary"</span><span class="p">:</span> <span class="n">output_library</span> <span class="ow">or</span> <span class="s2">"ModelPerformanceData"</span><span class="p">,</span>
+            <span class="s2">"includeAllData"</span><span class="p">:</span> <span class="n">all_data</span><span class="p">,</span>
+            <span class="s2">"scoreExecutionRequired"</span><span class="p">:</span> <span class="n">scoring_required</span><span class="p">,</span>
+            <span class="s2">"performanceResultSaved"</span><span class="p">:</span> <span class="n">save_output</span><span class="p">,</span>
+            <span class="s2">"loadPerformanceResult"</span><span class="p">:</span> <span class="n">autoload_output</span><span class="p">,</span>
+            <span class="s2">"dataLibrary"</span><span class="p">:</span> <span class="n">library_name</span> <span class="ow">or</span> <span class="s2">"Public"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="n">description</span>
+            <span class="ow">or</span> <span class="s2">"Performance definition for model "</span>
+            <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]),</span>
+            <span class="s2">"casServerId"</span><span class="p">:</span> <span class="n">cas_server</span> <span class="ow">or</span> <span class="s2">"cas-shared-default"</span><span class="p">,</span>
+            <span class="s2">"dataPrefix"</span><span class="p">:</span> <span class="n">table_prefix</span><span class="p">,</span>
+            <span class="s2">"traceOn"</span><span class="p">:</span> <span class="n">trace</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="c1"># If model doesn&#39;t specify input/output variables, try to pull from project definition</span>
-        <span class="k">if</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="n">request</span><span class="p">[</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">]</span>
+        <span class="c1"># If model doesn't specify input/output variables, try to pull from project definition</span>
+        <span class="k">if</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"inputVariables"</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">request</span><span class="p">[</span><span class="s2">"inputVariables"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"inputVariables"</span><span class="p">]</span>
             <span class="p">]</span>
-            <span class="n">request</span><span class="p">[</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">]</span>
+            <span class="n">request</span><span class="p">[</span><span class="s2">"outputVariables"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"outputVariables"</span><span class="p">]</span>
             <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">request</span><span class="p">[</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;variables&quot;</span><span class="p">,</span> <span class="p">[])</span>
-                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span>
+            <span class="n">request</span><span class="p">[</span><span class="s2">"inputVariables"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"variables"</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"role"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"input"</span>
             <span class="p">]</span>
-            <span class="n">request</span><span class="p">[</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;variables&quot;</span><span class="p">,</span> <span class="p">[])</span>
-                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;output&quot;</span>
+            <span class="n">request</span><span class="p">[</span><span class="s2">"outputVariables"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"variables"</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"role"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"output"</span>
             <span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s2">&quot;/performanceTasks&quot;</span><span class="p">,</span>
+            <span class="s2">"/performanceTasks"</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.performance.task+json&quot;</span>
+                <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/vnd.sas.models.performance.task+json"</span>
             <span class="p">},</span>
         <span class="p">)</span></div>
 
@@ -647,7 +647,7 @@
 <a class="viewcode-back" href="../../../api/services/model_management.html#sasctl._services.model_management.ModelManagement.check_model_versions">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_model_versions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">modelVersions</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Checking if the model version(s) are valid and append to model id accordingly.</span>
 
 <span class="sd">        Parameters</span>
@@ -660,7 +660,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        String list</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">modelVersions</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
 
@@ -670,27 +670,27 @@
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">modelVersions</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;There are too many versions for the amount of models specified.&quot;</span>
+                <span class="s2">"There are too many versions for the amount of models specified."</span>
             <span class="p">)</span>
 
-        <span class="n">modelVersions</span> <span class="o">=</span> <span class="n">modelVersions</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">modelVersions</span><span class="p">))</span>
+        <span class="n">modelVersions</span> <span class="o">=</span> <span class="n">modelVersions</span> <span class="o">+</span> <span class="p">[</span><span class="s2">""</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">modelVersions</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">modelVersionName</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">modelVersions</span><span class="p">):</span>
 
             <span class="k">if</span> <span class="p">(</span>
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">modelVersionName</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
-                <span class="ow">and</span> <span class="s2">&quot;modelVersionName&quot;</span> <span class="ow">in</span> <span class="n">modelVersionName</span>
+                <span class="ow">and</span> <span class="s2">"modelVersionName"</span> <span class="ow">in</span> <span class="n">modelVersionName</span>
             <span class="p">):</span>
 
-                <span class="n">modelVersionName</span> <span class="o">=</span> <span class="n">modelVersionName</span><span class="p">[</span><span class="s2">&quot;modelVersionName&quot;</span><span class="p">]</span>
+                <span class="n">modelVersionName</span> <span class="o">=</span> <span class="n">modelVersionName</span><span class="p">[</span><span class="s2">"modelVersionName"</span><span class="p">]</span>
             <span class="k">elif</span> <span class="p">(</span>
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">modelVersionName</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
-                <span class="ow">and</span> <span class="s2">&quot;modelVersionName&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modelVersionName</span>
+                <span class="ow">and</span> <span class="s2">"modelVersionName"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modelVersionName</span>
             <span class="p">):</span>
 
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Model version is not recognized.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Model version is not recognized."</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">modelVersionName</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">updated_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">modelVersionName</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">modelVersionName</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
+                <span class="n">updated_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">":"</span> <span class="o">+</span> <span class="n">modelVersionName</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">updated_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
@@ -701,7 +701,7 @@
 <a class="viewcode-back" href="../../../api/services/model_management.html#sasctl._services.model_management.ModelManagement.execute_performance_definition">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute_performance_definition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">definition</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Launches a job to run a performance definition.</span>
+<span class="w">        </span><span class="sd">"""Launches a job to run a performance definition.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -713,10 +713,10 @@
 <span class="sd">        RestObj</span>
 <span class="sd">            The executing job</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">definition</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_performance_definition</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/performanceTasks/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">definition</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/performanceTasks/</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">definition</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ModelManagement.list_model_workflow_definition">
@@ -724,14 +724,14 @@
     <span class="nd">@classmethod</span>
     <span class="nd">@experimental</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_model_workflow_definition</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all enabled Workflow Processes to execute on Model Project.</span>
+<span class="w">        </span><span class="sd">"""List all enabled Workflow Processes to execute on Model Project.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        list of RestObj</span>
 <span class="sd">            The list of workflows</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.workflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
 
         <span class="k">return</span> <span class="n">Workflow</span><span class="o">.</span><span class="n">list_enabled_definitions</span><span class="p">()</span></div>
@@ -742,7 +742,7 @@
     <span class="nd">@classmethod</span>
     <span class="nd">@experimental</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_model_workflow_prompt</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">workflowName</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List prompt Workflow Processes Definitions.</span>
+<span class="w">        </span><span class="sd">"""List prompt Workflow Processes Definitions.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -754,7 +754,7 @@
 <span class="sd">        list</span>
 <span class="sd">            The list of prompts for specific workflow</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.workflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
 
         <span class="k">return</span> <span class="n">Workflow</span><span class="o">.</span><span class="n">list_workflow_prompt</span><span class="p">(</span><span class="n">workflowName</span><span class="p">)</span></div>
@@ -765,7 +765,7 @@
     <span class="nd">@classmethod</span>
     <span class="nd">@experimental</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_model_workflow_executed</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">projectName</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List prompt Workflow Processes Definitions.</span>
+<span class="w">        </span><span class="sd">"""List prompt Workflow Processes Definitions.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -777,7 +777,7 @@
 <span class="sd">        RestObj</span>
 <span class="sd">            List of workflows associated to project</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span>
 
         <span class="n">mr</span> <span class="o">=</span> <span class="n">ModelRepository</span><span class="p">()</span>
@@ -785,9 +785,9 @@
         <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">projectName</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;/workflowProcesses?filter=eq(associations.solutionObjectId,%22&quot;</span>
-            <span class="o">+</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;%22)&quot;</span>
+            <span class="s2">"/workflowProcesses?filter=eq(associations.solutionObjectId,%22"</span>
+            <span class="o">+</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
+            <span class="o">+</span> <span class="s2">"%22)"</span>
         <span class="p">)</span></div>
 
 
@@ -798,7 +798,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">execute_model_workflow_definition</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">project_name</span><span class="p">,</span> <span class="n">workflow_name</span><span class="p">,</span> <span class="n">prompts</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs specific Workflow Processes Definitions.</span>
+<span class="w">        </span><span class="sd">"""Runs specific Workflow Processes Definitions.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -818,7 +818,7 @@
 <span class="sd">        .. versionchanged:: 1.8.2</span>
 <span class="sd">            Renamed the `input` parameter to `prompts`.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.workflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
 
@@ -831,26 +831,26 @@
         <span class="c1"># Associate running workflow to model project.</span>
         <span class="c1"># NOTE: workflow has to be running</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;processName&quot;</span><span class="p">:</span> <span class="n">workflow</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;processId&quot;</span><span class="p">:</span> <span class="n">workflow</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;objectType&quot;</span><span class="p">:</span> <span class="s2">&quot;MM_Project&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;solutionObjectName&quot;</span><span class="p">:</span> <span class="n">project_name</span><span class="p">,</span>
-            <span class="s2">&quot;solutionObjectId&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;solutionObjectUri&quot;</span><span class="p">:</span> <span class="s2">&quot;/modelRepository/projects/&quot;</span> <span class="o">+</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;solutionObjectMediaType&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.project+json&quot;</span><span class="p">,</span>
+            <span class="s2">"processName"</span><span class="p">:</span> <span class="n">workflow</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
+            <span class="s2">"processId"</span><span class="p">:</span> <span class="n">workflow</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span>
+            <span class="s2">"objectType"</span><span class="p">:</span> <span class="s2">"MM_Project"</span><span class="p">,</span>
+            <span class="s2">"solutionObjectName"</span><span class="p">:</span> <span class="n">project_name</span><span class="p">,</span>
+            <span class="s2">"solutionObjectId"</span><span class="p">:</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span>
+            <span class="s2">"solutionObjectUri"</span><span class="p">:</span> <span class="s2">"/modelRepository/projects/"</span> <span class="o">+</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span>
+            <span class="s2">"solutionObjectMediaType"</span><span class="p">:</span> <span class="s2">"application/vnd.sas.models.project+json"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># Note: you can get a HTTP Error 404:</span>
-        <span class="c1"># {&quot;errorCode&quot;:74052,&quot;message&quot;:&quot;The workflow process for id &lt;&gt; cannot be found.</span>
-        <span class="c1"># Associations can only be made to running processes.&quot;,&quot;details&quot;:[&quot;correlator:</span>
-        <span class="c1"># e62c5562-2b11-45db-bcb7-933200cb0f0a&quot;,&quot;traceId: 3118c0fb1eb9702d&quot;,&quot;path:</span>
-        <span class="c1"># /modelManagement/workflowAssociations&quot;],&quot;links&quot;:[],&quot;version&quot;:2,&quot;httpStatusCode&quot;:404}</span>
+        <span class="c1"># {"errorCode":74052,"message":"The workflow process for id &lt;&gt; cannot be found.</span>
+        <span class="c1"># Associations can only be made to running processes.","details":["correlator:</span>
+        <span class="c1"># e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:</span>
+        <span class="c1"># /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404}</span>
         <span class="c1"># Which is fine and expected like the Visual Experience.</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s2">&quot;/workflowAssociations&quot;</span><span class="p">,</span>
+            <span class="s2">"/workflowAssociations"</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.workflow.object.association+json&quot;</span>
+                <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/vnd.sas.workflow.object.association+json"</span>
             <span class="p">},</span>
         <span class="p">)</span></div>
 
@@ -861,7 +861,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">create_custom_kpi</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">timeLabel</span><span class="p">,</span> <span class="n">kpiName</span><span class="p">,</span> <span class="n">kpiValue</span><span class="p">,</span> <span class="n">timeSK</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post a user supplied custom KPI to a SAS Model Manager project&#39;s MM_STD_KPI</span>
+<span class="w">        </span><span class="sd">"""Post a user supplied custom KPI to a SAS Model Manager project's MM_STD_KPI</span>
 <span class="sd">        table. A custom KPI consists of the time label, KPI name, KPI value, and optionally</span>
 <span class="sd">        the timeSK. Additionally, the model and project associated with the custom KPI are</span>
 <span class="sd">        required.</span>
@@ -884,7 +884,7 @@
 <span class="sd">            Value of the custom KPI.</span>
 <span class="sd">        timeSK : int or list</span>
 <span class="sd">            Default is None. Indicator for the MM_STD_KPI table to denote performance task order.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span>
 
         <span class="n">mr</span> <span class="o">=</span> <span class="n">ModelRepository</span><span class="p">()</span>
@@ -892,40 +892,40 @@
         <span class="c1"># Step through options to determine project UUID</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
             <span class="n">projectId</span> <span class="o">=</span> <span class="n">project</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
-            <span class="n">projectId</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+            <span class="n">projectId</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">projectId</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">projectId</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
 
         <span class="c1"># Step through options to determine model UUID</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
             <span class="n">modelId</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-            <span class="n">modelId</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">modelId</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span>
-                <span class="nb">filter</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;and(eq(&#39;projectId&#39;,&#39;</span><span class="si">{</span><span class="n">projectId</span><span class="si">}</span><span class="s2">&#39;), eq(&#39;name&#39;,&#39;</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;))&quot;</span>
+                <span class="nb">filter</span><span class="o">=</span><span class="sa">f</span><span class="s2">"and(eq('projectId','</span><span class="si">{</span><span class="n">projectId</span><span class="si">}</span><span class="s2">'), eq('name','</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">'))"</span>
             <span class="p">)</span>
-            <span class="n">modelId</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">modelId</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"id"</span><span class="p">]</span>
 
         <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">modelId</span><span class="p">)</span>
 
-        <span class="c1"># If no timeSK is provided, create a list of 0&#39;s for the API call</span>
+        <span class="c1"># If no timeSK is provided, create a list of 0's for the API call</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">timeSK</span><span class="p">:</span>
             <span class="n">timeSK</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeLabel</span><span class="p">)</span>
 
         <span class="c1"># Create a list of dicts mapped to each custom KPI value</span>
         <span class="n">customKPI</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">&quot;TimeLabel&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span> <span class="s2">&quot;KPI&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;TimeSK&quot;</span><span class="p">:</span> <span class="n">SK</span><span class="p">}</span>
+            <span class="p">{</span><span class="s2">"TimeLabel"</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span> <span class="s2">"KPI"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"Value"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="s2">"TimeSK"</span><span class="p">:</span> <span class="n">SK</span><span class="p">}</span>
             <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">SK</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">timeLabel</span><span class="p">,</span> <span class="n">kpiName</span><span class="p">,</span> <span class="n">kpiValue</span><span class="p">,</span> <span class="n">timeSK</span><span class="p">)</span>
         <span class="p">]</span>
-        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.collection+json&quot;</span><span class="p">}</span>
-        <span class="n">requestData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectID&quot;</span><span class="p">:</span> <span class="n">projectId</span><span class="p">,</span> <span class="s2">&quot;ModelID&quot;</span><span class="p">:</span> <span class="n">modelId</span><span class="p">,</span> <span class="s2">&quot;KPIs&quot;</span><span class="p">:</span> <span class="n">customKPI</span><span class="p">}</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.sas.collection+json"</span><span class="p">}</span>
+        <span class="n">requestData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ProjectID"</span><span class="p">:</span> <span class="n">projectId</span><span class="p">,</span> <span class="s2">"ModelID"</span><span class="p">:</span> <span class="n">modelId</span><span class="p">,</span> <span class="s2">"KPIs"</span><span class="p">:</span> <span class="n">customKPI</span><span class="p">}</span>
         <span class="c1"># Include a terminal output, since it can take up to 60 seconds to POST the API</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uploading custom kpis to SAS Viya...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Uploading custom kpis to SAS Viya..."</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s2">&quot;/projects/</span><span class="si">{}</span><span class="s2">/kpis&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">projectId</span><span class="p">),</span>
+            <span class="s2">"/projects/</span><span class="si">{}</span><span class="s2">/kpis"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">projectId</span><span class="p">),</span>
             <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">requestData</span><span class="p">),</span>
         <span class="p">)</span></div>

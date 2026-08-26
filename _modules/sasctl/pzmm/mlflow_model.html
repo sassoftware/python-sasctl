@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.mlflow_model &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl.pzmm.mlflow_model &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/mlflow_model';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -329,7 +329,7 @@
 <a class="viewcode-back" href="../../../api/pzmm/mlflow_model.html#sasctl.pzmm.mlflow_model.MLFlowModel.read_mlflow_model_file">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">read_mlflow_model_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">m_path</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Read and return model metadata and input/output variables as dictionaries from</span>
 <span class="sd">        an MLFlow model directory.</span>
 
@@ -350,38 +350,38 @@
 <span class="sd">            Model input variables</span>
 <span class="sd">        outputs_dict : list of dict</span>
 <span class="sd">            Model output variables</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">m_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;MLmodel&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">m_file</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">m_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"MLmodel"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">m_file</span><span class="p">:</span>
             <span class="n">m_yml</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">m_file</span><span class="p">)</span>
 
         <span class="c1"># Read in metadata and properties from the MLFlow model</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">var_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;python_version&quot;</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">&quot;flavors&quot;</span><span class="p">][</span><span class="s2">&quot;python_function&quot;</span><span class="p">][</span><span class="s2">&quot;python_version&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;model_path&quot;</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">&quot;flavors&quot;</span><span class="p">][</span><span class="s2">&quot;python_function&quot;</span><span class="p">][</span><span class="s2">&quot;model_path&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;serialization_format&quot;</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">&quot;flavors&quot;</span><span class="p">][</span><span class="s2">&quot;sklearn&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;serialization_format&quot;</span>
+                <span class="s2">"python_version"</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">"flavors"</span><span class="p">][</span><span class="s2">"python_function"</span><span class="p">][</span><span class="s2">"python_version"</span><span class="p">],</span>
+                <span class="s2">"model_path"</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">"flavors"</span><span class="p">][</span><span class="s2">"python_function"</span><span class="p">][</span><span class="s2">"model_path"</span><span class="p">],</span>
+                <span class="s2">"serialization_format"</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">"flavors"</span><span class="p">][</span><span class="s2">"sklearn"</span><span class="p">][</span>
+                    <span class="s2">"serialization_format"</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;run_id&quot;</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">&quot;run_id&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;mlflowPath&quot;</span><span class="p">:</span> <span class="n">m_path</span><span class="p">,</span>
+                <span class="s2">"run_id"</span><span class="p">:</span> <span class="n">m_yml</span><span class="p">[</span><span class="s2">"run_id"</span><span class="p">],</span>
+                <span class="s2">"mlflowPath"</span><span class="p">:</span> <span class="n">m_path</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;This MLFlow model type is not currently supported.&quot;</span>
+                <span class="s2">"This MLFlow model type is not currently supported."</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;This MLFlow model type is not currently supported.&quot;</span>
+                <span class="s2">"This MLFlow model type is not currently supported."</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
         <span class="c1"># Read in the input and output variables</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">inputs_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">m_yml</span><span class="p">[</span><span class="s2">&quot;signature&quot;</span><span class="p">][</span><span class="s2">&quot;inputs&quot;</span><span class="p">])</span>
-            <span class="n">outputs_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">m_yml</span><span class="p">[</span><span class="s2">&quot;signature&quot;</span><span class="p">][</span><span class="s2">&quot;outputs&quot;</span><span class="p">])</span>
+            <span class="n">inputs_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">m_yml</span><span class="p">[</span><span class="s2">"signature"</span><span class="p">][</span><span class="s2">"inputs"</span><span class="p">])</span>
+            <span class="n">outputs_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">m_yml</span><span class="p">[</span><span class="s2">"signature"</span><span class="p">][</span><span class="s2">"outputs"</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Improper or unset signature values for model. No input or output &quot;</span>
-                <span class="s2">&quot;dicts could be generated. &quot;</span>
+                <span class="s2">"Improper or unset signature values for model. No input or output "</span>
+                <span class="s2">"dicts could be generated. "</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
         <span class="k">return</span> <span class="n">var_dict</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="p">,</span> <span class="n">outputs_dict</span></div>

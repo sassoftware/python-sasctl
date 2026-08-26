@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.projects &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl._services.projects &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/projects';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -326,17 +326,17 @@
 <div class="viewcode-block" id="Projects">
 <a class="viewcode-back" href="../../../api/services/projects.html#sasctl._services.projects.Projects">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Projects</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/projects&quot;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">"/projects"</span>
 
     <span class="n">list_projects</span><span class="p">,</span> <span class="n">get_project</span><span class="p">,</span> <span class="n">update_project</span><span class="p">,</span> <span class="n">delete_project</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
-        <span class="s2">&quot;/projects&quot;</span><span class="p">,</span> <span class="s2">&quot;project&quot;</span>
+        <span class="s2">"/projects"</span><span class="p">,</span> <span class="s2">"project"</span>
     <span class="p">)</span>
 
 <div class="viewcode-block" id="Projects.create_project">
 <a class="viewcode-back" href="../../../api/services/projects.html#sasctl._services.projects.Projects.create_project">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_project</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -349,13 +349,13 @@
 <span class="sd">        -------</span>
 <span class="sd">        RestObj</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span> <span class="s2">&quot;imageUri&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">}</span>
+<span class="sd">        """</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span> <span class="s2">"imageUri"</span><span class="p">:</span> <span class="n">image</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s2">&quot;/projects&quot;</span><span class="p">,</span>
+            <span class="s2">"/projects"</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
-            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.project+json&quot;</span><span class="p">},</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/vnd.sas.project+json"</span><span class="p">},</span>
         <span class="p">)</span></div>
 </div>
 

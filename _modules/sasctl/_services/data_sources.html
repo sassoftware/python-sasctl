@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.data_sources &#8212; sasctl 1.11.8 documentation</title>
+    <title>sasctl._services.data_sources &#8212; sasctl 1.12.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f4e927e7"></script>
+    <script src="../../../_static/documentation_options.js?v=533fed6b"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/data_sources';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.8" />
-    <meta name="docbuild:last-update" content="Apr 24, 2026"/>
+  <meta name="docsearch:version" content="1.12.0" />
+    <meta name="docbuild:last-update" content="Aug 26, 2026"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.8 documentation</p>
+    <p class="title logo__title">sasctl 1.12.0 documentation</p>
   
 </a></div>
     
@@ -328,24 +328,24 @@
 <div class="viewcode-block" id="DataSources">
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DataSources</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enables retrieval of data source metadata.</span>
+<span class="w">    </span><span class="sd">"""Enables retrieval of data source metadata.</span>
 
 <span class="sd">    The Data Sources API works in concert with the Data Tables and Row Sets</span>
 <span class="sd">    APIs to navigate, reference, and retrieve data in the SAS Viya ecosystem.</span>
 <span class="sd">    The Data Sources API enables retrieval of metadata for data sources and</span>
 <span class="sd">    linking to their respective tables.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/dataSources&quot;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">"/dataSources"</span>
 
-    <span class="n">list_providers</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">&quot;/providers&quot;</span><span class="p">,</span> <span class="s2">&quot;provider&quot;</span><span class="p">)</span>
+    <span class="n">list_providers</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">"/providers"</span><span class="p">,</span> <span class="s2">"provider"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DataSources.get_provider">
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_provider">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_provider</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a provider instance.</span>
+<span class="w">        </span><span class="sd">"""Returns a provider instance.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -365,21 +365,21 @@
 <span class="sd">        returned unless `refresh` is set.  This prevents unnecessary REST calls</span>
 <span class="sd">        when data is already available on the client.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">provider</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">provider</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
-                <span class="n">provider</span> <span class="o">=</span> <span class="n">provider</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="n">provider</span> <span class="o">=</span> <span class="n">provider</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">provider</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/providers/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">provider</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/providers/</span><span class="si">{id}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">provider</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="DataSources.list_sources">
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_sources">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_sources</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all data sources available for a provider.</span>
+<span class="w">        </span><span class="sd">"""List all data sources available for a provider.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -391,11 +391,11 @@
 <span class="sd">        list</span>
 <span class="sd">            A collection of :class:`.RestObj` instances.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">provider</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_provider</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
 
-        <span class="n">sources</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span> <span class="s2">&quot;dataSources&quot;</span><span class="p">)</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span> <span class="s2">"dataSources"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">sources</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">sources</span><span class="p">]</span></div>
@@ -405,7 +405,7 @@
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_source">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_source</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a data source belonging to a given provider.</span>
+<span class="w">        </span><span class="sd">"""Returns a data source belonging to a given provider.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -419,8 +419,8 @@
 <span class="sd">        RestObj or None</span>
 <span class="sd">            A dictionary containing the data source attributes or None.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;providerId&quot;</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"providerId"</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">source</span>
 
         <span class="n">sources</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_sources</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
@@ -434,8 +434,8 @@
 <div class="viewcode-block" id="DataSources.list_caslibs">
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_caslibs">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all caslibs registered with the given CAS server.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">"cas-shared-default"</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Get all caslibs registered with the given CAS server.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -454,11 +454,11 @@
 
 <span class="sd">        .. _filtering: https://developer.sas.com/reference/filtering/</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="s2">&quot;cas&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="s2">"cas"</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;filter=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filter_</span><span class="p">)</span> <span class="k">if</span> <span class="n">filter_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="s2">"filter=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filter_</span><span class="p">)</span> <span class="k">if</span> <span class="n">filter_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">"children"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">result</span><span class="p">]</span></div>
 
@@ -467,7 +467,7 @@
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_caslib">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a caslib by name.</span>
+<span class="w">        </span><span class="sd">"""Get a caslib by name.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -480,9 +480,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        RestObj</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="n">source</span> <span class="ow">or</span> <span class="s2">&quot;cas-shared-default&quot;</span>
-        <span class="n">caslibs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_caslibs</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="s1">&#39;eq(name, &quot;</span><span class="si">%s</span><span class="s1">&quot;)&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">source</span> <span class="ow">or</span> <span class="s2">"cas-shared-default"</span>
+        <span class="n">caslibs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_caslibs</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="s1">'eq(name, "</span><span class="si">%s</span><span class="s1">")'</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">caslibs</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">caslibs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -493,7 +493,7 @@
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_tables">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_tables</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List tables available in a caslib.</span>
+<span class="w">        </span><span class="sd">"""List tables available in a caslib.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -515,20 +515,20 @@
 
 <span class="sd">        .. _filtering: https://developer.sas.com/reference/filtering/</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">caslib</span><span class="p">,</span> <span class="s2">&quot;tables&quot;</span><span class="p">):</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">caslib</span><span class="p">,</span> <span class="s2">"tables"</span><span class="p">):</span>
             <span class="n">caslib</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_caslib</span><span class="p">(</span><span class="n">caslib</span><span class="p">)</span>
 
         <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="n">filter_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filter_</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">"filter"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filter_</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">session_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sessionId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">"sessionId"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="s2">"&amp;"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
 
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">caslib</span><span class="p">,</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">caslib</span><span class="p">,</span> <span class="s2">"tables"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">result</span><span class="p">]</span></div>
 
@@ -537,7 +537,7 @@
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_table">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get metadata for a CAS table.</span>
+<span class="w">        </span><span class="sd">"""Get metadata for a CAS table.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -550,9 +550,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        RestObj</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">tables</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_tables</span><span class="p">(</span>
-            <span class="n">caslib</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="s1">&#39;eq(name, &quot;</span><span class="si">%s</span><span class="s1">&quot;)&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="n">session_id</span>
+            <span class="n">caslib</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="s1">'eq(name, "</span><span class="si">%s</span><span class="s1">")'</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="n">session_id</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">tables</span><span class="p">:</span>
@@ -564,7 +564,7 @@
 <a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.table_uri">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">table_uri</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the URI identifying a table.</span>
+<span class="w">        </span><span class="sd">"""Get the URI identifying a table.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -575,14 +575,14 @@
 <span class="sd">        str</span>
 <span class="sd">            table URI</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Use the CASTable information to find the same table</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">,</span> <span class="s2">&quot;get_connection&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"caslib"</span><span class="p">,</span> <span class="s2">"get_connection"</span><span class="p">)):</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">.cas_management</span><span class="w"> </span><span class="kn">import</span> <span class="n">CASManagement</span> <span class="k">as</span> <span class="n">cm</span>
 
             <span class="n">server_http</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">builtins</span><span class="o">.</span><span class="n">httpAddress</span><span class="p">()</span>
-            <span class="n">server_name</span> <span class="o">=</span> <span class="n">server_http</span><span class="p">[</span><span class="s2">&quot;restPrefix&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;-http&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">server_name</span> <span class="o">=</span> <span class="n">server_http</span><span class="p">[</span><span class="s2">"restPrefix"</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"-http"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="n">table_name</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span>
             <span class="n">caslib_name</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">caslib</span>
@@ -593,7 +593,7 @@
             <span class="k">if</span> <span class="n">caslib_name</span> <span class="o">==</span> <span class="p">{}:</span>
                 <span class="c1"># skipcq: PYL-W0212</span>
                 <span class="n">username</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span><span class="o">.</span><span class="n">_username</span>
-                <span class="n">caslib_name</span> <span class="o">=</span> <span class="n">DEFAULT_CASLIB</span> <span class="o">+</span> <span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">username</span>
+                <span class="n">caslib_name</span> <span class="o">=</span> <span class="n">DEFAULT_CASLIB</span> <span class="o">+</span> <span class="s2">"(</span><span class="si">%s</span><span class="s2">)"</span> <span class="o">%</span> <span class="n">username</span>
 
             <span class="c1"># session_id = table.get_connection()._session</span>
 
@@ -601,21 +601,21 @@
             <span class="n">table</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">caslib</span><span class="p">)</span>
 
         <span class="c1"># Responses directly from cas_management service have a URI to</span>
-        <span class="c1"># data_tables service under the &quot;dataTable&quot; rel</span>
-        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="s2">&quot;dataTable&quot;</span><span class="p">)</span>
+        <span class="c1"># data_tables service under the "dataTable" rel</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="s2">"dataTable"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">link</span><span class="p">[</span><span class="s2">"uri"</span><span class="p">]</span>
 
         <span class="c1"># Responses from data_tables service have the URI to data_tables under</span>
-        <span class="c1"># the &quot;self&quot; rel</span>
-        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span>
+        <span class="c1"># the "self" rel</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">link</span><span class="p">[</span><span class="s2">"uri"</span><span class="p">]</span>
 
-        <span class="c1"># Responses from upload operations often don&#39;t include a links section.</span>
+        <span class="c1"># Responses from upload operations often don't include a links section.</span>
         <span class="c1"># Fall back to tableReference section if present</span>
-        <span class="n">table_ref</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tableReference&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="k">return</span> <span class="n">table_ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tableUri&quot;</span><span class="p">)</span></div>
+        <span class="n">table_ref</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tableReference"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="n">table_ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tableUri"</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
