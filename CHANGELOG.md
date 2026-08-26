@@ -1,3 +1,13 @@
+v1.12.0 (2026-08-26)
+--------------------
+**Improvements**
+- Scikit-learn binary classifier models now return both classes when registering model
+- Changed `use_cas_gateway` to be set to true as default for scoring functions
+- Added optional `input_mapping` argument allowing users to map table variables to model variables when scoring models
+
+**Bugfixes**
+- Replaced deprecated distutils package with packaging to accomodate newer python versions
+
 v1.11.8 (2026-04-24)
 --------------------
 **Bugfixes**
