@@ -60,7 +60,7 @@ class ScoreDefinitions(Service):
         table_name: str
             A user-inputted table name in CAS Management.
         use_cas_gateway: bool, optional
-            Determines whether object uses CAS Gateway or not.
+            Determines if scoring uses CAS Gateway.
         table_file: str or Path, optional
             A user-provided path to an uploadable file. Defaults to None.
         description: str, optional
@@ -70,9 +70,9 @@ class ScoreDefinitions(Service):
         library_name: str, optional
             The library within the CAS server the table exists in. Defaults to "Public".
         model_version: str, optional
-            The user-chosen version of the model. Deafaults to "latest".
-        input_mapping: list, optional
-            A list of dictionaries mapping variables from the data table to the variables in the model if they are different. Defaults to None.
+            The user-chosen version of the model. Defaults to "latest".
+        input_mapping: dict, optional
+            A dictionary mapping variables from the data table to the variables in the model if they are different. Defaults to None.
 
         Returns
         -------

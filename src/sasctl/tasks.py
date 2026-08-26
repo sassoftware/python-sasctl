@@ -984,6 +984,38 @@ def score_model_with_cas(
     timeout: int = 300,
     input_mapping: dict = None,
 ):
+    """Runs a score test on the specified model.
+
+    Parameters
+    --------
+    score_def_name: str
+        Name of score definition.
+    model : str or dict
+        The name or id of the model, or a dictionary representation of the model.
+    table_name: str
+        A user-inputted table name in CAS Management.
+    table_file: str or Path, optional
+        A user-provided path to an uploadable file. Defaults to None.
+    description: str, optional
+        Description of score definition. Defaults to an empty string.
+    server_name: str, optional
+        The server within CAS that the table is in. Defaults to "cas-shared-default".
+    library_name: str, optional
+        The library within the CAS server the table exists in. Defaults to "Public".
+    model_version: str, optional
+        The user-chosen version of the model. Defaults to "latest".
+    use_cas_gateway: bool, optional
+        Determines if scoring uses CAS Gateway.
+    timeout: int, optional
+        The maximum time in seconds to wait for the score execution to complete. Defaults to 300.
+    input_mapping: dict, optional
+        A dictionary mapping variables from the data table to the variables in the model if they are different. Defaults to None.
+
+    Returns
+    -------
+    pandas.DataFrame
+
+    """
     score_definition = sd.create_score_definition(
         score_def_name,
         model,
